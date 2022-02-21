@@ -63,8 +63,8 @@ class GastosController {
 
 	function ingresos() { 
 		$id_caja = $_GET['id_caja'];
-		$campos=Gastos::obtenerPaginain($id_caja);
-		require_once 'vistas/gastos/todosing.php';
+		//$campos=Gastos::obtenerPaginain($id_caja);
+		//require_once 'vistas/gastos/todosing.php';
 	}
 
 	/*************************************************************/
