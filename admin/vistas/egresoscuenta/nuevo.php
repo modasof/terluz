@@ -161,11 +161,12 @@ $cajas = Egresoscuenta::obtenerCuentapor($CuentaSel);
 															<option value="Movimiento a cuenta">Préstamo a cuenta</option>
 															<option value="Cuenta">Ingreso a caja</option>
 															<option value="Otro tipo de egreso">Otro tipo de egreso</option>
-								<!-- <option value="Pago a proveedor">Pago a proveedor</option>-->
+								 <option value="Pago a proveedor">Pago a proveedor</option>
+								  <option value="Anticipo a proveedor">Anticipo a proveedor</option>
 														  </select>
 												</div>
 											</div>
-											<div style="display: none;" id="divcuentas" class="col-md-12">
+											<div style="display: none; width:300px;" id="divcuentas" class="col-md-12">
 													<div class="form-group">
 														  <label for="sel1">Cuentas en Sistema:<span>*</span></label>
 														  <select class="form-control"  name="cuenta_beneficiada" >
@@ -202,7 +203,7 @@ $cajas = Egresoscuenta::obtenerCuentapor($CuentaSel);
 										<div class="form-group">
 
 										  <label for="sel1">Lista de Proveedores:</label>
-										  <select style="width: 200px;" class="form-control mi-selector2" id="beneficiario1" name="proveedor_id_proveedor" >
+										  <select style="width: 350px;" class="form-control mi-selector2" id="beneficiario1" name="proveedor_id_proveedor" >
 											<option value="" selected>Seleccionar...</option>
 										<?php
 										$rubros = Proveedores::obtenerListaProveedores();
@@ -385,6 +386,22 @@ symbolPosition : 'left' // use this setting to position the symbol at the left o
                             var selectMedio = $("#tipo_egreso option:selected").html();
                         $(document).ready
                             if (selectMedio == "Pago a proveedor") { 
+                                $("#divcuentas").hide("slow");
+                                $("#divcajas").hide("slow");
+                                 $("#divbeneficiario").hide("slow");
+                                  $("#divproveedor").slideToggle(100); 
+                                $("#divrubro").slideToggle(100);
+                                 $("#divsubrubro").slideToggle(100);
+                            }
+                        });
+                        </script>
+
+
+                         <script type="text/javascript">
+                        $("#tipo_egreso").change(function() {
+                            var selectMedio = $("#tipo_egreso option:selected").html();
+                        $(document).ready
+                            if (selectMedio == "Anticipo a proveedor") { 
                                 $("#divcuentas").hide("slow");
                                 $("#divcajas").hide("slow");
                                  $("#divbeneficiario").hide("slow");

@@ -10,6 +10,10 @@ Este es el repositorio inicial del proyecto 2022
   Se cargan archivos de gastos,  actualización de editar cajas menores (MVC)
   Se quita el botón requerido para la cotización en ordenes de compra
 
+# Actualización 23 de Febrero 
+
+- Se agrega funcionalidad de editar cantidades y valor unitario en OC (MVC) Compras
+
   
 
 

@@ -91,6 +91,7 @@ else
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="?controller=index&&action=index">Inicio</a></li>
+             <li class="breadcrumb-item active"><a href="?controller=compras&&action=todos">Compras</a></li>
            
             <!--<li class="breadcrumb-item active"><a href="?controller=equipos&&action=todos">Equipos</a></li>-->
           </ol>
@@ -100,22 +101,22 @@ else
   </div>
     <!-- /.content-header -->
 
-	<!-- Main content -->
-	<div class="content">
-		<div class="container-fluid">
-			<div class="row">
-				
-					
-						<!-- ESTE DIV LO USO PARA CENTRAR EL FORMULARIO -->
-						<!-- left column -->
-					
-					 <div class="col-md-12">
+  <!-- Main content -->
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        
+          
+            <!-- ESTE DIV LO USO PARA CENTRAR EL FORMULARIO -->
+            <!-- left column -->
+          
+           <div class="col-md-12">
 
-					 	<div style="display: none;" class="row">
-					 		<div id="chartContainer" style="height: 400px; width: 100%;"></div>
-					 	</div>
-					 	<br>
-					  	 <div class="row">
+            <div style="display: none;" class="row">
+              <div id="chartContainer" style="height: 400px; width: 100%;"></div>
+            </div>
+            <br>
+               <div class="row">
           <!-- MAP & BOX PANE -->
           <!-- TABLE: LATEST ORDERS -->
           <div class="box box-success">
@@ -132,7 +133,7 @@ else
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-            	            <div class="row">
+                          <div class="row">
         <form style="display:none;" action="?controller=compras&&action=porfecha" method="post" id="FormFechas" autocomplete="off">
          <div class="col-md-8">
                         <div class="form-group">
@@ -206,11 +207,12 @@ else
                     </div>
               <div class="table-responsive mailbox-messages">
           <table id="cotizaciones" class="table  table-responsive table-striped table-bordered table-hover" style="width: 100%;font-size: 13px;">
-          	<tfoot style="display: table-header-group;">
+            <tfoot style="display: table-header-group;">
                                    
                                       <th style="background-color: #fcf8e3" class="success"></th>
                                        <th style="background-color: #fcf8e3" class="success"></th>
                                       <th style="background-color: #fcf8e3" class="success"></th>
+                                       <th style="background-color: #fcf8e3" class="success"></th>
                                        <th style="background-color: #fcf8e3" class="success"></th>
                                        <th style="background-color: #fcf8e3" class="success"></th>
                                        <th style="background-color: #fcf8e3" class="success"></th>
@@ -224,6 +226,7 @@ else
               <th>Unidad</th>
               <th>Vr. Unitario</th>
               <th>Subtotal</th>
+              <th>Acción</th>
              
             </tr>
             <tr>
@@ -233,6 +236,7 @@ else
               <th>Unidad</th>
               <th>Vr. Unitario</th>
               <th>Subtotal</th>
+               <th>Acción</th>
                
             </tr>
           </thead>
@@ -278,6 +282,12 @@ else
               <td><?php echo($nomunidadmedida); ?></td>
                <td><?php echo ("$ ".number_format($vr_unitario,0)); ?></td>
               <td><?php echo ("$ ".number_format($valor_cot,0)); ?></td>
+              <td>
+                
+            <a href="?controller=compras&&action=editardetallecot&&id=<?php echo ($id1); ?>&&id_ordencompra=<?php echo($idordencompra); ?>" class="tooltip-primary text-success" data-rel="tooltip" data-placement="top" title="" data-original-title="Detalle">
+                <i class="fa fa-edit bigger-110 "> Editar</i>
+              </a>
+              </td>
             </tr>
             <?php
               }
@@ -295,14 +305,14 @@ else
           <!-- /.box -->
         </div>
         <!-- /.col -->
-					 </div>
+           </div>
 
 
-					</div> <!-- FIN DE ROW-->
-				</div><!-- FIN DE CONTAINER FORMULARIO-->
-			</div> <!-- Fin Row -->
-		</div> <!-- Fin Container -->
-	</div> <!-- Fin Content -->
+          </div> <!-- FIN DE ROW-->
+        </div><!-- FIN DE CONTAINER FORMULARIO-->
+      </div> <!-- Fin Row -->
+    </div> <!-- Fin Container -->
+  </div> <!-- Fin Content -->
 
 
  

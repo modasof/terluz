@@ -101,15 +101,15 @@ else
   </div>
     <!-- /.content-header -->
 
-	<!-- Main content -->
-	<div class="content">
-		<div class="container-fluid">
-			<div class="row">
-				
-					
-						<!-- ESTE DIV LO USO PARA CENTRAR EL FORMULARIO -->
-						<!-- left column -->
-						<div class="col-md-3">
+  <!-- Main content -->
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        
+          
+            <!-- ESTE DIV LO USO PARA CENTRAR EL FORMULARIO -->
+            <!-- left column -->
+            <div class="col-md-3">
           <!-- Widget: user widget style 1 -->
           <div class="box box-widget widget-user-2">
             <!-- Add the bg color to the header using any of the bg-* classes -->
@@ -157,7 +157,7 @@ else
           Solicitado por: 
           <address>
             <strong>Soluciones de Ingeniería Nómadas</strong><br>
-            Dirección:<small>DG 2 10 520 CARR TOLUVIEJO SAN ONOFRE KM 3 FCA LA FUENTE</small><br>
+            Dirección:<small>CRA 11 Nº7-05 B/ NOVA CERETE</small><br>
             Celular: (310) 641-4831<br>
             E-mail: <a href="mailto:contabilidad@solucionesnomadas.com">contabilidad@solucionesnomadas.com</a>
           </address>
@@ -427,14 +427,14 @@ Ante cualquier duda puede comunicarse con el jefe de compras al 3126638421 o al 
     </section>
             </div>
 
-					 
+           
 
 
-					</div> <!-- FIN DE ROW-->
-				</div><!-- FIN DE CONTAINER FORMULARIO-->
-			</div> <!-- Fin Row -->
-		</div> <!-- Fin Container -->
-	</div> <!-- Fin Content -->
+          </div> <!-- FIN DE ROW-->
+        </div><!-- FIN DE CONTAINER FORMULARIO-->
+      </div> <!-- Fin Row -->
+    </div> <!-- Fin Container -->
+  </div> <!-- Fin Content -->
 
 
 </div> <!-- Fin Content-Wrapper -->
