@@ -71,8 +71,6 @@ else
 
 ?>
 
-
-
 <!-- CCS Y JS PARA LA CARGA DE IMAGEN -->
 <script src="plugins/dropify/dropify.min.js"></script>
 <link rel="stylesheet" href="plugins/dropify/dropify.min.css">
@@ -89,7 +87,7 @@ else
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0 text-dark">Reporte Cuentas x Pagar</h1>
+          <h1 class="m-0 text-dark">Agregar Cuenta x Pagar</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
@@ -102,32 +100,32 @@ else
   </div>
     <!-- /.content-header -->
 
-	<!-- Main content -->
-	<div class="content">
-		<div class="container-fluid">
-			<div class="row">
-				
-					
-						<!-- ESTE DIV LO USO PARA CENTRAR EL FORMULARIO -->
-						<!-- left column -->
-						<div class="col-md-12">
-						  <?php
+  <!-- Main content -->
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        
           
-            	require_once 'formreportecuentasxpagar.php';
+            <!-- ESTE DIV LO USO PARA CENTRAR EL FORMULARIO -->
+            <!-- left column -->
+            <div class="col-md-12">
+              <?php
+          
+              require_once 'formreportecuentasxpagar.php';
             
             ?>
-					  </div>
+            </div>
 
-					 
-					
+           
+          
 
-					 <div class="col-md-12">
+           <div style="display: none;" class="col-md-12">
 
-					 	<div style="display: none;" class="row">
-					 		<div id="chartContainer" style="height: 400px; width: 100%;"></div>
-					 	</div>
-					 	<br>
-					  	 <div class="row">
+            <div style="display: none;" class="row">
+              <div id="chartContainer" style="height: 400px; width: 100%;"></div>
+            </div>
+            <br>
+               <div class="row">
           <!-- MAP & BOX PANE -->
           <!-- TABLE: LATEST ORDERS -->
           <div class="box box-success">
@@ -144,7 +142,7 @@ else
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-            	            <div class="row">
+                          <div class="row">
         <form action="?controller=reportes&&action=cuentasxpagarporfecha" method="post" id="FormFechas" autocomplete="off">
          <div class="col-md-8">
                         <div class="form-group">
@@ -233,7 +231,7 @@ else
                     </div>
               <div class="table-responsive mailbox-messages">
           <table id="cotizaciones" class="table  table-responsive table-striped table-bordered table-hover" style="width: 100%;font-size: 14px;">
-          	<tfoot style="display: table-header-group;">
+            <tfoot style="display: table-header-group;">
                                     <th style="background-color: #fcf8e3" class="success"></th>
                                     <th style="background-color: #fcf8e3" class="success"></th>
                                     <th style="background-color: #fcf8e3" class="success"></th>
@@ -245,7 +243,7 @@ else
                                     <th style="background-color: #fcf8e3" class="success"></th>
                                     <th style="background-color: #fcf8e3" class="success"></th>
                                      <th style="background-color: #fcf8e3" class="success"></th>
-                                    
+                                     <th style="background-color: #fcf8e3" class="success"></th>
                                    
                             </tfoot>
           <thead>
@@ -258,7 +256,7 @@ else
                <th style="width: 5%;">Crédito a</th>
                <th style="width: 5%;">Mora</th>
               <th>Proveedor</th>
-             
+              <th>Insumo</th>
                <th >Rubro</th>
                 <th>Valor</th>
                  <th>Observaciones</th>
@@ -274,7 +272,7 @@ else
                 <th style="width: 5%;">Crédito a</th>
                 <th style="width: 5%;">Mora</th>
                 <th>Proveedor</th>
-            
+              <th>Insumo</th>
                 <th >Rubro</th>
                 <th>Valor</th>
                 <th>Observaciones</th>
@@ -298,10 +296,9 @@ else
             $id = $campo['id'];
             $fecha_reporte = $campo['fecha_reporte'];
              $imagen = $campo['imagen'];
-            $vence = $campo['vence'];
+             $vence = $campo['vence'];
             $insumo_id_insumo = $campo['insumo_id_insumo'];
-            $id_subrubro=$campo['id_subrubro'];
-            $id_rubro=$campo['id_rubro'];
+            $subrubro_id_subrubro=$campo['subrubro_id_subrubro'];
             $proveedor_id_proveedor = $campo['proveedor_id_proveedor'];
             $valor_m3 = $campo['valor_m3'];
             $cantidad = $campo['cantidad'];
@@ -310,25 +307,16 @@ else
             $reporte_publicado = $campo['reporte_publicado'];
             $marca_temporal = $campo['marca_temporal'];
             $observaciones = $campo['observaciones'];
-           
-            $nomproveedor=Proveedores::obtenerNombreProveedor($proveedor_id_proveedor);
-             
-            if ($id_subrubro==0) {
+            $nomprod=Insumos::obtenerNombreInsumo($insumo_id_insumo);
+            $nomproveedor=Proveedores::obtenerNombreInsumo($proveedor_id_proveedor);
+             $nomprod=Insumos::obtenerNombreInsumo($insumo_id_insumo);
+            if ($subrubro_id_subrubro==0) {
               $nomsubrubro='PENDIENTE';
             }
             else
             {
-              $nomsubrubro=Subrubros::obtenerNombreSubrubro($id_subrubro);
+              $nomsubrubro=Subrubros::obtenerNombreSubrubro($subrubro_id_subrubro);
             }
-
-            if ($id_rubro==0) {
-              $nombrerubro='PENDIENTE';
-            }
-            else
-            {
-               $nombrerubro=Rubros::obtenerNombreRubro($id_rubro);
-            }
-
             $ventatotal=$cantidad*$valor_m3;
              $tipo="Cuenta_x_pagar";
             $abonos=obtenerAbonosPor($id,$tipo);
@@ -529,8 +517,8 @@ if (datefield.type != "date"){ //if browser doesn't support input type="date", i
               <td><?php echo utf8_encode($vence); ?> días</td>
               <td><?php echo utf8_encode($mora); ?></td>
               <td><?php echo utf8_encode($nomproveedor); ?></td>
-             
-              <td><?php echo utf8_encode($nombrerubro."<br/>".$nomsubrubro); ?></td>
+              <td><?php echo utf8_encode($nomprod); ?></td>
+              <td><?php echo utf8_encode($nomsubrubro); ?></td>
               <td><?php echo utf8_encode("$".number_format($valor_m3,0)); ?></td>
               <td><?php echo utf8_encode($observaciones); ?></td>
                
@@ -552,14 +540,14 @@ if (datefield.type != "date"){ //if browser doesn't support input type="date", i
           <!-- /.box -->
         </div>
         <!-- /.col -->
-					 </div>
+           </div>
 
 
-					</div> <!-- FIN DE ROW-->
-				</div><!-- FIN DE CONTAINER FORMULARIO-->
-			</div> <!-- Fin Row -->
-		</div> <!-- Fin Container -->
-	</div> <!-- Fin Content -->
+          </div> <!-- FIN DE ROW-->
+        </div><!-- FIN DE CONTAINER FORMULARIO-->
+      </div> <!-- Fin Row -->
+    </div> <!-- Fin Container -->
+  </div> <!-- Fin Content -->
 
 <!-- Inicio Modal Clientes -->
     <div id="modal-form6" class="modal" tabindex="-1">
@@ -575,8 +563,8 @@ if (datefield.type != "date"){ //if browser doesn't support input type="date", i
                       </div>
 
                       <div class="col-md-12 col-xs-12">
-                      	  <label>Nombre Inusmo<span>*</span></label>
-                      	  <input type="hidden" name="estado_insumo" value="1">
+                          <label>Nombre Inusmo<span>*</span></label>
+                          <input type="hidden" name="estado_insumo" value="1">
                            <input type="text" name="nombre_insumo" placeholder="Nombre del Insumo" class="form-control" value="" >
                           <br>
                       <br>

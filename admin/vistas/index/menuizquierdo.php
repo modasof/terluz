@@ -68,6 +68,7 @@ foreach($campos as $campo){
   $m_salidasinv=$campo['m_salidasinv'];
   $m_salidasdetalleinv=$campo['m_salidasdetalleinv'];
   $m_inventario=$campo['m_inventario'];
+  $m_cuentasxpagarusuario=$campo['m_cuentasxpagarusuario'];
 
  
 }
@@ -310,8 +311,11 @@ foreach($campos as $campo){
          <li class=""><a href="?controller=compras&&action=todos"><i class="fa fa-shopping-cart"></i>Compras</a></li>
      <?php } ?> 
        <?php if ($m_cuentasxpagar=="Si") { ?>
-            <li><a href="?controller=reportes&&action=cuentasxpagar"><i class="fa fa-circle-o"></i> Cuentas x Pagar</a></li>
+            <li><a href="?controller=reportes&&action=cuentasxpagar"><i class="fa fa-circle-o"></i> Subir CxP</a></li>
              <?php } ?>
+       <?php if ($m_cuentasxpagarusuario=="Si") { ?>
+            <li><a href="?controller=compras&&action=cxpusuario&&id=<?php echo($IdSesion); ?>"><i class="fa fa-circle-o"></i> CxP x Usuario </a></li>
+      <?php } ?>
       <?php if ($m_cotizaciones=="Si") { ?>
             <li class=""><a href="?controller=requisiciones&&action=cotizaciones"><i class="fa fa-shopping-cart"></i>Cotizaciones</a></li>
         <?php } ?>

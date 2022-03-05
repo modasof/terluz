@@ -99,6 +99,9 @@
   $m_salidasinv=$campo['m_salidasinv'];
   $m_salidasdetalleinv=$campo['m_salidasdetalleinv'];
   $m_inventario=$campo['m_inventario'];
+  $m_cuentasxpagarusuario= $campo['m_cuentasxpagarusuario'];
+
+
             }
             ?>
               <tr class="info" style="border-style: solid; border-color: #777">
@@ -829,6 +832,30 @@
 
                ?></td>
             </tr>
+
+             <tr>
+             <td><i class="fa fa-th-list"></i></td>
+              <td class=""><strong>Cuentas por pagar Usuario:</strong> Permite al usuario ver solo las cuentas por pagar que ha subido al sistema.</td>
+              <td><?php 
+              if ($m_cuentasxpagarusuario=="Si") {
+               ?>
+                <a href="#" onclick="desactivarpermiso(<?php echo $id_usuario; ?>,'m_cuentasxpagarusuario');" class="tooltip-primary text-success" data-rel="tooltip" data-placement="top" title="" data-original-title="Desactivar Permisos">
+                <i class="fa fa-check bigger-110 "></i>
+               </a>
+               <?php
+              }
+              else
+              {
+                ?>
+                <a href="#" onclick="activarpermiso(<?php echo $id_usuario; ?>,'m_cuentasxpagarusuario');" class="tooltip-primary text-danger" data-rel="tooltip" data-placement="top" title="" data-original-title="Activar Permisos">
+                <i class="fa fa-close bigger-110 "></i>
+                </a>
+                <?php
+              }
+
+               ?></td>
+            </tr>
+
 
              <tr>
              <td><i class="fa fa-th-list"></i></td>

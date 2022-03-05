@@ -6,7 +6,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 
-
 <script type="text/javascript">
   jQuery(document).ready(function($){
     $(document).ready(function() {
@@ -17,28 +16,27 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-    $('#id_rubro').on('change',function(){
+    $('#rubro_id').on('change',function(){
         var rubroID = $(this).val();
         //alert (rubroID);
         if(rubroID){
             $.ajax({
                 type:'POST',
                 url:'vistas/reportes/ajaxrubros.php',
-                data:'id_rubro='+rubroID,
+                data:'rubro_id='+rubroID,
                 success:function(html){
-                    $('#id_subrubro').html(html);  
+                    $('#subrubro_id').html(html);  
                 }
             });
         }else{
-            $('#id_subrubro').html('<option value="">Seleccione primero el rubro</option>');
+            $('#subrubro_id').html('<option value="">Seleccione primero el rubro</option>');
             
         }
     });
 });
 </script>
 
-
-<div class="box box-primary collapsed-box">
+<div class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title"> Registrar Cuenta x Pagar
               <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
@@ -46,9 +44,14 @@ $(document).ready(function(){
               </h3>
 
               <div class="box-tools pull-right">
-              <!--   <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
-                </button> -->
+              <!--   
+			// Campos tabla de ordenesdecompra 
+
+						(imagen, imagen_cot, fecha_reporte, valor_total, valor_retenciones, valor_iva, estado_orden, proveedor_id_proveedor, medio_pago, observaciones, marca_temporal, usuario_creador, rubro_id, subrubro_id, vencimiento, factura, estado_recibido, compra_de)
+
+             -->
               </div>
+
               <!-- /.box-tools -->
             </div>
             <!-- /.box-header -->
@@ -59,12 +62,18 @@ $(document).ready(function(){
 								$TiempoActual = date('Y-m-d H:i:s');
 							?>
 							
-					<input type="hidden" name="creado_por" value="<?php echo($IdSesion);?>">
-					<input type="hidden" name="estado_reporte" value="2">
-					<input type="hidden" name="reporte_publicado" value="1">
+					<input type="hidden" name="valor_retenciones" value="0">
+					<input type="hidden" name="valor_iva" value="0">
+					<input type="hidden" name="estado_orden" value="1">
+					<input type="hidden" name="medio_pago" value="Credito">
 					<input type="hidden" name="marca_temporal" value="<?php echo($TiempoActual);?>">
-					<input type="hidden" name="beneficiario" value="0">
-					<input type="hidden" name="pago_con" value="credito">
+					<input type="hidden" name="usuario_creador" value="<?php echo($IdSesion);?>">
+					<input type="hidden" name="factura" value="0">
+					<input type="hidden" name="estado_recibido" value="Pendiente Llegada">
+					<input type="hidden" name="compra_de" value="cxp">
+				
+				
+				
 
 					<div class="card-body">
 						 
@@ -76,18 +85,18 @@ $(document).ready(function(){
 												</div>
 										</div>
 									   </div>
-							
+						
 							<div class="row">
-											<div class="col-md-12">
+									<div class="col-md-12">
 												<div class="form-group">
-													<label>Fecha de la Compra: <span>*</span></label>
+													<label>Ingrese la Fecha: <span>*</span></label>
 													<input type="date" name="fecha_reporte" placeholder="Fecha" class="form-control required" required id="fecha_reporte">
 												</div>
-											</div>
-										<div id="divproveedor" class="col-md-12">
+									</div>
+									<div id="divproveedor" class="col-md-12">
 												<div class="form-group">
 													<label> Seleccione el Proveedor: <span>*</span></label>
-								<select style="width:350px" class="form-control mi-selector2" id="proveedor_id_proveedor" name="proveedor_id_proveedor" required>
+								<select style="width:300px;" class="form-control mi-selector2 " id="proveedor_id_proveedor" name="proveedor_id_proveedor" required>
 										<option value="" selected>Seleccionar...</option>
 										<?php
 										$rubros = Proveedores::obtenerListaProveedores();
@@ -99,29 +108,12 @@ $(document).ready(function(){
 										<?php } ?>
 								</select>
 												</div>
-											</div>
-											
-											<div style="display: none;"  id="divplaca" class="col-md-12">
-												<div class="form-group">
-													<label><a data-toggle="modal" data-target="#modal-form6" href="#"  class="btn btn-success btn-sm"><i class="fa fa-plus-square"></i></a> Seleccione el Insumo: <span>*</span></label>
-								<select class="form-control" id="insumo_id_insumo" name="insumo_id_insumo" required>
-										<option value="0" selected>Seleccionar...</option>
-										<?php
-										$rubros = Insumos::obtenerListaInsumos();
-										foreach ($rubros as $campo){
-											$id_insumo = $campo['id_insumo'];
-											$nombre_insumo = $campo['nombre_insumo'];
-										?>
-										<option value="<?php echo $id_insumo; ?>"><?php echo utf8_encode($nombre_insumo); ?></option>
-										<?php } ?>
-								</select>
+										</div>
 
-												</div>
-											</div>
-										<div id="divrubro" class="col-md-12">
+											<div id="divrubro" class="col-md-12">
 													<div class="form-group">
 														  <label for="sel1">Rubro:<span>*</span></label>
-														  <select class="form-control" id="id_rubro" name="id_rubro" >
+														  <select style="width:300px;" class="form-control mi-selector2" id="rubro_id" name="rubro_id" >
 																  <option value="" selected>Seleccione...</option>
 																<?php
 																	$rubros = Rubros::obtenerListaRubros();
@@ -138,30 +130,15 @@ $(document).ready(function(){
 												<div  class="col-md-12">
 												<div class="form-group">
 													  <label for="sel1">Sub-Rubro:<span>*</span></label>
-													  <select class="form-control" id="id_subrubro" name="id_subrubro" >
+													  <select style="width:300px;" class="form-control mi-selector2" id="subrubro_id" name="subrubro_id" >
 													  	<option value="0">Seleccionar Subrubro</option>
 													  </select>
-												</div>
-											
-
-											<div class="col-md-4">
-												<div class="form-group">
-													<label>Valor:<span>*</span></label>
-													<input type="text" name="valor_m3" placeholder="Valor" class="form-control" id="demo1">
-												</div>
-											</div>
-											
-											<div style="display:none;" class="col-md-4">
-												<div class="form-group">
-													<label>Cantidad<span>*</span></label>
-													<input type="number" step="any" name="cantidad" placeholder="Indique la cantidad" class="form-control" required value="1">
-													<small>Decimales separados con punto</small>
 												</div>
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
 													<label>Vencimiento a<span>*</span></label>
-													<select class="form-control mi-selector2" name="vence" required="">
+													<select style="width:300px;" class="form-control mi-selector2" name="vencimiento" required="">
 														<option value="">Seleccionar...</option>
 														<?php
 
@@ -171,6 +148,12 @@ $(document).ready(function(){
 														 ?>
 													
 													</select>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label>Valor:<span>*</span></label>
+													<input type="text" name="valor_total" placeholder="Valor Total" class="form-control" id="demo1">
 												</div>
 											</div>
 											<div class="col-md-12">

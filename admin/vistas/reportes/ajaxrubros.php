@@ -2,9 +2,9 @@
 //Include database configuration file
 include '../../include/class.conexion.php';
 
-if(isset($_POST["id_rubro"]) && !empty($_POST["id_rubro"])){
+if(isset($_POST["rubro_id"]) && !empty($_POST["rubro_id"])){
 	$db=Db::getConnect();
-	$select=$db->query("SELECT * FROM subrubros WHERE rubro_id_rubro = '".$_POST['id_rubro']."' and estado_subrubro='1' and activado_cxp='1'");
+	$select=$db->query("SELECT * FROM subrubros WHERE rubro_id_rubro = '".$_POST['rubro_id']."' and estado_subrubro='1' and activado_cxp='1'");
 	$campo=$select->fetchAll();
 	$i = 0;
 	echo("<option value'0'>Seleccionar Subrubro</option>");
