@@ -21,10 +21,12 @@ include_once 'modelos/equipos.php';
 include_once 'controladores/equiposController.php';
 include_once 'controladores/requisicionesitemsController.php';
 
+include_once 'modelos/rubros.php';
+include_once 'controladores/rubrosController.php';
+
 include_once 'modelos/estadosreq.php';
 include_once 'controladores/estadosreqController.php';
 
-include 'vistas/index/estadisticas_almacen.php';
 $RolSesion = $_SESSION['IdRol'];
 $IdSesion = $_SESSION['IdUser'];
 
@@ -114,17 +116,17 @@ else
   </div>
     <!-- /.content-header -->
 
-	<!-- Main content -->
-	<div class="content">
+  <!-- Main content -->
+  <div class="content">
    
-		<div class="container-fluid">
+    <div class="container-fluid">
 
-			<div class="row">
+      <div class="row">
        
         
-					
-						<!-- ESTE DIV LO USO PARA CENTRAR EL FORMULARIO -->
-						<!-- left column -->
+          
+            <!-- ESTE DIV LO USO PARA CENTRAR EL FORMULARIO -->
+            <!-- left column -->
           
 
 <div style="display:none;" class="col-md-3">
@@ -163,16 +165,16 @@ else
           </div>
           <!-- /.widget-user -->
         </div>
-					 
-					
+           
+          
 
-					 <div class="col-md-12">
+           <div class="col-md-12">
 
-					 	<div style="display: none;" class="row">
-					 		<div id="chartContainer" style="height: 400px; width: 100%;"></div>
-					 	</div>
-					 	<br>
-					  	 <div class="row">
+            <div style="display: none;" class="row">
+              <div id="chartContainer" style="height: 400px; width: 100%;"></div>
+            </div>
+            <br>
+               <div class="row">
           <!-- MAP & BOX PANE -->
           <!-- TABLE: LATEST ORDERS -->
           <div class="box box-primary">
@@ -187,7 +189,7 @@ else
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-            	            <div class="row">
+                          <div class="row">
          <div class="form-group">
           
         
@@ -547,14 +549,14 @@ else
           <!-- /.box -->
         </div>
         <!-- /.col -->
-					 </div>
+           </div>
 
 
-					</div> <!-- FIN DE ROW-->
-				</div><!-- FIN DE CONTAINER FORMULARIO-->
-			</div> <!-- Fin Row -->
-		</div> <!-- Fin Container -->
-	</div> <!-- Fin Content -->
+          </div> <!-- FIN DE ROW-->
+        </div><!-- FIN DE CONTAINER FORMULARIO-->
+      </div> <!-- Fin Row -->
+    </div> <!-- Fin Container -->
+  </div> <!-- Fin Content -->
 
 
 

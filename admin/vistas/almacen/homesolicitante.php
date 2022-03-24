@@ -21,6 +21,9 @@ include_once 'modelos/unidadesmed.php';
 include_once 'controladores/usuariosController.php';
 include_once 'modelos/usuarios.php';
 
+include_once 'controladores/rubrosController.php';
+include_once 'modelos/rubros.php';
+
 include_once 'controladores/unidadesmedController.php';
 include_once 'modelos/unidadesmed.php';
 

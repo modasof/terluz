@@ -248,7 +248,7 @@ public static function guardar($campos){
 		$campostraidos = $campos->getCampos();
 		extract($campostraidos);
 
-	$insert=$db->prepare('INSERT INTO requisiciones VALUES (NULL,:fecha_reporte,:solicitado_por,:requisicion_num,:cliente_id_cliente,:proyecto_id_proyecto,:marca_temporal,:usuario_creador,:requisicion_publicada,:estado_id_requisicion,:observaciones,:tipo_requisicion,:rq_area)');
+	$insert=$db->prepare('INSERT INTO requisiciones VALUES (NULL,:fecha_reporte,:solicitado_por,:requisicion_num,:cliente_id_cliente,:proyecto_id_proyecto,:marca_temporal,:usuario_creador,:requisicion_publicada,:estado_id_requisicion,:observaciones,:tipo_requisicion,:rq_area,:rubro_id,:subrubro_id)');
 
 		
 		date_default_timezone_set("America/Bogota");
@@ -266,6 +266,8 @@ public static function guardar($campos){
 		$insert->bindValue('observaciones',utf8_decode($observaciones));
 		$insert->bindValue('tipo_requisicion',utf8_decode($tipo_requisicion));
 		$insert->bindValue('rq_area',utf8_decode($rq_area));
+		$insert->bindValue('rubro_id',utf8_decode($rubro_id));
+		$insert->bindValue('subrubro_id',utf8_decode($subrubro_id));
 		$insert->execute();
 		
 		return true;
@@ -539,6 +541,48 @@ public static function obtenerIdproyecto($id){
     	$marcas = $campos->getCampos();
 		foreach($marcas as $marca){
 			$mar = $marca['proyecto_id_proyecto'];
+		}
+		return $mar;
+	}
+	catch(PDOException $e) {
+		echo '{"error en obtener la pagina":{"text":'. $e->getMessage() .'}}';
+	}
+}
+
+/*******************************************************
+** FUNCION PARA MOSTRAR EL NOMBRE DEL PRODUCTO **
+********************************************************/
+public static function obtenerIdproyectoporRQ($id){
+	try {
+		$db=Db::getConnect();
+
+		$select=$db->query("SELECT proyecto_id_proyecto FROM  requisiciones WHERE id='".$id."'");
+    	$camposs=$select->fetchAll();
+    	$campos = new Requisiciones('',$camposs);
+    	$marcas = $campos->getCampos();
+		foreach($marcas as $marca){
+			$mar = $marca['proyecto_id_proyecto'];
+		}
+		return $mar;
+	}
+	catch(PDOException $e) {
+		echo '{"error en obtener la pagina":{"text":'. $e->getMessage() .'}}';
+	}
+}
+
+/*******************************************************
+** FUNCION PARA MOSTRAR EL NOMBRE DEL PRODUCTO **
+********************************************************/
+public static function obtenerIdCreadoporRQ($id){
+	try {
+		$db=Db::getConnect();
+
+		$select=$db->query("SELECT solicitado_por FROM  requisiciones WHERE id='".$id."'");
+    	$camposs=$select->fetchAll();
+    	$campos = new Requisiciones('',$camposs);
+    	$marcas = $campos->getCampos();
+		foreach($marcas as $marca){
+			$mar = $marca['solicitado_por'];
 		}
 		return $mar;
 	}

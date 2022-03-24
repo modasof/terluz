@@ -12,6 +12,9 @@ include_once 'controladores/proyectosController.php';
 include_once 'modelos/usuarios.php';
 include_once 'controladores/usuariosController.php';
 
+include_once 'modelos/rubros.php';
+include_once 'controladores/rubrosController.php';
+
 include_once 'controladores/requisicionesitemsController.php';
 include_once 'modelos/requisicionesitems.php';
 
@@ -227,7 +230,7 @@ foreach ($rubros as $campo) {
 
         ?>
 
-        <a href="<?php echo ($ruta); ?>" class="btn btn-warning " type="Submit"><small><?php echo ($nombre); ?></small><span style="margin-left:3px;" class="pull-right badge bg-white"><?php echo ($cantidaditems) ?></span></a>
+        <a href="<?php echo ($ruta); ?>" class="btn btn-success " type="Submit"><small><?php echo ($nombre); ?></small><span style="margin-left:3px;" class="pull-right badge bg-white"><?php echo ($cantidaditems) ?></span></a>
                    <?php
 } else {
         if ($cargo == 1 or $cargo == 13 or $cargo==15) {

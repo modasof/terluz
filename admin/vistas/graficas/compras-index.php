@@ -58,7 +58,7 @@ for ($i = 1; $i < $tope; $i++) {
                     <?php
 $ventames1 = Comprasmesgeneral($i, $anoactual);
     $sumaventas1 += $ventames1;
-    echo ("<a style='color:black;' href='?controller=compras&&action=todospormes=" . $fechaconsulta . "'><small style='color:#128a2e;'></small> " . number_format($ventames1, 0) . "</a>");
+    echo ("<a style='color:black;' href='?controller=compras&&action=todospormes&daterange=" . $fechaconsulta . "'><small style='color:#128a2e;'></small> " . number_format($ventames1, 0) . "</a>");
 
     ?>
                   </td>
@@ -66,13 +66,13 @@ $ventames1 = Comprasmesgeneral($i, $anoactual);
                     <?php
 
     $arreglof   = (Abonoscomprasmes($i, $anoactual));
-     $sumaAbonos17 += $arreglof;
+    $sumaAbonos17 += $arreglof;
     $CadenaAt   = explode(",", $arreglof);
     $longitudAt = count($CadenaAt) - 1;
     $sumaAt     = array_sum($CadenaAt);
     $maxviajes  = max($CadenaAt);
     $promedio33 = $sumaAt / $longitudAt;
-    echo ("<a style='color:black;' href='?controller=compras&&action=todospormes=" . $fechaconsulta . "'><small style='color:#128a2e;'></small> $" . number_format($arreglof, 0) . "</a>");
+    echo ("<a style='color:black;' href='?controller=compras&&action=todospormes&daterange=" . $fechaconsulta . "'><small style='color:#128a2e;'></small> $" . number_format($arreglof, 0) . "</a>");
     ?>
                   </td>
                   <td>
@@ -80,7 +80,7 @@ $ventames1 = Comprasmesgeneral($i, $anoactual);
 $ventames17 = Comprasmesgeneral($i, $anoactual);
     $sumaventas17 += $ventames17;
     $saldocxp=$ventames1-$arreglof;
-    echo ("<a style='color:black;' href='?controller=compras&&action=todospormes=" . $fechaconsulta . "'><small style='color:#128a2e;'></small>$ " . number_format($saldocxp, 0) . "</a>");
+    echo ("<a style='color:black;' href='?controller=compras&&action=todospormes&daterange=" . $fechaconsulta . "'><small style='color:#128a2e;'></small>$ " . number_format($saldocxp, 0) . "</a>");
 
     ?>
                   </td>

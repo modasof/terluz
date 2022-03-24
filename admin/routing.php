@@ -54,7 +54,7 @@ $controllers = array(
     'concreto' => ['todos','formularioconcreto','guardar','eliminar','editar','actualizar','despachosporfecha','detallepuntos'],
 
 	// Funcionalidad compras
-	'compras' => ['todos','formulario','guardar','eliminar','editar','actualizar','porfecha','verdetalle','cambiarestado','actualizarpago','cambiarestadocreditos','pagotemporal','deletepagotemporal','actualizarpagocredito','recibiroc','todospormes','cxpusuario','actualizardetallecot','editardetallecot'],
+	'compras' => ['todos','formulario','guardar','eliminar','editar','actualizar','porfecha','verdetalle','cambiarestado','actualizarpago','cambiarestadocreditos','pagotemporal','deletepagotemporal','actualizarpagocredito','recibiroc','todospormes','cxpusuario','actualizardetallecot','editardetallecot','todosrecibirinsumos','porfechainsumos','cargarinventario'],
 
 	// Reporte Producción
 	'reportesproduccion' => ['reportesproduccion','guardarreporteproduccion','eliminarreporteproduccion','editarreporteproduccion','actualizarreporteproduccion','reportesporfechaproduccion'],
@@ -96,6 +96,10 @@ $controllers = array(
 	'ventasdespachos' => ['todos','nuevo','guardar','eliminar'],
 	'productosinsumos' => ['todos','nuevo','guardar','eliminar'],
 	'tipomantenimiento' => ['todos','nuevo','editar','guardar','actualizar','eliminar'],
+
+	// Funcionalidad Activar Rubros por Usuario
+	'usuariosrubros' => ['todospor','activarrubroPor','desactivarrubroPor','activartodo','activarporRol'],
+
 );
 
 if (array_key_exists($controller, $controllers)) {
@@ -129,6 +133,12 @@ function call($controller, $action) {
 		require_once 'modelos/usuarios.php';
 		$controller = new UsuariosController();
 		break;
+
+	case 'usuariosrubros':
+		require_once 'modelos/usuariosrubros.php';
+		$controller = new UsuariosrubrosController();
+		break;
+	
 	case 'reportes':
 		require_once 'modelos/reportes.php';
 		$controller = new ReportesController();
