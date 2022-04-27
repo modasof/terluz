@@ -10,24 +10,30 @@ $controllers = array(
 
 'cuentas' => ['editar','guardar','actualizar','todos','nuevo','eliminar','reporteporfecha','crucecuentas','detallecruce'],
 
-	'usuarios' => ['editar','guardar','actualizar','todos','nuevo','eliminar','editarpermisos','activarmenuPor','desactivarmenuPor','activartodo','desactivartodo'],
+	// Funcionalidad Gestión Usuarios
+	'usuarios' => ['editar','guardar','actualizar','todos','nuevo','eliminar','editarpermisos','activarmenuPor','desactivarmenuPor','activartodo','desactivartodo','activarrubros','notificacionleida','notificaciones'],
+
 	'reportes' => ['ventas','clienteextra','productoextra','guardarventa','eliminarventa','cambiarestadoventa','editarventa','actualizarventa','ventasporfecha','compras','insumoextra','guardarcompra','eliminarcompra','editarcompra','actualizarcompra','comprasporfecha','despachos','guardardespacho','eliminardespacho','editardespacho','actualizardespacho','despachosporfecha','despachosclientes','despachosclientesf','despachosclientesunico','despachosproveedorunico','despachospropietario','guardardespachoclientes','eliminardespachoclientes','editardespachoclientes','actualizardespachoclientes','despachosporfechaclientes','despachosporfechaclientesunico','despachosporfechaproveedorunico','despachosporfechapropietario','facturas','guardarfactura','eliminarfactura','editarfactura','actualizarfactura','facturasporfecha','guardarabono','eliminarabono','cuentasxpagar','cuentasxpagarconsolidado','cuentasxpagardetalle','guardarcuentaxpagar','eliminarcuentaxpagar','cancelarcuentaxpagar','editarcuentaxpagar','actualizarcuentaxpagar','cuentasxpagarporfecha','cuentasxpagarporfechaconsolidado','cuentasxpagarporfechadetalle','prestamos','guardarprestamo','eliminarprestamo','cambiarestadoprestamo','editarprestamo','actualizarprestamo','prestamosporfecha','combustibles','combustiblescisterna','combustiblesporfechacisterna','mescombustibleseq','mesfletes','meshorasmq','infovolqueta','guardarcombustible','eliminarcombustible','editarcombustible','actualizarcombustible','combustiblesporfecha','proveedorextra','horas','guardarhoras','eliminarhoras','editarhoras','actualizarhoras','horasporfecha','despachostrituradora','guardardespachotrituradora','eliminardespachotrituradora','editardespachotrituradora','actualizardespachotrituradora','despachosporfechatrituradora','insumosxpagar','guardarinsumoxpagar','eliminarinsumoxpagar','cancelarinsumoxpagar','editarinsumoxpagar','actualizarinsumoxpagar','insumosxpagarporfecha'],
 
 	// Reporte Horas Máquinaria 
 	'horasmq' => ['horas','guardarhoras','eliminarhoras','editarhoras','actualizarhoras','horasporfecha'],
 
 
-	// Reporte Requisiciones 
+	// Funcionalidad Requisiciones 
 	'requisiciones' => ['todosporusuario','todosalmacen','todosmiusuario','todos','guardar','eliminar','editar','actualizar','porfecha','todosporusuarioestado','reqalmacenestado','todosporusuarioadmin','todosporusuarioestadoadmin','cotizaciones','vercotizacion','eliminaritemcot','reqparaentrega'],
 
-	// Reporte Requisiciones Items
-	'requisicionesitems' => ['todosporreq','todos','guardar','eliminar','editar','actualizar','porfecha','cambiarestado','guardarestado','actualizarestado','trazabilidad','agregarvalores','guardarcotizacion','cambiarestadoadmin','actualizarestadoadmin','trazabilidadadmin','guardarocompra','actualizaritem','actualizarcantidadcot','gestionarvalores','guardarcotizacionmultiple','eliminarcotizacion','finalizarrq','aprobarrq'],
+	// Funcionalidad Requisiciones Items
+	'requisicionesitems' => ['todosporreq','todos','guardar','eliminar','editar','actualizar','porfecha','cambiarestado','guardarestado','actualizarestado','trazabilidad','agregarvalores','guardarcotizacion','cambiarestadoadmin','actualizarestadoadmin','trazabilidadadmin','guardarocompra','actualizaritem','actualizarcantidadcot','gestionarvalores','guardarcotizacionmultiple','eliminarcotizacion','finalizarrq','aprobarrq','guardarsoportecotizacionmultiple'],
 
 	// Reporte Inventarios
 	'inventario' => ['cargarentradaoc','guardarentradadetalletem','guardarsalidadetalletem','deletedellentradatemp','deletedellsalidatemp','actualizarentradaoc','actualizarsalidarq','totalentradas','totalsalidas','entradasporfecha','salidasporfecha','entradasdetalle','salidasdetalle','entradasdetalletotal','salidasdetalletotal','cargarsalidasrq','verinventario','kardexporinsumo','despachosporfecha','entregaspendientesusuario','recibirdespacho','entregasrecibidasusuario'],
 
 	// Estados Requisiciones
 	'estadosreq' => ['todos','nuevo','guardar','eliminar','editar','actualizar'],
+
+
+	// Módulo de Dashboard 
+	'dashboards' =>['dashboardcompras'],
 	
 	// Movimientos Item 
 	'movimientositem' => ['todospor','guardar','eliminar'],
@@ -54,7 +60,7 @@ $controllers = array(
     'concreto' => ['todos','formularioconcreto','guardar','eliminar','editar','actualizar','despachosporfecha','detallepuntos'],
 
 	// Funcionalidad compras
-	'compras' => ['todos','formulario','guardar','eliminar','editar','actualizar','porfecha','verdetalle','cambiarestado','actualizarpago','cambiarestadocreditos','pagotemporal','deletepagotemporal','actualizarpagocredito','recibiroc','todospormes','cxpusuario','actualizardetallecot','editardetallecot','todosrecibirinsumos','porfechainsumos','cargarinventario'],
+	'compras' => ['todos','formulario','guardar','eliminar','editar','actualizar','porfecha','verdetalle','cambiarestado','actualizarpago','cambiarestadocreditos','pagotemporal','deletepagotemporal','actualizarpagocredito','recibiroc','todospormes','cxpusuario','actualizardetallecot','editardetallecot','todosrecibirinsumos','porfechainsumos','cargarinventario','retornar','todosproveedorpagos'],
 
 	// Reporte Producción
 	'reportesproduccion' => ['reportesproduccion','guardarreporteproduccion','eliminarreporteproduccion','editarreporteproduccion','actualizarreporteproduccion','reportesporfechaproduccion'],
@@ -82,7 +88,9 @@ $controllers = array(
 	'insumos' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
 	'destinos' => ['editar','guardar','actualizar','todos','nuevo','eliminar','destinoextra'],
 	'proyectos' => ['editar','guardar','actualizar','todos','nuevo','eliminar','proyectoextra'],
-	'proveedores' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
+	
+	'proveedores' => ['editar','guardar','actualizar','todos','nuevo','eliminar','cxpproveedor','estadocuenta','listadoproveedorespago','proyecciontemporal','deleteproyecciontemporal','actualizarrelacionpagos','showrelacionpagos','eliminarrelacion'],
+	
 	'modulos' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
 	'documentos' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
 	'consolidados' => ['editar','guardar','actualizar','todos','nuevo','eliminar','documentoscuentas','documentosequipos','totalreporteseq'],
@@ -162,6 +170,12 @@ function call($controller, $action) {
 		require_once 'modelos/compras.php';
 		$controller = new comprasController();
 		break;
+
+	case 'dashboards':
+		require_once 'modelos/dashboards.php';
+		$controller = new dashboardsController();
+		break;
+
 
 	case 'cotizaciones':
 		require_once 'modelos/cotizaciones.php';

@@ -184,11 +184,11 @@ include_once 'controladores/cajasController.php';
               <td>
                  <div class="btn-group">
              
-             <button type="button" class="btn btn-default"> <a target="_blank" href="<?php echo($soporte); ?>"  class="tooltip-primary text-primary" title="Ver Soporte">
+             <button type="button" class="btn btn-default"> <a target="_blank" href="<?php echo($imagen); ?>"  class="tooltip-primary text-primary" title="Ver Soporte">
                 <i class="fa fa-eye bigger-110 "></i>
               </a>
             </button>
-             <button type="button" class="btn btn-default"> <a download="Soporte" href="<?php echo($soporte); ?>"  class="tooltip-primary text-dark" title="Descargar Soporte">
+             <button type="button" class="btn btn-default"> <a download="Soporte" href="<?php echo($imagen); ?>"  class="tooltip-primary text-dark" title="Descargar Soporte">
                 <i class="fa fa-cloud-download bigger-110 "></i>
               </a>
             </button>

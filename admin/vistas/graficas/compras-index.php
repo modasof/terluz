@@ -1,13 +1,13 @@
            <div class="col-md-4 col-xs-12">
-      
+        <div class="chart">
                     <!-- Sales Chart Canvas 
                    <div id="grafica_4" style="height: 300px; width: 100%;"></div>
-                   -->
-      
+                 -->
+        </div>
           <!--<div class="box box-primary collapsed-box">-->
          <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Compras RQ <small> Actualizado al <?php
+              <h3 class="box-title">Total Compras<small> Actualizado al <?php
 date_default_timezone_set("America/Bogota");
 $TiempoActual = date('Y-m-d');
 echo (fechalarga($TiempoActual));
@@ -19,8 +19,11 @@ echo (fechalarga($TiempoActual));
             </div>
             <!-- /.box-header -->
           <div class="box-body" id="InformeVentas">
-           
+            <div style="display:none;" class="clearfix">
+                  <div id="stockChartContainer" style="height: 300px; width: 100%;"></div>
+            </div>
         <table  class="table table-bordered table-hover dataTables_borderWrap" style="width: 100%;font-size: 12px;">
+          <thead>
 
           <thead>
 
@@ -58,7 +61,22 @@ for ($i = 1; $i < $tope; $i++) {
                     <?php
 $ventames1 = Comprasmesgeneral($i, $anoactual);
     $sumaventas1 += $ventames1;
-    echo ("<a style='color:black;' href='?controller=compras&&action=todospormes&daterange=" . $fechaconsulta . "'><small style='color:#128a2e;'></small> " . number_format($ventames1, 0) . "</a>");
+$totalcompras = Comprasanogeneral($anoactual);  
+    $division=$tope-1;
+    $promediocompras=$totalcompras/$division;
+
+    if ($ventames1>$promediocompras) {
+      $valorporcentaje=($ventames1-$promediocompras)/$promediocompras;
+      $labelporcentaje=$valorporcentaje*100;
+
+      $icono="<span class='badge bg-red'><i class='fa fa-arrow-circle-up'></i>  ".round($labelporcentaje,0)."%</span>";
+    }else{
+       $valorporcentaje=($ventames1-$promediocompras)/$promediocompras;
+        $labelporcentaje=$valorporcentaje*100;
+      $icono="<span class='badge bg-green'><i class='fa fa-arrow-circle-down'> </i> ".round($labelporcentaje,0)."%</span>";
+    }
+
+    echo ("<a style='color:black;' href='?controller=compras&&action=todospormes&daterange=" . $fechaconsulta . "'><small style='color:#128a2e;'></small> " . number_format($ventames1, 0) . " ".$icono."</a>");
 
     ?>
                   </td>
@@ -66,7 +84,7 @@ $ventames1 = Comprasmesgeneral($i, $anoactual);
                     <?php
 
     $arreglof   = (Abonoscomprasmes($i, $anoactual));
-    $sumaAbonos17 += $arreglof;
+     $sumaAbonos17 += $arreglof;
     $CadenaAt   = explode(",", $arreglof);
     $longitudAt = count($CadenaAt) - 1;
     $sumaAt     = array_sum($CadenaAt);

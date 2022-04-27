@@ -33,7 +33,25 @@ Este es el repositorio inicial del proyecto 2022
 - Pasar a cotización lo que este aprobado por el jefe de área
 - Actualización y ajuste del módulo carga a inventario de las compras por rango de fecha, se cambia el campo de fecha que estaba por defecto del día actual a un campo editable.
 
-
+# Actualización 12 Marzo a 27 de Abril 
+1	Replicar anticipo a proveedor
+4	Agregar opción de seleccionar diferentes item para aprobar
+3	Verificar órdenes de compra con items que no aplican
+2	Ajuste de los pagos a compras anteriores a Marzo 01 - Terluz - Nomadas
+5	Opción de pago "a convenir "
+6	Opción de pagar orden de compra sin adjunto de factura
+7	Ajustar rubros por usuario
+8	Agregar RQ el rubro y sub rubro
+9	Link a la RQ en la orden de compra 
+10	Notificaciones de las cuentas por pagar que se suben en el dashboard
+11	Pasar a cotización lo que este aprobado por el jefe de área
+12	Actualización y ajuste del módulo carga a inventario de las compras por rango de fecha, se cambia el campo de fecha que estaba por defecto del día actual a un campo editable.
+12	Quitar lo que está aprobado en el dashboard de RQ (verificar todos los roles)
+13	Subir adjunto de cotizaciones por proveedor al finalizar las cotizaciones
+14	Pasar a espera de aprobación cuando se sube la cotización 
+15	Módulo de aprobación y proyección de pagos 
+16	Módulo cuentas por pagar 
+17	Módulo cuentas por cobrar
   
 
 

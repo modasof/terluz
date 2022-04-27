@@ -12,6 +12,9 @@ include_once 'controladores/equipostemporalesController.php';
 include_once 'modelos/insumos.php';
 include_once 'controladores/insumosController.php';
 
+include_once 'modelos/proyectos.php';
+include_once 'controladores/proyectosController.php';
+
 include_once 'modelos/unidadesmed.php';
 include_once 'controladores/unidadesmedController.php';
 
@@ -119,7 +122,7 @@ if ($FechaDos == "") {
               <ul class="nav nav-stacked">
                  <li><a href="?controller=cotizaciones&&action=todos"><strong> <i class="fa fa-external-link-square"></i> Cotizaciones Aprobadas</strong> <span class="pull-right badge bg-blue"></span></a></li>
                 <li><a href="?controller=requisiciones&&action=cotizaciones"><strong> <i class="fa fa-external-link-square"></i> Cargar Cotizaciones Pendientes</strong> <span class="pull-right badge bg-blue"></span></a></li>
-                <?php
+               <?php
 $res    = Requisiciones::cotizaciones();
 $campos = $res->getCampos();
 foreach ($campos as $campo) {
@@ -160,7 +163,8 @@ foreach ($campos as $campo) {
 
       <!-- title row -->
       <div class="row">
-        
+       
+        <!-- /.col -->
       </div>
       <!-- info row -->
       <div class="row invoice-info">
@@ -218,7 +222,7 @@ $mediopago = ObtenerMediopago($idproveedor, "1");
       <div class="row">
         <div class="col-xs-12 table-responsive">
           <form action="?controller=requisicionesitems&action=guardarocompra" method="post" id="formularioppal">
-  <button id="btncrearorden" style="display:none;" onclick="submitform(); return false;" type="submit" class="btn btn-success btn-xs pull-right"><i class="fa fa-check"></i> Autorizar Orden
+  <button id="btncrearorden" style="display:none;"  onclick="submitform(); return false;" type="submit" class="btn btn-success btn-xs pull-right"><i class="fa fa-check"></i> Autorizar Orden
   </button>
 <?php
 date_default_timezone_set("America/Bogota");
@@ -226,7 +230,7 @@ $TiempoActual = date('Y-m-d H:i:s');
 $DiaActualfor = date('Y-m-d');
 ?>
         <input type="hidden" name="imagen" value="0">
-        <input type="hidden" name="imagen_cot" value="0">
+       
         <input type="hidden" name="fecha_reporte" value="<?php echo ($DiaActualfor); ?>">
         <input type="hidden" name="valor_total" value="<?php echo ($Subtotalcot); ?>">
         <input type="hidden" name="valor_retenciones" value="0">
@@ -239,7 +243,10 @@ $DiaActualfor = date('Y-m-d');
         <input type="hidden" name="marca_temporal" value="<?php echo $TiempoActual ?>">
         <input type="hidden" name="usuario_creador" value="<?php echo $IdSesion ?>">
 
-           <b>Método de pago:</b>
+
+         
+         
+          <b>Método de pago:</b>
           <select name="medio_pago" >
                     <option selected="" value="<?php echo($mediopago) ?>"><?php echo($mediopago); ?></option>
                      <option value="A convenir">A convenir</option>
@@ -247,13 +254,15 @@ $DiaActualfor = date('Y-m-d');
                     <option value="Credito">Crédito</option>
           </select>
           <br>
+       
+
+         
 
           <table class="table table-striped" style="font-size:13px;">
             <thead>
             <tr>
               <th>Código
-                <input type="checkbox" id="seleccionar-todos">
-
+                 <input type="checkbox" id="seleccionar-todos"> 
               </th>
               <th>Detalle</th>
               <th>Cantidades</th>
@@ -285,12 +294,22 @@ foreach ($campos as $campo) {
     $cantidad               = $campo['cantidad'];
     $cantidadoriginal += $cantidad;
     $canticotizada1  = $campo['cantidadcot'];
+    $imagencot1       = imagencot($item_id1, $cotizacion);
+
+    $idproyecto= requisiciones::obtenerIdproyectoporRQ($requisicion_id);
+    $idcreador= requisiciones::obtenerIdCreadoporRQ($requisicion_id);
+    $rubrorq = requisiciones::obtenerRubroidRQ($requisicion_id);
+    $subrubrorq = requisiciones::obtenerSubRubroidRQ($requisicion_id);
+    $nomcreador = Usuarios::ObtenerNombreUsuario($idcreador);
+    $nomproyecto = Proyectos::obtenerNombreProyecto($idproyecto);
     $primerproveedor = Proveedores::obtenerNombreProveedor($proveedor_id_proveedor);
     $nominsumo       = Insumos::obtenerNombreInsumo($insumo_id_insumo);
     $unidadmedidaid  = Insumos::obtenerUnidadmed($insumo_id_insumo);
     $nomunidadmedida = Unidadesmed::obtenerNombre($unidadmedidaid);
     $valorunitario1  = $valor_cot1 / $canticotizada1;
     $cantorigen1 += $canticotizada1;
+
+
 
     if ($insumo_id_insumo != '0') {
         $insumo_id_insumo  = ObtenerIdInsumo($item_id1);
@@ -321,9 +340,30 @@ foreach ($campos as $campo) {
               <td class="success">
 
                 <i class="fa fa-caret-square-o-right"></i> <small id="primerrefresh<?php echo ($id1); ?>"></small>
+                <?php if ($imagencot1!='') {
+                ?>
+
+             <a target="_blank" href="<?php echo($imagencot1); ?>"  class="tooltip-primary text-primary" title="Ver Soporte">
+                <i class="fa fa-file-pdf-o bigger-110 "> Ver Soporte</i>
+              </a>
+
+                <?php
+            }else{
+                //echo("<i class='fa fa-ban bigger-110 bg-red'> Sin Soporte </i>");
+            } 
+
+            ?>
+
+               
               </td>
               <td class="success">
-               <strong><?php echo ($detallesolicitado); ?></strong>
+               <strong><?php echo ($detallesolicitado); ?>
+                 <br>
+                 <span class="bg-blue">
+                 Proyecto : <?php echo($nomproyecto); ?> 
+                  <i data-toggle="tooltip" data-placement="top" title="Solicitado por: <?php echo($nomcreador); ?>" class="fa fa-question-circle"></i>
+                  </span>
+               </strong>
               </td>
               <td class="success">
                 <?php
@@ -331,9 +371,9 @@ foreach ($campos as $campo) {
     # =           Validación de Cantidades por Item           =
     # =========================================================
 
-  $cantidadoriginal = $cantidad;
+    $cantidadoriginal = $cantidad;
 
-   if ($insumo_id_insumo != '0') {
+    if ($insumo_id_insumo != '0') {
 
   $estadocotizado1  = round(Cotizacionesporcantdeinsumos($item_id1, $requisicion_id, $insumo_id_insumo, "1"),1);
   $estadocotizado2  = round(Cotizacionesporcantdeinsumos($item_id1, $requisicion_id, $insumo_id_insumo, "2"),1);
@@ -349,14 +389,9 @@ foreach ($campos as $campo) {
 
   $estadocotizado1  = round(Cotizacionesporcantdeequipos($item_id1, $requisicion_id, $equipo_id_equipo, "1"),1);
   $estadocotizado2  = round(Cotizacionesporcantdeequipos($item_id1, $requisicion_id, $equipo_id_equipo, "2"),1);
-
        
     }
 
-
-
-
- 
 
     $cantidadfinal = $cantidadoriginal - $estadocotizado2;
 
@@ -364,13 +399,13 @@ foreach ($campos as $campo) {
     $sumatotalcotizado1 +=$estadocotizado1;
 
     if ($estadocotizado1 > $cantidadfinal) {
-        echo ("<strong class='text-danger'>" . round($estadocotizado1, 1) . " <i class='fa fa-warning'> </i></strong>");
+        echo ("<strong class='text-danger'>" . round($estadocotizado1, 2) . " <i class='fa fa-warning'> </i></strong>");
         $variablesum += 1;
     } elseif ($estadocotizado1 < $cantidadfinal) {
-        echo ("<strong class='text-danger'>" . round($estadocotizado1, 1) . " <i class='fa fa-warning'> </i></strong>");
+        echo ("<strong class='text-danger'>" . round($estadocotizado1, 2) . " <i class='fa fa-warning'> </i></strong>");
         $variablesum += 1;
     } elseif ($estadocotizado1 == $cantidadfinal) {
-        echo ("<strong class='text-success'>" . round($estadocotizado1, 1) . " <i class='fa fa-check'> </i></strong>");
+        echo ("<strong class='text-success'>" . round($estadocotizado1, 2) . " <i class='fa fa-check'> </i></strong>");
         $variablesum += 0;
     }
 
@@ -399,18 +434,25 @@ foreach ($campos as $campo) {
             <tr>
               <td id="listado">
 
-               RQ <?php echo ($requisicion_id . "-" . $item_id1); ?>
-               <input type="checkbox" value="<?php echo ($item_id1); ?>" name="items[]" onclick="marcardespacho(<?php echo $item_id1; ?>)" style="cursor: pointer;">
+               RQ <?php echo ($requisicion_id . "-" . $item_id1); 
+
+               ?>
+                <input type="checkbox" value="<?php echo ($item_id1); ?>" name="items[]" onclick="marcardespacho(<?php echo $item_id1; ?>)" style="cursor: pointer;">
                 <input type="hidden" value="<?php echo ($label) ?>" name="compra_de">
+                <input type="hidden" name="imagen_cot" value="<?php echo($imagencot1); ?>">
+                <input type="hidden" name="rubro_id" value="<?php echo($rubrorq); ?>">
+                <input type="hidden" name="subrubro_id" value="<?php echo($subrubrorq); ?>">
+
+          </td>
 </form>
               <?php 
 
 
                ?>
-               <i data-toggle="tooltip" data-placement="top" title="Proyecto" class="fa fa-question-circle"></i>
-              </td>
+              
+            
               <td>
-               <small>Proveedor: </small><?php echo ($primerproveedor); ?>
+                               <small>Proveedor: </small><?php echo ($primerproveedor); ?>
               </td>
               <td><?php echo ($canticotizada1 . " de " . $cantidadfinal); ?></td>
               <td><?php echo ($nomunidadmedida); ?></td>
@@ -508,9 +550,28 @@ $ver       = Requisiciones::vermascotizaciones($item_id1, $idproveedor);
         $canticotizada2      = $campo2['cantidadcot'];
         $valorunitario2      = $valor_cot2 / $canticotizada2;
         $cantorigen2 += $canticotizada2;
+        $imagencot2       = imagencot($item_id2, $cotizacion2);
         ?>
                   <tr class="info">
-                    <td>RQ <?php echo ($requisicion_id2 . "-" . $item_id2); ?></td>
+                    <td>
+
+
+                      RQ <?php echo ($requisicion_id2 . "-" . $item_id2); ?>
+                     <?php if ($imagencot1!='') {
+                ?>
+
+             <a target="_blank" href="<?php echo($imagencot2); ?>"  class="tooltip-primary text-primary" title="Ver Soporte">
+                <i class="fa fa-file-pdf-o bigger-110 "> Ver Soporte</i>
+              </a>
+
+                <?php
+            }else{
+                //echo("<i class='fa fa-ban bigger-110 bg-red'> Sin Soporte </i>");
+            } 
+
+            ?>
+
+                      </td>
               <td><small>Proveedor : </small><?php echo ($nombreotroproveedor); ?>
               <br>
               <small id="segundorefresh<?php echo ($id2); ?>"></small>
@@ -618,7 +679,7 @@ $(document).ready(function(){
         <!-- accepted payments column -->
        
         <!-- /.col -->
-        <div class="col-xs-12 col-md-5">
+        <div class="col-xs-12 col-md-12">
 
           <div class="table-responsive">
             <table class="table">
@@ -648,7 +709,6 @@ echo ($mediopago);
             </table>
           </div>
         </div>
-      
        
       
         <!-- /.col -->
@@ -708,6 +768,7 @@ else
         });
       });
 </script>
+
 
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
       <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>

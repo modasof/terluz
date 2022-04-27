@@ -3,6 +3,9 @@
 include_once 'modelos/proveedores.php';
 include_once 'controladores/proveedoresController.php';
 
+include_once 'modelos/rubros.php';
+include_once 'controladores/rubrosController.php';
+
 $RolSesion = $_SESSION['IdRol'];
 $IdSesion = $_SESSION['IdUser'];
 
@@ -91,12 +94,12 @@ $cajas = Egresoscuenta::obtenerCuentapor($CuentaSel);
 								<?php  
 								date_default_timezone_set("America/Bogota");
 								$TiempoActual = date('Y-m-d H:i:s');
-
 								?>
 							
 							<input type="hidden" name="cuenta_id_cuenta" value="<?php echo($CuentaSel); ?>">
 							<input type="hidden" name="creado_por" value="<?php echo($IdSesion); ?>">
 							<input type="hidden" name="egreso_publicado" value="1">
+							<input type="hidden" name="relacion_id_relacion" value="0">
 							<input type="hidden" name="marca_temporal" value="<?php echo($TiempoActual); ?>">
 							  <div class="card-body">
 								<div class="card-header">
@@ -161,12 +164,12 @@ $cajas = Egresoscuenta::obtenerCuentapor($CuentaSel);
 															<option value="Movimiento a cuenta">Préstamo a cuenta</option>
 															<option value="Cuenta">Ingreso a caja</option>
 															<option value="Otro tipo de egreso">Otro tipo de egreso</option>
-				 <!--<option value="Pago a proveedor">Pago a proveedor</option>-->
-								  <option value="Anticipo a proveedor">Anticipo a proveedor</option>
+				<!--	<option value="Pago a proveedor">Pago a proveedor</option>-->
+						<option value="Anticipo a proveedor">Anticipo a proveedor</option>
 														  </select>
 												</div>
 											</div>
-											<div style="display: none; width:300px;" id="divcuentas" class="col-md-12">
+											<div style="display: none;" id="divcuentas" class="col-md-12">
 													<div class="form-group">
 														  <label for="sel1">Cuentas en Sistema:<span>*</span></label>
 														  <select class="form-control"  name="cuenta_beneficiada" >
@@ -203,7 +206,7 @@ $cajas = Egresoscuenta::obtenerCuentapor($CuentaSel);
 										<div class="form-group">
 
 										  <label for="sel1">Lista de Proveedores:</label>
-										  <select style="width: 350px;" class="form-control mi-selector2" id="beneficiario1" name="proveedor_id_proveedor" >
+										  <select style="width: 200px;" class="form-control mi-selector2" id="beneficiario1" name="proveedor_id_proveedor" >
 											<option value="" selected>Seleccionar...</option>
 										<?php
 										$rubros = Proveedores::obtenerListaProveedores();
@@ -229,7 +232,7 @@ $cajas = Egresoscuenta::obtenerCuentapor($CuentaSel);
 														  <select class="form-control" id="id_rubro" name="id_rubro" >
 																  <option value="" selected>Seleccione...</option>
 																<?php
-																	$rubros = Egresoscuenta::obtenerRubros();
+																	$rubros = Rubros::obtenerListaRubros();
 																	foreach($rubros as $rubro){
 																		$id_rubro = $rubro['id_rubro'];
 																		$nombre_rubro = $rubro['nombre_rubro'];
@@ -395,7 +398,6 @@ symbolPosition : 'left' // use this setting to position the symbol at the left o
                             }
                         });
                         </script>
-
 
                          <script type="text/javascript">
                         $("#tipo_egreso").change(function() {

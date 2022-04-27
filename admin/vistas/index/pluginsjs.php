@@ -17,9 +17,15 @@
 <script src="plugins/chartjs/Chart.min.js"></script>
 <script src="plugins/knob/jquery.knob.js"></script>
 <!-- Libreria JS de las alertas -->
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<!-- <script src="dist/js/pages/dashboard2.js"></script> -->
+
+
+<link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@4/bulma.css" rel="stylesheet">
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
+
+<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
 <!-- AdminLTE for demo purposes -->
 <script src="dist/js/demo.js"></script>
 

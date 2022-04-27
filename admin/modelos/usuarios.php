@@ -51,6 +51,24 @@ public static function obtenerPagina(){
 	}
 }
 
+
+/*******************************************************
+** FUNCION PARA MOSTRAR TODOS LOS CAMPOS DE TESTIMONIOS	  **
+********************************************************/
+public static function obtenerPaginanotificaciones($id){
+	try {
+		$db=Db::getConnect();
+
+		$select=$db->query("SELECT * FROM modulo_alertas WHERE usuario_receptor='".$id."'");
+    	$camposs=$select->fetchAll();
+    	$campos = new Usuarios('',$camposs);
+		return $campos;
+	}
+	catch(PDOException $e) {
+		echo '{"error en obtener la pagina":{"text":'. $e->getMessage() .'}}';
+	}
+}
+
 /*******************************************************
 ** FUNCION PARA OBTENER TODAS LAS MARCAS DEL VEHICULO	  **
 ********************************************************/
@@ -108,7 +126,41 @@ public static function ListaEquipos(){
 public static function ListaUsuariosCond(){
 	try {
 		$db=Db::getConnect();
+		$select=$db->query("SELECT * FROM usuarios WHERE estado_usuario='1' and rol_id_rol='4' or rol_id_rol='16' order by nombre_usuario");
+    	$campos=$select->fetchAll();
+		$camposs = new Usuarios('',$campos);
+		$campostraidos = $camposs->getCampos();
+		return $campostraidos;
+	}
+	catch(PDOException $e) {
+		echo '{"error en obtener la pagina":{"text":'. $e->getMessage() .'}}';
+	}
+}
+
+/*******************************************************
+** FUNCION PARA OBTENER LA LISTA DE CLIENTES	  **
+********************************************************/
+public static function ListaUsuariosCondVolqueta(){
+	try {
+		$db=Db::getConnect();
 		$select=$db->query("SELECT * FROM usuarios WHERE estado_usuario='1' and rol_id_rol='4' order by nombre_usuario");
+    	$campos=$select->fetchAll();
+		$camposs = new Usuarios('',$campos);
+		$campostraidos = $camposs->getCampos();
+		return $campostraidos;
+	}
+	catch(PDOException $e) {
+		echo '{"error en obtener la pagina":{"text":'. $e->getMessage() .'}}';
+	}
+}
+
+/*******************************************************
+** FUNCION PARA OBTENER LA LISTA DE CLIENTES	  **
+********************************************************/
+public static function ListaUsuariosCondmula(){
+	try {
+		$db=Db::getConnect();
+		$select=$db->query("SELECT * FROM usuarios WHERE estado_usuario='1' and rol_id_rol='16' order by nombre_usuario");
     	$campos=$select->fetchAll();
 		$camposs = new Usuarios('',$campos);
 		$campostraidos = $camposs->getCampos();
@@ -159,7 +211,7 @@ public static function ListaUsuariosOperadores(){
 public static function ListaUsuariosAdmin(){
 	try {
 		$db=Db::getConnect();
-		$select=$db->query("SELECT * FROM usuarios WHERE estado_usuario='1' and rol_id_rol='1' order by nombre_usuario");
+		$select=$db->query("SELECT * FROM usuarios WHERE estado_usuario='1' order by nombre_usuario");
     	$campos=$select->fetchAll();
 		$camposs = new Usuarios('',$campos);
 		$campostraidos = $camposs->getCampos();
@@ -226,7 +278,7 @@ public static function activarmenuPor($id,$menu){
 public static function activartodo($id){
 	try {
 		$db=Db::getConnect();
-		$select=$db->query("UPDATE menu SET m_clientes='Si',m_productos='Si',m_insumos='Si',m_proveedores='Si',m_carpetas='Si',m_usuarios='Si',m_funcionarios='Si',m_documentos='Si',m_rubros='Si',m_subrubro='Si',m_destinos='Si',m_proyectos='Si',m_estaciones='Si',m_empleados='Si',m_gdocempleados='Si',m_novedades='Si',m_cuentas='Si',m_gdoccuentas='Si',m_cajas='Si',m_consolidadocajas='Si',m_equipos='Si',m_gdocequipos='Si',m_campamentos='Si',m_mantenimientos='Si',m_ventas='Si',m_ventasalquiler='Si',m_cuentasxpagar='Si',m_compras='Si',m_comprainsumos='Si',m_despachos='Si',m_combustible='Si',m_horas='Si',m_horasmq='Si',m_informe1='Si',m_concreto='Si',m_categoriains='Si',m_cargos='Si',m_crucecuentas='Si',m_egresoscajacontador='Si',m_ingresoscajacontador='Si',m_cotizaciones='Si',m_rq='Si',m_rqentrada='Si',m_rqsalida='Si',m_entradasinv='Si',m_entradasdetalleinv='Si',m_salidasinv='Si',m_salidasdetalleinv='Si',m_inventario='Si',m_cuentasxpagarusuario='Si' WHERE id_usuario='".$id."'");
+		$select=$db->query("UPDATE menu SET m_clientes='Si',m_productos='Si',m_insumos='Si',m_proveedores='Si',m_carpetas='Si',m_usuarios='Si',m_funcionarios='Si',m_documentos='Si',m_rubros='Si',m_subrubro='Si',m_destinos='Si',m_proyectos='Si',m_estaciones='Si',m_empleados='Si',m_gdocempleados='Si',m_novedades='Si',m_cuentas='Si',m_gdoccuentas='Si',m_cajas='Si',m_consolidadocajas='Si',m_equipos='Si',m_gdocequipos='Si',m_campamentos='Si',m_mantenimientos='Si',m_ventas='Si',m_ventasalquiler='Si',m_cuentasxpagar='Si',m_compras='Si',m_comprainsumos='Si',m_despachos='Si',m_combustible='Si',m_horas='Si',m_horasmq='Si',m_informe1='Si',m_concreto='Si',m_categoriains='Si',m_cargos='Si',m_crucecuentas='Si',m_egresoscajacontador='Si',m_ingresoscajacontador='Si',m_cotizaciones='Si',m_rq='Si',m_rqentrada='Si',m_rqsalida='Si',m_entradasinv='Si',m_entradasdetalleinv='Si',m_salidasinv='Si',m_salidasdetalleinv='Si',m_inventario='Si', m_cuentasxpagarusuario='Si' WHERE id_usuario='".$id."'");
 		if ($select){
 			return true;
 			}else{return false;}
@@ -315,27 +367,6 @@ public static function obtenerNombreUsuario($id){
 /*******************************************************
 ** FUNCION PARA MOSTRAR EL NOMBRE DEL USUARIO **
 ********************************************************/
-public static function obtenerImagenPerfil($id){
-	try {
-		$db=Db::getConnect();
-
-		$select=$db->query("SELECT imagen FROM usuarios WHERE id_usuario='".$id."'");
-    	$camposs=$select->fetchAll();
-    	$campos = new Usuarios('',$camposs);
-    	$marcas = $campos->getCampos();
-		foreach($marcas as $marca){
-			$mar = $marca['imagen'];
-		}
-		return $mar;
-	}
-	catch(PDOException $e) {
-		echo '{"error en obtener la pagina":{"text":'. $e->getMessage() .'}}';
-	}
-}
-
-/*******************************************************
-** FUNCION PARA MOSTRAR EL NOMBRE DEL USUARIO **
-********************************************************/
 public static function obtenerRolUsuario($id){
 	try {
 		$db=Db::getConnect();
@@ -354,6 +385,26 @@ public static function obtenerRolUsuario($id){
 	}
 }
 
+/*******************************************************
+** FUNCION PARA MOSTRAR EL NOMBRE DEL USUARIO **
+********************************************************/
+public static function obtenerImagenPerfil($id){
+	try {
+		$db=Db::getConnect();
+
+		$select=$db->query("SELECT imagen FROM usuarios WHERE id_usuario='".$id."'");
+    	$camposs=$select->fetchAll();
+    	$campos = new Usuarios('',$camposs);
+    	$marcas = $campos->getCampos();
+		foreach($marcas as $marca){
+			$mar = $marca['imagen'];
+		}
+		return $mar;
+	}
+	catch(PDOException $e) {
+		echo '{"error en obtener la pagina":{"text":'. $e->getMessage() .'}}';
+	}
+}
 
 
 /*******************************************************
@@ -643,6 +694,47 @@ public static function perfilequipos($rol_id_rol,$ultimoid,$No){
 }
 
 
+
+/*******************************************************
+** FUNCION PARA MOSTRAR TODOS LOS CAMPOS POR RANGO DE FECHA	  **
+********************************************************/
+public static function mostrarnotificaciones($id){
+	try {
+		$db=Db::getConnect();
+		$sql="SELECT * FROM modulo_alertas WHERE usuario_receptor='".$id."' and estado_alerta='0' order by id asc";
+		$select=$db->query($sql);
+		//echo($sql);
+    	$camposs=$select->fetchAll();
+    	$campos = new Usuarios('',$camposs);
+		return $campos;
+	}
+	catch(PDOException $e) {
+		echo '{"error en obtener la pagina":{"text":'. $e->getMessage() .'}}';
+	}
+}
+
+
+/***************************************************************
+** FUNCION PARA ELIINAR POR ID  **
+***************************************************************/
+public static function notificacionleida($id,$marcadapor){
+	try {
+		$db=Db::getConnect();
+
+		date_default_timezone_set("America/Bogota");
+		$TiempoActual = date('Y-m-d H:i:s');
+		$diactual = date('Y-m-d');
+		$estadonotificacion=1;
+
+		$select=$db->query("UPDATE modulo_alertas SET estado_alerta='1', fecha_leida='".$diactual."',marca_leida='".$TiempoActual."' WHERE usuario_receptor='".$marcadapor."' and id='".$id."'");
+		if ($select){
+			return true;
+			}else{return false;}
+	}
+	catch(PDOException $e) {
+		echo '{"error en obtener la pagina":{"text":'. $e->getMessage() .'}}';
+	}
+}
 
 }
 
