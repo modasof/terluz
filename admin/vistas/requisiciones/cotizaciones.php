@@ -170,12 +170,12 @@ foreach ($campos as $campo) {
       <div class="row invoice-info">
         <div class="col-sm-5 invoice-col">
           Solicitado por:
-         <address>
-            <strong>CONSTRUCTORA TERLUZ S.AS</strong><br>
-            Nit. 901407951-6<br>
-            Dirección:<small>CC PLACES MALL OF 317</small><br>
-            Celular: (320) 252-8767<br>
-            E-mail: <a href="constructoraterluz@gmail.com">constructoraterluz@gmail.com</a>
+          <address>
+            <strong>VIASCON S.A.S</strong><br>
+            Nit. 901384338-1<br>
+            Dirección:<small>KM 2 VIA CERETE - SAN CARLOS</small><br>
+            Celular: (320) 541-9555<br>
+            E-mail: <a href="contabilidad.viascon@gmail.com">contabilidad.viascon@gmail.com</a>
           </address>
         </div>
         <!-- /.col -->
@@ -207,7 +207,7 @@ foreach ($campos as $campo) {
           <b>Orden Compra #N<?php echo ($MarcaTemporal) ?></b><br>
           <br>
 
-          <b>Método de pago:</b>
+         
           <?php
 $mediopago = ObtenerMediopago($idproveedor, "1");
 //echo ($mediopago);

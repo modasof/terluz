@@ -60,7 +60,7 @@ $controllers = array(
     'concreto' => ['todos','formularioconcreto','guardar','eliminar','editar','actualizar','despachosporfecha','detallepuntos'],
 
 	// Funcionalidad compras
-	'compras' => ['todos','formulario','guardar','eliminar','editar','actualizar','porfecha','verdetalle','cambiarestado','actualizarpago','cambiarestadocreditos','pagotemporal','deletepagotemporal','actualizarpagocredito','recibiroc','todospormes','cxpusuario','actualizardetallecot','editardetallecot','todosrecibirinsumos','porfechainsumos','cargarinventario','retornar','todosproveedorpagos'],
+	'compras' => ['todos','formulario','guardar','eliminar','editar','actualizar','porfecha','verdetalle','cambiarestado','actualizarpago','cambiarestadocreditos','pagotemporal','deletepagotemporal','actualizarpagocredito','recibiroc','todospormes','cxpusuario','actualizardetallecot','editardetallecot','todosrecibirinsumos','porfechainsumos','cargarinventario','retornar','todosproveedorpagos','cargarfactura','ivamultiple','descartar','descartarinversa','guardarfacturacompras','detallefacturacompra','facturascompraspormes','cargarfacturacp','todosporproveedorespera','pagofacturacompra','editarfacturacompra','actualizarfacturacompras','editarfacturacompracp','guardarpagoanticipo','guardarpagofactura'],
 
 	// Reporte Producción
 	'reportesproduccion' => ['reportesproduccion','guardarreporteproduccion','eliminarreporteproduccion','editarreporteproduccion','actualizarreporteproduccion','reportesporfechaproduccion'],
@@ -104,6 +104,8 @@ $controllers = array(
 	'ventasdespachos' => ['todos','nuevo','guardar','eliminar'],
 	'productosinsumos' => ['todos','nuevo','guardar','eliminar'],
 	'tipomantenimiento' => ['todos','nuevo','editar','guardar','actualizar','eliminar'],
+
+	'retefuente' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
 
 	// Funcionalidad Activar Rubros por Usuario
 	'usuariosrubros' => ['todospor','activarrubroPor','desactivarrubroPor','activartodo','activarporRol'],
@@ -174,6 +176,11 @@ function call($controller, $action) {
 	case 'dashboards':
 		require_once 'modelos/dashboards.php';
 		$controller = new dashboardsController();
+		break;
+
+	case 'retefuente':
+		require_once 'modelos/retefuente.php';
+		$controller = new RetefuenteController();
 		break;
 
 

@@ -478,7 +478,7 @@ public static function reqalmacenestado($estado){
 	try {
 		$db=Db::getConnect();
 		$sql="SELECT * FROM requisiciones_items WHERE estado_item='".$estado."'order by fecha_reporte DESC";
-		//echo($sql);
+	//echo($sql);
 		$select=$db->query($sql);
     	$camposs=$select->fetchAll();
     	$campos = new Requisiciones('',$camposs);

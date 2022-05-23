@@ -358,7 +358,7 @@ class RequisicionesitemsController
 
         if ($valor_cot1 != "") {
             $res = Requisicionesitems::guardarcotizacionmultiple($proveedor1, $cotizacion1, $item_id, $valor_cot1, $requisicion_id, $marca_temporal, $usuario_creador, $insumo_id_insumo, $servicio_id_servicio, $equipo_id_equipo, $cantidadcot);
-             $res=Requisicionesitems::actualizarestado($estado_item, $item_id);
+            $res=Requisicionesitems::actualizarestado($estado_item, $item_id);
             //$res = Requisicionesitems::guardartrazabilidad($estado_item, $id, $usuario_creador, $observaciones1);
         }
         if ($valor_cot2 != "") {
