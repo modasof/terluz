@@ -6,6 +6,15 @@ include_once 'controladores/usuariosController.php';
 include_once 'modelos/proyectos.php';
 include_once 'controladores/proyectosController.php';
 
+include_once 'modelos/rubros.php';
+include_once 'controladores/rubrosController.php';
+
+include_once 'modelos/subrubros.php';
+include_once 'controladores/subrubrosController.php';
+
+include_once 'modelos/obras.php';
+include_once 'controladores/obrasController.php';
+
 include_once 'modelos/insumos.php';
 include_once 'controladores/insumosController.php';
 
@@ -64,6 +73,27 @@ foreach ($campos as $campo) {
 });
 </script>
 
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#id_rubro').on('change',function(){
+        var rubroID = $(this).val();
+        //alert (rubroID);
+        if(rubroID){
+            $.ajax({
+                type:'POST',
+                url:'vistas/gastos/ajax.php',
+                data:'id_rubro='+rubroID,
+                success:function(html){
+                    $('#id_subrubro').html(html);  
+                }
+            });
+        }else{
+            $('#id_subrubro').html('<option value="">Seleccione primero el rubro</option>');
+            
+        }
+    });
+});
+</script>
 
 
 <!-- Content Wrapper. Contains page content -->
@@ -124,30 +154,55 @@ $itemsget = $_GET['des'];
 $items    = explode(",", $itemsget);
 foreach ($items as $key => $despachounico) {
 
-    $insumo_id_insumo = Requisicionesitems::sqlinsumoitem($despachounico);
     $usuario_creador  = Requisicionesitems::sqlusuariocreador($despachounico);
     $rqprincipal      = Requisicionesitems::sqlrq($despachounico);
     $cantidad         = Requisicionesitems::sqlcantidaditem($despachounico);
 
-    $nomsolicita         = Usuarios::obtenerNombreUsuario($usuario_creador);
-    $nombreinsumo        = Insumos::obtenerNombreInsumo($insumo_id_insumo);
-    $Ucategoriainsumo_id = Insumos::obtenerCategoria($insumo_id_insumo);
-    $Unombrecategoria    = Categoriainsumos::obtenerNombre($Ucategoriainsumo_id);
-    $Uunidadmedida_id    = Insumos::obtenerUnidadmed($insumo_id_insumo);
-    $Unombredmedida      = Unidadesmed::obtenerNombre($Uunidadmedida_id);
+    $insumo_id_insumo = Requisicionesitems::sqlinsumoitem($despachounico);
 
+    # =================================================================
+    # =           Verificamos si es un Insumo o un Servicio           =
+    # =================================================================
+
+    if ($insumo_id_insumo!=0) {
+
+        $nombreinsumo        = Insumos::obtenerNombreInsumo($insumo_id_insumo);
+        $Ucategoriainsumo_id = Insumos::obtenerCategoria($insumo_id_insumo);
+        $Unombrecategoria    = Categoriainsumos::obtenerNombre($Ucategoriainsumo_id);
+        $Uunidadmedida_id    = Insumos::obtenerUnidadmed($insumo_id_insumo);
+        $Unombredmedida      = Unidadesmed::obtenerNombre($Uunidadmedida_id);
+        $valorpromedio       = Valorpromedioinsumo($insumo_id_insumo,$rqprincipal,$despachounico);
+        $totalvalorentregado = $valorpromedio * $sumaanteriorestemp;
+
+    }else{
+
+        $servicio_id_servicio = Requisicionesitems::sqlservicioitem($despachounico);
+        $nombreinsumo        = Servicios::obtenerNombre($servicio_id_servicio);
+        $Unombrecategoria= Servicios::obtenerUnidadServicio($servicio_id_servicio);
+        $Unombredmedida      = Unidadesmed::obtenerNombre($Unombrecategoria);
+        $valorpromedio       = Valorpromedioservicio($servicio_id_servicio,$rqprincipal,$despachounico);
+        $totalvalorentregado = $valorpromedio * $sumaanteriorestemp;
+      
+    }
+
+  
+
+    $nomsolicita         = Usuarios::obtenerNombreUsuario($usuario_creador);
+
+    
     $fechadia = date('Y-m-d');
 
     $cant_anteriores     = Inventario::sqldetallesalida($despachounico);
     $cant_anteriorestemp = Inventario::sqldetallesalidatemporal($despachounico, $fechadia);
 
-    $pendiente = $cantidad - $cant_anteriores;
+
+
+    $pendiente = $cantidad - $cant_anteriores - $cant_anteriorestemp;
     $sumatotal += $cantidad;
     $sumaanteriores += $cant_anteriores;
     $sumaanteriorestemp += $cant_anteriorestemp;
-    $pendientetotal      = $sumatotal - $sumaanteriores;
-    $valorpromedio       = Valorpromedioinsumo($insumo_id_insumo);
-    $totalvalorentregado = $valorpromedio * $sumaanteriorestemp;
+    $pendientetotal      = $sumatotal - $sumaanteriores-$sumaanteriorestemp;
+   
 
     ?>
             <tr>
@@ -162,6 +217,7 @@ date_default_timezone_set("America/Bogota");
                                 <input type="hidden" name="item_id" value="<?php echo ($despachounico) ?>">
                                 <input type="hidden" name="requisicion_id" value="<?php echo ($idreq) ?>">
                                 <input type="hidden" name="insumo_id" value="<?php echo ($insumo_id_insumo) ?>">
+                                 <input type="hidden" name="servicio_id" value="<?php echo ($servicio_id_servicio) ?>">
                                 <input type="hidden" name="salida_id" value="<?php echo ($entrada_id) ?>">
                                 <input type="hidden" name="fecha_registro" value="<?php echo ($campofecha) ?>">
                                 <input type="hidden" name="estado_detalle_salida" value="0">
@@ -265,7 +321,7 @@ if ($sumaanteriorestemp == 0) {
     $contadorsumainsumo += $valorinsumos;
 
     ?>
-    <input type="hidden" value="<?php echo (round($valorpromedio, 0)); ?>" name="valor_entregado">
+<input type="hidden" value="<?php echo (round($valorpromedio, 0)); ?>" name="valor_entregado">
 
 <input disabled="" id="campocarga<?php echo ($despachounico); ?>" class='input input-group-sm' type="text" value="<?php echo ($cant_anteriorestemp); ?>">
  <a href="?controller=inventario&action=deletedellsalidatemp&&id=<?php echo ($idreq); ?>&&iddelete=<?php echo ($despachounico); ?>&&des=<?php echo ($itemsget); ?>"><i class="fa fa-close text-danger"></i></a>
@@ -282,11 +338,9 @@ if ($cant_anteriorestemp == 0) {
             </script>
 
             <?php
-} elseif ($cant_anteriorestemp < $pendiente) {
+} elseif ($cant_anteriorestemp<$pendiente) {
         echo ("<span><small class='text-success'  id='<?php echo($despachounico); ?>msjporitem1'>Entrega Parcial</small></span>");
-    } elseif ($cant_anteriorestemp > $pendiente) {
-        echo ("<span><small class='text-danger' id='<?php echo($despachounico); ?>msjporitem1'>Supera el Valor</small></span>");
-    } elseif ($cant_anteriorestemp == $pendiente) {
+    } elseif ($pendiente==0) {
         echo ("<span><small class='text-success' id='<?php echo($despachounico); ?>msjporitem1'>Entrega Completa</small></span>");
     }
     ?>
@@ -330,16 +384,15 @@ $TiempoActual = date('Y-m-d H:i:s');
 $campofecha   = date('Y-m-d');
 
 ?>
-                   
 
-                    <input type="hidden" name="fecha_recepcion" value="<?php echo ($campofecha); ?>">
-                    <input type="hidden" name="requisicion_id" value="<?php echo ($idreq); ?>">
-                    <input type="hidden" name="marca_temporal" value="<?php echo ($TiempoActual); ?>">
-                    <input type="hidden" name="creado_por" value="<?php echo ($IdSesion); ?>">
-                    <input type="hidden" name="estado_salida" value="Despachado">
-                    <input type="hidden" name="tipo_salida" value="Despacho RQ-<?php echo ($idreq); ?>">
-                    <input type="hidden" name="items" value="<?php echo ($itemsget); ?>">
-                    <input  type="hidden" name="valor_salida" value="<?php echo ($contadorsumainsumo); ?>">
+            <input type="hidden" name="fecha_recepcion" value="<?php echo ($campofecha); ?>">
+            <input type="hidden" name="requisicion_id" value="<?php echo ($idreq); ?>">
+            <input type="hidden" name="marca_temporal" value="<?php echo ($TiempoActual); ?>">
+            <input type="hidden" name="creado_por" value="<?php echo ($IdSesion); ?>">
+            <input type="hidden" name="estado_salida" value="Despachado">
+            <input type="hidden" name="tipo_salida" value="Despacho RQ-<?php echo ($idreq); ?>">
+            <input type="hidden" name="items" value="<?php echo ($itemsget); ?>">
+            <input type="hidden" name="valor_salida" value="<?php echo ($contadorsumainsumo); ?>">
 
                               <div class="card-body">
 
@@ -381,8 +434,8 @@ foreach ($rubros as $campo) {
                                             </div>
             <div id="" class="col-md-4">
                         <div class="form-group">
-                          <label> Insumo aplica a un Equipo: <span>*</span></label>
-                <select class="form-control" id="foo" name="aplica_equipo" required>
+                          <label> ¿Desea cargar el insumo o servicio a una obra?: <span>*</span></label>
+                <select class="form-control" id="foo" name="aplica_obra" required>
                     <option value="" selected="">Seleccionar...</option>
                     <option value="Si">Si</option>
                     <option value="No" >No</option>
@@ -392,17 +445,16 @@ foreach ($rubros as $campo) {
 </div>
  <div id="campoequipo" style="display:none;"  class="col-md-12">
                         <div class="form-group">
-                          <label> Seleccione el Equipo: <span>*</span></label>
-                         <select style="width:300px;" class="form-control mi-selector" id="selectequipo" name="equipo_id_equipo" >
+                          <label> Seleccione la Obra: <span>*</span></label>
+                         <select style="width:300px;" class="form-control mi-selector" id="selectequipo" name="obra_id_obra" >
                             <option value="" selected>Seleccionar...</option>
-                             <option value="10000" >Otros</option>
                             <?php
-$campamentos = Equipos::obtenerListaEquiposAsf();
+$campamentos = Obras::ListaObras();
 foreach ($campamentos as $campamento) {
-    $id_equipo     = $campamento['id_equipo'];
-    $nombre_equipo = $campamento['nombre_equipo'];
+    $id_obra     = $campamento['id_obra'];
+    $nombre_obra = $campamento['nombre_obra'];
     ?>
-                            <option value="<?php echo $id_equipo; ?>"><?php echo utf8_encode($nombre_equipo); ?></option>
+                            <option value="<?php echo $id_obra; ?>"><?php echo utf8_encode($nombre_obra); ?></option>
                             <?php }?>
                           </select>
 
@@ -412,7 +464,7 @@ foreach ($campamentos as $campamento) {
  $('#foo').change(function() {
     var el = $(this);
     if(el.val() === "Si") {
-      alert("Selecione el Equipo");
+      alert("Selecione la obra");
           $('#campoequipo').show();
           document.getElementById("selectequipo").required = true;
 
@@ -431,6 +483,9 @@ foreach ($campamentos as $campamento) {
     }
 });
 </script>
+
+    
+
             <div  id="" class="col-md-4">
                                                 <div class="form-group">
                                                     <label> Entregado a: <span>*</span></label>
@@ -471,6 +526,31 @@ foreach ($rubros as $campo) {
                         </div>
 
                 </div>
+                <div id="divrubro" class="col-md-4">
+                                                    <div class="form-group">
+                                                          <label for="sel1">Rubro:<span>*</span></label>
+                                                          <select class="form-control" id="id_rubro" name="id_rubro" >
+                                                                  <option value="" selected>Seleccione...</option>
+                                                                <?php
+                                                            $rubros = Rubros::obtenerListaRubros();
+                                                                    foreach($rubros as $rubro){
+                                                                        $id_rubro = $rubro['id_rubro'];
+                                                                        $nombre_rubro = $rubro['nombre_rubro'];
+                                                                ?>
+                                                                <option value="<?php echo $id_rubro; ?>"><?php echo utf8_encode($nombre_rubro); ?></option>
+                                                                <?php }?>
+                                                          </select>
+                                                    </div>
+                                                </div>
+
+                                                <div  id="divsubrubro" class="col-md-4">
+                                                <div class="form-group">
+                                                      <label for="sel1">Sub-Rubro:<span>*</span></label>
+                                                      <select class="form-control" id="id_subrubro" name="id_subrubro" required>
+                                                        <option value="0">Seleccionar Subrubro</option>
+                                                      </select>
+                                                </div>
+
 
 
 
@@ -515,8 +595,11 @@ foreach ($rubros as $campo) {
 <script type="text/javascript">
 $(document).ready(function(){
 
-
+        //2
         var recibido = $("#inputcantidadrecibida").val();
+
+
+        //10
         var pendiente = $("#inputcantidacomprada").val();
 
        // Verificar que las cantidades recibidas no superen las compradas.
@@ -532,7 +615,7 @@ $(document).ready(function(){
             addOption2(mySelect,"Entrega Parcial","Entrega Parcial");
 
         }
-        else if(recibido==pendiente){
+        else if(pendiente==0){
              $("#botonguardar").slideToggle(100);
             var mySelect = document.getElementById("estadoOC");
         var addOption2 = function(select,txt,value){

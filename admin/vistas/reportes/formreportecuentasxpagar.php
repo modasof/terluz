@@ -111,6 +111,36 @@ $(document).ready(function(){
 												</div>
 										</div>
 
+											<div id="adicional" class="col-md-3">
+												<div class="form-group">
+													<label> ¿Aplica a una Obra?: <span>*</span></label>
+							<select style="width: 200px;" class="form-control mi-selector3" id="aplica_obra" name="aplica_obra" required>
+								
+										<option value="" selected>Seleccionar...</option>
+										<option value="Si">Si</option>
+										<option value="No">No</option>
+								</select>
+												</div>
+											</div>
+
+											<div style="display: none;" id="campo_obra" class="col-md-3">
+												<div class="form-group">
+													<label>Seleccionar Obra<span>*</span></label>
+													 <select style="width:300px;" class="form-control mi-selector2" id="obra_id_obra" name="obra_id_obra" >
+																  <option value="" selected>Seleccione...</option>
+																<?php
+																	$rubros = Obras::ListaObras();
+																	foreach($rubros as $rubro){
+																		$id_obra = $rubro['id_obra'];
+																		$nombre_obra = $rubro['nombre_obra'];
+																?>
+																<option value="<?php echo $id_obra; ?>"><?php echo utf8_encode($nombre_obra); ?></option>
+																<?php }?>
+														  </select>
+												</div>
+											</div>
+
+
 											<div id="divrubro" class="col-md-12">
 													<div class="form-group">
 														  <label for="sel1">Rubro:<span>*</span></label>
@@ -190,7 +220,21 @@ precision: 0, // How many decimal places are allowed
 affixesStay : true, // set if the symbol will stay in the field after the user exits the field. 
 symbolPosition : 'left' // use this setting to position the symbol at the left or right side of the value. default 'left'
 }); //
-		</script>
+</script>
+
+
+	<script type="text/javascript">
+ $('#aplica_obra').change(function() {
+    var el = $(this);
+    if(el.val() === "No") {
+          $('#campo_obra').hide();   
+    } else {
+      alert("Has seleccionado que si, indica cuál?"); 
+          $('#campo_obra').show();
+    }      
+});
+</script>
+
 <script type="text/javascript">
 	var datefield = document.createElement("input")
 

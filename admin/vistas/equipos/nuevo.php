@@ -2,10 +2,31 @@
 ini_set('display_errors', '0'); 
 $RolSesion = $_SESSION['IdRol'];
 $IdSesion = $_SESSION['IdUser'];
+
+include_once 'modelos/listame.php';
+include_once 'controladores/listameController.php';
+
+include_once 'modelos/unidadesmed.php';
+include_once 'controladores/unidadesmedController.php';
+
  ?>
 <!-- CCS Y JS PARA LA CARGA DE IMAGEN -->
 <script src="plugins/dropify/dropify.min.js"></script>
 <link rel="stylesheet" href="plugins/dropify/dropify.min.css">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+<script type="text/javascript">
+  jQuery(document).ready(function($){
+    $(document).ready(function() {
+        $('.mi-selector').select2();
+    });
+});
+</script>
+
+
 <!-- CCS Y JS PARA LA CARGA DE IMAGEN -->
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -14,7 +35,7 @@ $IdSesion = $_SESSION['IdUser'];
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0 text-dark">Nuevo Equipo</h1>
+          <h1 class="m-0 text-dark">Nuevo Equipo en Alquiler</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
@@ -78,20 +99,24 @@ $IdSesion = $_SESSION['IdUser'];
 												</div>
 											</div>
 
-												<div class="col-md-4 col-xs-12">
-												<div class="form-group">
-													<label>Tipo Equipo: <span>*</span></label>
-													
-													 <select class="form-control select2" id="tipo_equipo" name="tipo_equipo" required="">
-															<option value="" selected="">Seleccione una opción....</option>
-															<option value="Maquinaria Pesada">Maquinaria Pesada</option>
-															<option value="Volquetas">Volquetas</option>
-															<option value="Vehículos">Vehículos</option>
-															<option value="Equipos Menores">Equipos Menores</option>
-															<option value="Herramientas">Herramientas</option>
-													</select>
-												</div>
-											</div>
+											<div class="col-md-4">
+									<div class="form-group">
+									  <label for="sel1">Seleccione la Categoría al cual está asociado:</label>
+									  <select class="form-control mi-selector" id="tipo_equipo" name="tipo_equipo" required>
+										<option value="" selected>Tipo Equipo</option>
+										<?php
+										$rubros = Listame::obtenerLista();
+										foreach ($rubros as $campo){
+											$nombre_lme = $campo['nombre_lme'];
+											$id_lme = $campo['id_lme'];
+											$unidad_id_unidad = $campo['unidad_id_unidad'];
+											$nomunidad = Unidadesmed::obtenerNombre($unidad_id_unidad);
+										?>
+										<option value="<?php echo $id_lme; ?>"><?php echo utf8_decode($nombre_lme." - [".$nomunidad."]"); ?></option>
+										<?php } ?>
+									  </select>
+									</div>
+								</div>
 
 												<div class="col-md-4 col-xs-12">
 												<div class="form-group">
@@ -145,7 +170,7 @@ $IdSesion = $_SESSION['IdUser'];
 						
 											<div class="col-md-4">
 												<div class="form-group">
-													<label>Unidad de Trabajo: <span>*</span></label>
+													<label>Cobro por: <span>*</span></label>
 													
 													 <select class="form-control select2"  name="unidad_trabajo" required="">
 															<option value="" selected="">Seleccione una opción....</option>
@@ -158,22 +183,22 @@ $IdSesion = $_SESSION['IdUser'];
 											</div>
 											<div  class="col-md-4">
 												<div class="form-group">
-													<label>Fecha Adquisición: <span>*</span></label>
+													<label>Fecha Ingreso: <span>*</span></label>
 													<input type="date" name="fecha_adquisicion" id="fecha_adquisicion" placeholder="Fecha" class="form-control required" required id="beneficiario">
 												</div>
 											</div>
 
 											<div  class="col-md-4">
 												<div class="form-group">
-													<label>Valor Activo: <span>*</span></label>
+													<label>Valor Contratado: <span>*</span></label>
 													<input type="text" name="valor_activo" id="demo1" placeholder="Valor" class="form-control required" required >
 												</div>
 											</div>
-												<div class="col-md-6">
+												<div style="display: none;" class="col-md-6">
 												<div class="form-group">
 													<label>Indique el % de comisión: <span>*</span></label>
 													<select class="form-control"  name="comision" required="">
-															<option value="0" selected="">Seleccione una opción....</option>
+															<option value="0" selected="0">Seleccione una opción....</option>
 															<?php 
 															for ($i=0; $i < 21 ; $i++) { 
 																echo("<option value='".$i."'>".$i." %</option>");

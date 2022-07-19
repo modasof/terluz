@@ -7,7 +7,8 @@ class HorasmqController {
 /*************************************************************/
 
 	function horas() {
-		$campos=Horasmq::ReporteHoras();;
+		$id_obra=$_GET['id_obra'];
+		$campos=Horasmq::ReporteHoras($id_obra);;
 		require_once 'vistas/horasmq/reportehoras.php';
 	}
 
@@ -16,14 +17,14 @@ class HorasmqController {
 /*************************************************************/
 
 function horasporfecha() {
-
+$id_obra=$_GET['id_obra'];
 	if (isset($_POST['daterange'])) {
   $fechaform=$_POST['daterange'];
 }
 elseif (isset($_GET['daterange'])) {
   $fechaform=$_GET['daterange'];
 }
-		$campos=Horasmq::ReporteHoras();;
+		$campos=Horasmq::ReporteHoras($id_obra);;
 		require_once 'vistas/horasmq/reportehoras.php';
 	}
 
@@ -32,6 +33,7 @@ elseif (isset($_GET['daterange'])) {
 /*************************************************************/
 function guardarhoras() {
 
+	$id_obra=$_GET['id_obra'];
 	$ruta_imagen=$this->subir_fichero('images/horasmq','imagen');
 	$variable = $_POST;
 	$nuevoarreglo = array();
@@ -53,7 +55,21 @@ function guardarhoras() {
 			}
 		}
 	}
-	//array_push($nuevoarreglo,$nuevo);
+
+	$fecha_reporte=$_POST['fecha_reporte'];
+	$equipo_id_equipo=$_POST['equipo_id_equipo'];
+	$hora_inactiva=$_POST['hora_inactiva'];
+	$obra_id_obra=$_POST['obra_id_obra'];
+
+
+	$validacion=Horasmq::validarduplicado($fecha_reporte,$equipo_id_equipo,$obra_id_obra);
+
+	if ($validacion>0) {
+		echo "<script>jQuery(function(){Swal.fire(\"¡Erro al guardar!\", \"El equipo seleccionado ya tiene horas reportadas el día ".$fecha_reporte." \", \"warning\");});</script>";
+	}
+	else{
+
+			//array_push($nuevoarreglo,$nuevo);
 	$campo = new Horasmq('',$nuevoarreglo);
 	$res = Horasmq::guardarhoras($campo,$ruta_imagen);
 	if ($res){
@@ -61,7 +77,14 @@ function guardarhoras() {
 	}else{
 		echo "<script>jQuery(function(){Swal.fire(\"¡Erro al guardar!\", \"No se han guardado correctamente los datos\", \"error\");});</script>";
 	}
-	$this->showhoras();
+
+	}
+
+
+	$campos=Horasmq::ReporteHoras($id_obra);
+	require_once 'vistas/horasmq/reportehoras.php';
+
+	
 }
 
 /*************************************************************/
@@ -69,13 +92,14 @@ function guardarhoras() {
 /*************************************************************/
 	function eliminarhoras() {
 		$id = $_GET['id'];
+		$id_obra = $_GET['id_obra'];
 		$res = Horasmq::eliminarhorasPor($id);
 		if ($res){
 			echo "<script>jQuery(function(){Swal.fire(\"¡Datos eliminados!\", \"Se han eliminado correctamente los datos\", \"success\");});</script>";
 		}else{
 				echo "<script>jQuery(function(){Swal.fire(\"¡Error al eliminar!\", \"No se han eliminado correctamente los datos\", \"error\");});</script>";
 		}
-		$campos = Horasmq::ReporteHoras();
+		$campos = Horasmq::ReporteHoras($id_obra);
 		require_once 'vistas/horasmq/reportehoras.php';
 	}
 
@@ -84,6 +108,7 @@ function guardarhoras() {
 /*************************************************************/
 	function editarhoras() {
 		$id = $_GET['id'];
+		$id_obra =$_GET['id_obra'];
 		$vereditar = $_GET['vereditar'];
 		$campos = Horasmq::editarhorasPor($id);
 		require_once 'vistas/horasmq/formeditarhoras.php';
@@ -94,6 +119,7 @@ function guardarhoras() {
 /*************************************************************/
 function actualizarhoras(){
 	$id = $_GET['id'];
+	$id_obra=$_GET['id_obra'];
 	if (empty($_FILES['imagen']['name'])){
 		$ruta_imagen = $_POST['ruta1'];
 	} else {
@@ -128,16 +154,11 @@ function actualizarhoras(){
 	}else{
 		echo "<script>jQuery(function(){Swal.fire(\"¡Error al actualizar!\", \"Hubo un error al actualizar, comunique con el administrador del sistema\", \"error\");});</script>";
 	}
-	$this->showhoras();
+	$campos = Horasmq::ReporteHoras($id_obra);
+		require_once 'vistas/horasmq/reportehoras.php';
 }
 
-/*************************************************************/
-/* FUNCION PARA MOSTRAR LA PAGINA*/
-/*************************************************************/
-function showhoras(){
-	$campos=Horasmq::ReporteHoras();
-	require_once 'vistas/horasmq/reportehoras.php';
-}
+
 
 /*************************************************************/
 /* FUNCION PARA SUBIR UN ARCHIVO  */

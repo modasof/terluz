@@ -170,12 +170,12 @@ foreach ($campos as $campo) {
       <div class="row invoice-info">
         <div class="col-sm-5 invoice-col">
           Solicitado por:
-          <address>
-            <strong>VIASCON S.A.S</strong><br>
-            Nit. 901384338-1<br>
-            Dirección:<small>KM 2 VIA CERETE - SAN CARLOS</small><br>
-            Celular: (320) 541-9555<br>
-            E-mail: <a href="contabilidad.viascon@gmail.com">contabilidad.viascon@gmail.com</a>
+         <address>
+            <strong>CONSTRUCTORA TERLUZ S.AS</strong><br>
+            Nit. 901407951-6<br>
+            Dirección:<small>CC PLACES MALL OF 317</small><br>
+            Celular: (320) 252-8767<br>
+            E-mail: <a href="constructoraterluz@gmail.com">constructoraterluz@gmail.com</a>
           </address>
         </div>
         <!-- /.col -->
@@ -222,7 +222,7 @@ $mediopago = ObtenerMediopago($idproveedor, "1");
       <div class="row">
         <div class="col-xs-12 table-responsive">
           <form action="?controller=requisicionesitems&action=guardarocompra" method="post" id="formularioppal">
-  <button id="btncrearorden" style="display:none;"  onclick="submitform(); return false;" type="submit" class="btn btn-success btn-xs pull-right"><i class="fa fa-check"></i> Autorizar Orden
+  <button id="btncrearorden"   onclick="submitform(); return false;" type="submit" class="btn btn-success btn-xs pull-right"><i class="fa fa-check"></i> Autorizar Orden
   </button>
 <?php
 date_default_timezone_set("America/Bogota");
@@ -235,6 +235,9 @@ $DiaActualfor = date('Y-m-d');
         <input type="hidden" name="valor_total" value="<?php echo ($Subtotalcot); ?>">
         <input type="hidden" name="valor_retenciones" value="0">
         <input type="hidden" name="factura" value="0">
+        <input type="hidden" name="id_factura_compra" value="0">
+         <input type="hidden" name="aplica_obra" value="0">
+        <input type="hidden" name="obra_id_obra" value="0">
         <input type="hidden" name="estado_recibido" value="Pendiente Llegada">
         <input type="hidden" name="estado_orden" value="1">
         <input type="hidden" name="proveedor_id_proveedor" value="<?php echo ($idproveedor); ?>">
@@ -731,15 +734,15 @@ echo ($mediopago);
 <script>
   $(document).ready(function(){
    
-        var totalcotizaco = $("#sumatotalcotizado1").val();
-        var totaloriginal = $("#sumarcantidadfinal").val();
+       // var totalcotizaco = $("#sumatotalcotizado1").val();
+       // var totaloriginal = $("#sumarcantidadfinal").val();
 
-       if (totalcotizaco==0 && totaloriginal==0) {
-              $("#btncrearorden").hide("slow");
-        }
-        else if (totalcotizaco==totaloriginal){
-                $("#btncrearorden").slideToggle(100); 
-        }
+      // if (totalcotizaco==0 && totaloriginal==0) {
+             // $("#btncrearorden").hide("slow");
+        //}
+        //else if (totalcotizaco==totaloriginal){
+        //        $("#btncrearorden").slideToggle(100); 
+       // }
 });
 </script>
 <script>

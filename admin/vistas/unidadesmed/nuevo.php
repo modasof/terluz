@@ -43,24 +43,24 @@
 							<div class="row">
 								 <div class="col-12">
 									<div class="form-group">
-									  <label for="nombres">Nombre Unidad (Máximo 20 Caráteres)</label>
+									  <label for="nombres">Nombre Unidad (Máximo 50 Caráteres)</label>
 									  <div class="input-group">
 										<div class="input-group-prepend">
 										  <span class="input-group-text"><i class="fa fa-align-justify"></i></span>
 										</div>
-										<input type="text" name="nombre" value="" class="form-control" id="nombre" placeholder="Ingrese el nombre" maxlength="20" required>
+										<input type="text" name="nombre" value="" class="form-control" id="nombre" placeholder="Ingrese el nombre" maxlength="50" required>
 										<input type="hidden" name="publicado" value="1">
 									  </div>
 									</div>
 								  </div>
 								   <div class="col-12">
 									<div class="form-group">
-									  <label for="nombres">Abreviatura (Máximo 3 Caráteres)</label>
+									  <label for="nombres">Abreviatura (Máximo 10 Caráteres)</label>
 									  <div class="input-group">
 										<div class="input-group-prepend">
 										  <span class="input-group-text"><i class="fa fa-align-justify"></i></span>
 										</div>
-										<input type="text" name="abreviatura" value="" class="form-control" id="nombre" placeholder="Ingrese Abreviatura" maxlength="3" required>
+										<input type="text" name="abreviatura" value="" class="form-control" id="nombre" placeholder="Ingrese Abreviatura" maxlength="10" required>
 										
 									  </div>
 									</div>

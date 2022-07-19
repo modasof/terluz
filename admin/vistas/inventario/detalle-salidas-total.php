@@ -10,6 +10,9 @@ include_once 'modelos/insumos.php';
 include_once 'controladores/equiposController.php';
 include_once 'modelos/equipos.php';
 
+include_once 'controladores/obrasController.php';
+include_once 'modelos/obras.php';
+
 include_once 'controladores/unidadesmedController.php';
 include_once 'modelos/unidadesmed.php';
 
@@ -202,7 +205,7 @@ if ($fechaform != "") {
               <th>Entrega</th>
               <th>Tipo Salida</th>
               <th>Proyecto</th>
-               <th>Equipo</th>
+               <th>Obra</th>
               <th>Despachada</th>
               <th>Recibe</th>
               <th>Fecha-Despacho</th>
@@ -213,18 +216,18 @@ if ($fechaform != "") {
               <th>Valor Entregado</th>
             </tr>
             <tr>
-               <th>Entrega</th>
-              <th>Tipo Salida</th>
-              <th>Proyecto</th>
-                <th>Equipo</th>
-             <th>Despachada</th>
-              <th>Recibe</th>
-              <th>Fecha-Despacho</th>
-               <th>Fecha-Recepción</th>
-              <th>Insumo</th>
-              <th>Cantidades</th>
-              <th>Unidad</th>
-              <th>Valor Entregado</th>
+            <th>Entrega</th>
+            <th>Tipo Salida</th>
+            <th>Proyecto</th>
+            <th>Obra</th>
+            <th>Despachada</th>
+            <th>Recibe</th>
+            <th>Fecha-Despacho</th>
+            <th>Fecha-Recepción</th>
+            <th>Insumo</th>
+            <th>Cantidades</th>
+            <th>Unidad</th>
+            <th>Valor Entregado</th>
 
             </tr>
           </thead>
@@ -260,9 +263,18 @@ foreach ($campos as $campo) {
 
     $proyecto_id_proyecto = requisiciones::obtenerIdproyecto($salida_id);
     $recibido_por         = Inventario::obteneusuariorecibe($salida_id);
-    $nominsumo            = Insumos::obtenerNombreInsumo($insumo_id);
-    $unidadmedida         = Insumos::obtenerUnidadmed($insumo_id);
-    $nomunidadmedida      = Unidadesmed::obtenerNombre($unidadmedida);
+
+    if ($insumo_id != 0) {
+        $nominsumo       = Insumos::obtenerNombreInsumo($insumo_id);
+        $unidadmedida    = Insumos::obtenerUnidadmed($insumo_id);
+        $nomunidadmedida = Unidadesmed::obtenerNombre($unidadmedida);
+    } else {
+        $nominsumo       = Servicios::obtenerNombre($servicio_id);
+        $unidadmedida    = Servicios::obtenerUnidadServicio($servicio_id);
+        $nomunidadmedida = Unidadesmed::obtenerNombre($unidadmedida);
+
+    }
+
     $nombredespacha       = Usuarios::obtenerNombreUsuario($creado_por);
     $nombrerecibe         = Usuarios::obtenerNombreUsuario($recibido_por);
     $nombreproyecto       = Proyectos::obtenerNombreProyecto($proyecto_id_proyecto);
@@ -270,10 +282,10 @@ foreach ($campos as $campo) {
     $aplica = Inventario::Aplicaequipo($salida_id);
 
     if ($aplica == "Si") {
-        $equipo_id_equipo = Inventario::Idequipo($salida_id);
-        $nombreequipo     = Equipos::ObtenerNombreEquipo($equipo_id_equipo);
+        $obra_id_obra = Inventario::Idequipo($salida_id);
+        $nombreobra     = Obras::obtenernombreobra($obra_id_obra);
     } else {
-        $nombreequipo = "";
+        $nombreobra = "";
     }
 
     ?>
@@ -281,7 +293,7 @@ foreach ($campos as $campo) {
            <td><?php echo ("RQ" . $requisicion_id . "-" . $item_id); ?></td>
             <td><?php echo ("<a href='?controller=inventario&&action=salidasdetalle&&id=" . $salida_id . "'>DES-" . $salida_id . "</a>"); ?></td>
             <td><?php echo ($nombreproyecto) ?></td>
-             <td><?php echo ($nombreequipo) ?></td>
+             <td><?php echo ($nombreobra) ?></td>
               <td><?php echo utf8_encode($nombredespacha); ?></td>
                <td><?php echo utf8_encode($nombrerecibe); ?></td>
                <td><?php echo utf8_encode($marca_temporal); ?></td>

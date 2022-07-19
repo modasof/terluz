@@ -16,6 +16,12 @@ include_once 'modelos/unidadesmed.php';
 include_once 'controladores/insumosController.php';
 include_once 'modelos/insumos.php';
 
+include_once 'controladores/serviciosController.php';
+include_once 'modelos/servicios.php';
+
+include_once 'controladores/obrasController.php';
+include_once 'modelos/obras.php';
+
 include_once 'controladores/equiposController.php';
 include_once 'modelos/equipos.php';
 
@@ -101,10 +107,10 @@ for ($i = 0; $i < $min; $i++) {
     $aplica = Inventario::Aplicaequipo($Cadena[$i]);
 
     if ($aplica == "Si") {
-        $equipo_id_equipo = Inventario::Idequipo($Cadena[$i]);
-        $nombreequipo     = Equipos::ObtenerNombreEquipo($equipo_id_equipo);
+        $obra_id_obra = Inventario::Idequipo($Cadena[$i]);
+        $nombreobra     = Obras::obtenernombreobra($obra_id_obra);
     } else {
-        $nombreequipo = "No aplica";
+        $nombreobra = "No aplica";
     }
 
     ?>
@@ -115,7 +121,7 @@ for ($i = 0; $i < $min; $i++) {
                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne<?php echo ($Cadena[$i]); ?>" aria-expanded="true" class="">
                         <i class="fa fa-plus-square"> </i> Despacho Nº <?php echo ($Cadena[$i]); ?>
                       </a>
-            <a href="#" onclick="eliminar(<?php echo $Cadena[$i]; ?>,<?php echo $IdSesion; ?>);" class="btn btn-success tooltip-primary text-danger" data-rel="tooltip" data-placement="top" title="" data-original-title="Recibir">
+            <a href="#" onclick="eliminar(<?php echo ($Cadena[$i]); ?>,<?php echo $IdSesion; ?>);" class="btn btn-success tooltip-primary text-danger" data-rel="tooltip" data-placement="top" title="" data-original-title="Recibir">
                  Recibir
             </a>
                     </h4>
@@ -130,7 +136,7 @@ for ($i = 0; $i < $min; $i++) {
                 <th>Fecha Despacho</th>
                 <th>Cantidad</th>
                 <th>Insumo</th>
-                <th>Equipo</th>
+                <th>Obra</th>
                 </tr>
          <?php
 
@@ -140,6 +146,7 @@ for ($i = 0; $i < $min; $i++) {
         $item_id               = $campo2['item_id'];
         $requisicion_id        = $campo2['requisicion_id'];
         $insumo_id             = $campo2['insumo_id'];
+        $servicio_id           = $campo2['servicio_id'];
         $cantidad              = $campo2['cantidad'];
         $salida_id             = $campo2['salida_id'];
         $fecha_registro        = $campo2['fecha_registro'];
@@ -148,19 +155,24 @@ for ($i = 0; $i < $min; $i++) {
         $marca_temporal        = $campo2['marca_temporal'];
         $creado_por            = $campo2['creado_por'];
 
-        $nominsumo     = Insumos::obtenerNombreInsumo($insumo_id);
-        $unidad_id     = Insumos::obtenerUnidadmed($insumo_id);
-        $unidad_nombre = Unidadesmed::obtenerNombre($unidad_id);
+     if ($insumo_id != 0) {
+        $nominsumo       = Insumos::obtenerNombreInsumo($insumo_id);
+        $unidadmedida    = Insumos::obtenerUnidadmed($insumo_id);
+        $nomunidadmedida = Unidadesmed::obtenerNombre($unidadmedida);
+    } else {
+        $nominsumo       = Servicios::obtenerNombre($servicio_id);
+        $unidadmedida    = Servicios::obtenerUnidadServicio($servicio_id);
+        $nomunidadmedida = Unidadesmed::obtenerNombre($unidadmedida);
 
-        $unidad_nombre = Unidadesmed::obtenerNombre($unidad_id);
+    }
 
         ?>
                 <tr>
                   <td>RQ<?php echo ($requisicion_id . "-" . $item_id) ?></td>
                    <td><?php echo ($fecha_registro); ?></td>
-                  <td><?php echo ($cantidad . " " . $unidad_nombre); ?></td>
+                  <td><?php echo ($cantidad . " " . $nomunidadmedida); ?></td>
                   <td><?php echo ($nominsumo); ?></td>
-                   <td><?php echo ($nombreequipo); ?></td>
+                   <td><?php echo ($nombreobra); ?></td>
 
                 </tr>
 <?php
@@ -199,7 +211,7 @@ for ($i = 0; $i < $min; $i++) {
 
 <script type="text/javascript">
    function eliminar(id,idsesion) {
-   swal({
+   Swal.fire({
   title: "¿Acepta recibir despacho Nº "+id+"?",
   text: "<?php echo ($nombre_usuario); ?>, se cargará a su usuario los insumos mencionados!",
   icon: "warning",
@@ -209,13 +221,12 @@ for ($i = 0; $i < $min; $i++) {
 })
 .then((willDelete) => {
   if (willDelete) {
-
-    swal("Gracias! el despacho "+id+" ha sido recibido correctamente!", {
+    Swal.fire("Gracias! el despacho "+id+" ha sido recibido correctamente!", {
       icon: "success",
     });
     window.location.href="?controller=inventario&&action=recibirdespacho&&id="+id+"&&idusuario="+idsesion;
   } else {
-    swal("Ok, verifique el despacho nuevamente!");
+    Swal.fire("Ok, verifique el despacho nuevamente!");
   }
 });
    };

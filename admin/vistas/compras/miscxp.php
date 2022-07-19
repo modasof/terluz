@@ -149,17 +149,17 @@ if ($FechaDos == "") {
           <thead>
             <tr style="background-color: #4f5962;color: white;">
 
-              <th>OC-N.</th>
-              <th>Fecha</th>
-               <th>Tipo</th>
-              <th>Proveedor</th>
-              <th>Pago a</th>
-             <th >Vr. Subtotal</th>
-              <th >Vr. Retenciones</th>
-              <th >Vr. Iva</th>
-              <th >Vr. A Pagar</th>
-              <th >Abonos</th>
-              <th>Saldo Pendiente</th>
+            <th>OC-N.</th>
+            <th>Fecha</th>
+            <th>Tipo</th>
+            <th>Proveedor</th>
+            <th>Pago a</th>
+            <th >Vr. Subtotal</th>
+            <th >Vr. Retenciones</th>
+            <th >Vr. Iva</th>
+            <th >Vr. A Pagar</th>
+            <th >Abonos</th>
+            <th>Saldo Pendiente</th>
                <th>Acción</th>
             </tr>
             <tr>

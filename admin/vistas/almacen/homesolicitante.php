@@ -71,15 +71,15 @@ require_once 'vistas/index/header-formdate.php';
     <!-- Main content -->
     <section class="content">
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-12">
               <?php
 require_once 'vistas/requisiciones/formrequisiciones.php';
 ?>
         </div>
 
-        <div class="col-md-5">
+        <div class="col-md-6">
 
-          <div class="box box-default collapsed-box">
+          <div class="box box-default ">
             <div class="box-header with-border">
               <h3 class="box-title">Items por Estado</h3>
 
@@ -125,11 +125,9 @@ foreach ($rubros as $campo) {
 
           </div>
 
- </div>
- <div class="row">
-    <div class="col-md-7">
+              <div class="col-md-6">
 
-      <div class="box box-default collapsed-box">
+      <div class="box box-default ">
             <div class="box-header with-border">
               <h3 class="box-title">Buscar RQ</h3>
 
@@ -296,7 +294,11 @@ foreach ($campos as $campo) {
             <!-- /.box-body -->
           </div>
         </div>
-        <div class="col-md-5">
+
+ </div>
+ <div class="row">
+
+        <div style="display: none;" class="col-md-5">
           <div class="box box-default">
             <div class="box-header with-border">
               <h3 class="box-title">Trazabilidad</h3>

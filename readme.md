@@ -70,6 +70,35 @@ Este es el repositorio inicial del proyecto 2022
 - Validación al cargar la factura de una orden de compra, que no se repita. 
 - Cruce con anticipos
 - Realizar Abonos / pagos 
+
+# Actualización 19 de Julio 2022 (MODULO OBRAS)
+- Crear, editar, eliminar Obras 
+- Crear, editar, eliminar Frentes
+- Crear, editar, eliminar Capítulos
+- Crear, editar, eliminar Actividades
+- Crear, editar, eliminar Listado de maquinaría (lme)
+- Crear, editar, eliminar Listado de mano de obra (lmo)
+- Crear, editar, eliminar Listado de personal extra (l-pex)
+- Agregar, quitar modificaciones de obra 
+- Agregar, quitar avances de obra 
+- Perfil de Ing. Residente con asignación de obra y reporte de lme, l-ins, actividades 
+- Proyección de actividades por rangos de fecha.
+- Proyección de gastos de equipos (lme) por rangos de fecha.
+- Proyección de gastos de mano de obra (lmo) por rangos de fecha.
+- Proyección de gastos de materiales (l-ins) por rangos de fecha.
+- Proyección de gastos Administrativos (rubro admin) por rangos de fecha.
+- Informe de gastos de equipos (Asociado al rubro EQUIPOS).
+- Informe de gastos de materiales (Asociado al rubro MATERIALES Y SUMINISTROS).
+- Informe de gastos Admin (Asociado al rubro GASTOS ADMINISTRATIVOS).
+- Informe de reporte de horas máquina 
+- Informe de reporte de recepción de material 
+- Informe de indicadores porcentuales por avances, gastos
+
+
+
+
+
+
   
 
 

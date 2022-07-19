@@ -2,6 +2,10 @@
 ini_set('display_errors', '0');
 include_once 'modelos/cuentas.php';
 include_once 'controladores/cuentasController.php';
+
+include_once 'modelos/listame.php';
+include_once 'controladores/listameController.php';
+
 include 'vistas/index/estadisticas.php';
 
 if (isset($_POST['daterange'])) {
@@ -90,7 +94,7 @@ else
   <div class="content">
     <div class="container-fluid">
                           <div class="row">
-        <form action="?controller=reportes&&action=horasporfecha" method="post" id="FormFechas" autocomplete="off">
+        <form style="display: none;" action="?controller=reportes&&action=horasporfecha" method="post" id="FormFechas" autocomplete="off">
          <div class="col-md-8">
                         <div class="form-group">
                           <label>Seleccione el Rango de Fecha<span>*</span></label>
@@ -193,7 +197,7 @@ else
                                        <th style="background-color: #fcf8e3" class="success"></th>
                                        <th style="background-color: #fcf8e3" class="success"></th>
                                         <th style="background-color: #fcf8e3" class="success"></th>
-                                        <th style="background-color: #fcf8e3" class="success"></th>
+                                        <th style="background-color: #fcf8e3" class="success"></th><th style="background-color: #fcf8e3" class="success"></th>
                                       
                                         
                             </tfoot>
@@ -202,7 +206,8 @@ else
               
               <th style="width: 20%;">Equipo</th>
               <th>Propietario</th>
-              <th>Comisión</th>
+              <th>Contratado por</th>
+              <th>Valor</th>
               <th>Tipo Equipo</th>
               <th>Marca</th>
              
@@ -211,7 +216,8 @@ else
             <tr>
              <th style="width: 20%;">Equipo</th>
               <th>Propietario</th>
-              <th>Comisión</th>
+              <th>Contratado por</th>
+              <th>Valor</th>
               <th>Tipo Equipo</th>
               <th>Marca</th>
              
@@ -238,6 +244,10 @@ else
             $unidad_interna = $campo['unidad_interna'];
             $rend_externo = $campo['rend_externo'];
             $unidad_externa = $campo['unidad_externa'];
+            $valor_activo = $campo['valor_activo'];
+
+            $nomtipoequipo = Listame::obtenerNombre($tipo_equipo);
+
             //$unidad_reportada=Equipos::obtenerNombreTipoUnidad($id_equipo);
 
             $totalgalones=round(ConsumoGalonespor($id_equipo),1);
@@ -254,8 +264,9 @@ else
 						<tr>
               <td><?php echo utf8_encode($nombre_equipo); ?></td>
               <td><?php echo utf8_encode($propietario); ?></td>
-              <td><?php echo utf8_encode($comision); ?> %</td>
-              <td><?php echo utf8_encode($tipo_equipo); ?></td>
+              <td><?php echo utf8_encode($unidad_trabajo); ?></td>
+              <td><?php echo utf8_encode("$".number_format($valor_activo,0)); ?> </td>
+              <td><?php echo utf8_encode($nomtipoequipo); ?></td>
                <td><?php echo utf8_encode($marca_equipo); ?></td>
              
              

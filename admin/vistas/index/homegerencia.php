@@ -234,6 +234,9 @@ $despachosmes = Despachosclmes($FechaInicioDia, $FechaFinalDia);
 
 <a href="?controller=proveedores&&action=showrelacionpagos" class="btn btn-app">
 <i class="fa fa-list"></i> Relaciones de Pago</a>
+
+<a href="?controller=obras&&action=dashboard" class="btn btn-app">
+<i class="fa fa-building"></i> Obras</a>
               
             </div>
             <!-- /.box-body -->

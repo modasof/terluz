@@ -250,7 +250,7 @@ Group by equipo_id_equipo order by Galones DESC");
 public static function obtenerListaVolquetasAsf(){
 	try {
 		$db=Db::getConnect();
-		$select=$db->query("SELECT * FROM equipos WHERE equipo_publicado='1' and modulo='Asf' and tipo_equipo='Volquetas' order by nombre_equipo");
+		$select=$db->query("SELECT * FROM equipos WHERE equipo_publicado='1' and modulo='Asf' and tipo_equipo='Volqueta' order by nombre_equipo");
     	$campos=$select->fetchAll();
 		$camposs = new Equipos('',$campos);
 		$campostraidos = $camposs->getCampos();
@@ -942,6 +942,25 @@ public static function obtenerNovedadesPor($id){
 		$select=$db->query("SELECT * FROM reporte_estado_equipos WHERE equipo_id_equipo='".$id."' and estado_publicado='1' order by fecha_reporte asc");
 		$camposs=$select->fetchAll();
 		$campos = new Equipos('',$camposs);
+		return $campos;
+	}
+	catch(PDOException $e) {
+		echo '{"error en obtener la pagina":{"text":'. $e->getMessage() .'}}';
+	}
+}
+
+
+/*******************************************************
+** FUNCION PARA MOSTRAR TODOS LOS CAMPOS POR RANGO DE FECHA	  **
+********************************************************/
+public static function totalequiposobra($obra){
+	try {
+		$db=Db::getConnect();
+		$sql="SELECT DISTINCT(equipo_id_equipo) AS equipo,frente_id_frente,obra_id_obra FROM reporte_horasmq WHERE reporte_publicado<>'0' and obra_id_obra='".$obra."'";
+		$select=$db->query($sql);
+		//echo($sql);
+    	$camposs=$select->fetchAll();
+    	$campos = new Equipos('',$camposs);
 		return $campos;
 	}
 	catch(PDOException $e) {

@@ -184,6 +184,9 @@ class RequisicionesitemsController
         $compra_de         = $_POST['compra_de'];
         $rubro_id          = $_POST['rubro_id'];
         $subrubro_id       = $_POST['subrubro_id'];
+        $aplica_obra       = $_POST['aplica_obra'];
+        $obra_id_obra      = $_POST['obra_id_obra'];
+        $id_factura_compra = $_POST['id_factura_compra'];
 
         $estado_orden           = $_POST['estado_orden'];
         $proveedor_id_proveedor = $_POST['proveedor_id_proveedor'];
@@ -200,13 +203,17 @@ class RequisicionesitemsController
             $arregloitems = array($items . ",");
         }
 // 1. Se guarda el registro de la orden de compra
-        $res = Requisicionesitems::guardaroccompra($imagen, $imagen_cot, $fecha_reporte, $valor_total, $valor_retenciones, $valor_iva, $estado_orden, $proveedor_id_proveedor, $medio_pago, $observaciones, $marca_temporal, $usuario_creador, $items, $rubro_id, $subrubro_id, $factura, $estado_recibido, $compra_de);
+        $res = Requisicionesitems::guardaroccompra($imagen, $imagen_cot, $fecha_reporte, $valor_total, $valor_retenciones, $valor_iva, $estado_orden, $proveedor_id_proveedor, $medio_pago, $observaciones, $marca_temporal, $usuario_creador, $items, $rubro_id, $subrubro_id, $factura, $estado_recibido, $compra_de, $aplica_obra, $obra_id_obra,$id_factura_compra);
+
 // 2. Se obtiene el último registro de OC y se toma como consecutivo
         $ordencompra_num = Requisicionesitems::obtenerUltimo();
+
 // 3. Se actualizan los items con el consecutivo OC
         $res = Requisicionesitems::actualizaritemsoc($ordencompra_num, $arregloitems);
+
 // 4. Se actualiza los items en tabla cotizaciones y se pasan a estado 2
         $res = Requisicionesitems::actualizaritemcotizasoc($usuario_creador, $ordencompra_num, $arregloitems, $proveedor_id_proveedor, $estado_cotizacion, $estado_nuevo_cot);
+
 // 5. Se cambia el estado al item
         $res = Requisicionesitems::actualizarestadooc($estado_item, $arregloitems);
         // 6. Se verifica el valor total de la orden de compra por id de orden de compra
@@ -232,6 +239,7 @@ class RequisicionesitemsController
 
         if ($res) {
             echo "<script>jQuery(function(){Swal.fire(\"¡Datos actualizados!\", \"Se ha actualizado correctamente la pagina\", \"success\").then(function(){window.location='?controller=requisiciones&&action=cotizaciones';});});</script>";
+            //echo "<script>jQuery(function(){Swal.fire(\"¡Datos guardados!\", \"Se han guardado correctamente los datos\", \"success\");});</script>";
         } else {
             echo "<script>jQuery(function(){Swal.fire(\"¡Error al guardar !\", \"No se han guardado correctamente los datos\", \"error\");});</script>";
         }
@@ -358,18 +366,18 @@ class RequisicionesitemsController
 
         if ($valor_cot1 != "") {
             $res = Requisicionesitems::guardarcotizacionmultiple($proveedor1, $cotizacion1, $item_id, $valor_cot1, $requisicion_id, $marca_temporal, $usuario_creador, $insumo_id_insumo, $servicio_id_servicio, $equipo_id_equipo, $cantidadcot);
-            $res=Requisicionesitems::actualizarestado($estado_item, $item_id);
+            $res = Requisicionesitems::actualizarestado($estado_item, $item_id);
             //$res = Requisicionesitems::guardartrazabilidad($estado_item, $id, $usuario_creador, $observaciones1);
         }
         if ($valor_cot2 != "") {
             $res = Requisicionesitems::guardarcotizacionmultiple($proveedor2, $cotizacion2, $item_id, $valor_cot2, $requisicion_id, $marca_temporal, $usuario_creador, $insumo_id_insumo, $servicio_id_servicio, $equipo_id_equipo, $cantidadcot);
-             $res=Requisicionesitems::actualizarestado($estado_item, $item_id);
+            $res = Requisicionesitems::actualizarestado($estado_item, $item_id);
             //$res = Requisicionesitems::guardartrazabilidad($estado_item, $id, $usuario_creador, $observaciones2);
         }
         if ($valor_cot3 != "") {
 
             $res = Requisicionesitems::guardarcotizacionmultiple($proveedor3, $cotizacion3, $item_id, $valor_cot3, $requisicion_id, $marca_temporal, $usuario_creador, $insumo_id_insumo, $servicio_id_servicio, $equipo_id_equipo, $cantidadcot);
-             $res=Requisicionesitems::actualizarestado($estado_item, $item_id);
+            $res = Requisicionesitems::actualizarestado($estado_item, $item_id);
             //$res = Requisicionesitems::guardartrazabilidad($estado_item, $id, $usuario_creador, $observaciones3);
         }
 

@@ -1,18 +1,29 @@
 <?php
 ini_set('display_errors', '0');
-include_once 'modelos/clientes.php';
-include_once 'controladores/clientesController.php';
-include_once 'modelos/productos.php';
-include_once 'controladores/productosController.php';
-include_once 'modelos/proyectos.php';
-include_once 'controladores/proyectosController.php';
+
 include_once 'modelos/funcionarios.php';
 include_once 'controladores/funcionariosController.php';
-include_once 'modelos/equipos.php';
-include_once 'controladores/equiposController.php';
+
+
+include_once 'modelos/obras.php';
+include_once 'controladores/obrasController.php';
+
+include_once 'modelos/proyeccioneslme.php';
+include_once 'controladores/proyeccioneslmeController.php';
+
+include_once 'modelos/listame.php';
+include_once 'controladores/listameController.php';
+
+include_once 'modelos/frentes.php';
+include_once 'controladores/frentesController.php';
+
+include_once 'modelos/usuarios.php';
+include_once 'controladores/usuariosController.php';
+
 $RolSesion = $_SESSION['IdRol'];
 $IdSesion = $_SESSION['IdUser'];
 $idventa=$_GET['id'];
+$getobra=$_GET['id_obra'];
 $vereditar=$_GET['vereditar'];
 
 $res=horasmq::editarhorasPor($idventa);
@@ -36,13 +47,19 @@ foreach($campos as $campo){
             $observaciones = $campo['observaciones'];
             $cliente_id_cliente = $campo['cliente_id_cliente'];
             $equipo_adicional = $campo['equipo_adicional'];
+
+            $obra_id_obra = $campo['obra_id_obra'];
+            $frente_id_frente = $campo['frente_id_frente'];
+
+            $nomobra=Obras::obtenernombreobra($obra_id_obra);
+           	$nomfrente=Frentes::obtenerNombre($frente_id_frente);
+
             $nombre_equipo_adicional = $campo['nombre_equipo_adicional'];
             $proyecto_id_proyecto = $campo['proyecto_id_proyecto'];
-            $nomequipo=Equipos::obtenerNombreEquipo($equipo_id_equipo);
+            $nomequipo=Listame::obtenerNombre($equipo_id_equipo);
             $nomdespachadopor=Funcionarios::obtenerNombreFuncionario($despachado_por);
             $nomrecibidopor=Usuarios::obtenerNombreUsuario($recibido_por);
-            $nombrecliente= Clientes::obtenerNombreCliente($cliente_id_cliente);
-            $nombreproyecto= Proyectos::obtenerNombreProyecto($proyecto_id_proyecto);
+           
 
 }
 
@@ -113,13 +130,14 @@ foreach($campos as $campo){
 						<!-- ESTE DIV LO USO PARA CENTRAR EL FORMULARIO -->
 						<!-- left column -->
 						<div class="col-md-8">
-	<form role="form" autocomplete="off" action="?controller=horasmq&&action=actualizarhoras&&id=<?php echo($idventa); ?>" method="POST" enctype="multipart/form-data" >
+	<form role="form" autocomplete="off" action="?controller=horasmq&&action=actualizarhoras&&id=<?php echo($idventa); ?>&&id_obra=<?php echo($getobra); ?>" method="POST" enctype="multipart/form-data" >
 							<?php  
 								date_default_timezone_set("America/Bogota");
 								$TiempoActual = date('Y-m-d H:i:s');
 							?>
 							
 					<input type="hidden" name="creado_por" value="<?php echo($IdSesion);?>">
+					<input type="hidden" name="obra_id_obra" value="<?php echo($getobra);?>">
 					<input type="hidden" name="estado_reporte" value="1">
 					<input type="hidden" name="reporte_publicado" value="1">
 					<input type="hidden" name="marca_temporal" value="<?php echo($TiempoActual);?>">
@@ -142,17 +160,17 @@ foreach($campos as $campo){
 												</div>
 											</div>
 										
-												<div class="col-md-3">
+												<div style="display: none;" class="col-md-3">
 												<div class="form-group">
 													<label>Horómetro Inicial<span>*</span></label>
-													<input type="number" step="any" name="indicador" placeholder="Horómetro Inicial" class="form-control" required value="<?php echo($indicador);?>">
+													<input type="number" step="any" name="indicador" placeholder="Horómetro Inicial" class="form-control"  value="<?php echo($indicador);?>">
 													<small>Decimales separados con punto</small>
 												</div>
 											</div>
 												<div class="col-md-3">
-												<div class="form-group">
+												<div style="display: none;" class="form-group">
 													<label>Horómetro Final<span>*</span></label>
-													<input type="number" step="any" name="cantidad" placeholder="Horómetro final" class="form-control" required value="<?php echo($cantidad);?>">
+													<input type="number" step="any" name="cantidad" placeholder="Horómetro final" class="form-control"  value="<?php echo($cantidad);?>">
 													<small>Decimales separados con punto</small>
 												</div>
 											</div>
@@ -163,7 +181,7 @@ foreach($campos as $campo){
 													<small>Decimales separados con punto</small>
 												</div>
 											</div>
-											<div  class="col-md-3">
+											<div style="display: none;" class="col-md-3">
 												<div class="form-group">
 													<label>Valor Hora<span>*</span></label>
 													<input type="text" name="valor_m3" placeholder="Valor Hora" class="form-control" id="demo1" value="<?php echo($valor_m3);?>">
@@ -176,12 +194,12 @@ foreach($campos as $campo){
 								<select class="form-control mi-selector" id="equipo_id_equipo" name="equipo_id_equipo" required>
 										<option value="<?php echo($equipo_id_equipo);?>" selected><?php echo utf8_encode($nomequipo);?></option>
 										<?php
-										$rubros = Equipos::ListaEquiposAsfMaqAmarilla();
-										foreach ($rubros as $campo){
-											$id_equipo = $campo['id_equipo'];
-											$nombre_equipo = $campo['nombre_equipo'];
+										$equipos = Proyeccioneslme::obtenerlmeObra($getobra);
+										foreach ($equipos as $campo_eq){
+											$id_equipo = $campo_eq['lme_id_lme'];
+											$nombre_equipo = Listame::obtenerNombre($id_equipo);
 										?>
-										<option value="<?php echo $id_equipo; ?>"><?php echo utf8_encode($nombre_equipo); ?></option>
+										<option value="<?php echo $id_equipo; ?>"><?php echo utf8_decode($nombre_equipo); ?></option>
 										<?php } ?>
 								</select>
 												</div>
@@ -189,7 +207,7 @@ foreach($campos as $campo){
 											<div style="display: none;"  id="" class="col-md-12">
 												<div class="form-group">
 													<label> Punto Despacho: <span>*</span></label>
-								<select class="form-control" id="punto_despacho" name="punto_despacho" required>
+								<select class="form-control" id="punto_despacho" name="punto_despacho">
 										<option value="<?php echo($punto_despacho);?>" selected><?php echo utf8_encode($punto_despacho);?></option>
 										<option value="Comercializadora"  >Comercializadora</option>
 										<option value="Cantera 1"  >Cantera 1</option>
@@ -200,7 +218,7 @@ foreach($campos as $campo){
 												<div class="form-group">
 													<label> Reportado por: <span>*</span></label>
 							
-										<select class="form-control mi-selector2" id="despachado_por" name="despachado_por" required>
+										<select class="form-control mi-selector2" id="despachado_por" name="despachado_por" >
 										<option value="<?php echo($despachado_por);?>" selected><?php echo utf8_encode($nomdespachadopor);?></option>
 										<?php
 										$rubros = Funcionarios::obtenerListaFuncionarios();
@@ -230,17 +248,17 @@ foreach($campos as $campo){
 								</select>
 												</div>
 											</div>
-											<div class="col-md-3">
+											<div style="display: none;" class="col-md-3">
 												<div class="form-group">
 													<label>Valor Hora Operador: <span>*</span></label>
 													<input type="text" name="valor_hora_operador" placeholder="Valor Hora Operador" class="form-control" id="demo2" value="<?php echo utf8_encode($valor_hora_operador); ?>">
 												</div>
 											</div>
 
-											<div id="adicional" class="col-md-3">
+											<div  style="display: none;" id="adicional" class="col-md-3">
 												<div class="form-group">
 													<label> ¿Incluye equipo adicional?: <span>*</span></label>
-							<select style="width: 200px;" class="form-control mi-selector3" id="equipo_adicional" name="equipo_adicional" required>
+							<select style="width: 200px;" class="form-control mi-selector3" id="equipo_adicional" name="equipo_adicional" >
 								
 										<option value="<?php echo($equipo_adicional) ?>" selected><?php echo($equipo_adicional) ?></option>
 										<option value="Si">Si</option>
@@ -248,44 +266,49 @@ foreach($campos as $campo){
 								</select>
 												</div>
 											</div>
-											<div id="campo_equipo" class="col-md-3">
+											<div  style="display: none;" id="campo_equipo" class="col-md-3">
 												<div class="form-group">
 													<label>Indique nombre del equipo: <span>*</span></label>
 													<input type="text" name="nombre_equipo_adicional" placeholder="Equipo Adicional" class="form-control" value="<?php echo($nombre_equipo_adicional) ?>">
 												</div>
 											</div>
-											<div id="" class="col-md-12">
+											<div  style="display: none;" id="" class="col-md-12">
 												<div class="form-group">
 													<label> Seleccione el Cliente: <span>*</span></label>
-								<select class="form-control mi-selector3" id="cliente_id_cliente" name="cliente_id_cliente" required>
+								<select class="form-control mi-selector3" id="cliente_id_cliente" name="cliente_id_cliente" >
 								
 										<option value="<?php echo($cliente_id_cliente);?>" selected><?php echo utf8_encode($nombrecliente);?></option>
-										<?php
-										$rubros = Clientes::obtenerListaClientes();
-										foreach ($rubros as $campo){
-											$id_cliente = $campo['id_cliente'];
-											$nombre_cliente = $campo['nombre_cliente'];
-										?>
-										<option value="<?php echo $id_cliente; ?>"><?php echo utf8_encode($nombre_cliente); ?></option>
-										<?php } ?>
+										
 								</select>
 												</div>
 											</div>
-												<div id="" class="col-md-12">
+												<div  style="display: none;" id="" class="col-md-12">
 												<div class="form-group">
 													<label> Seleccione el Proyecto: <span>*</span></label>
-								<select class="form-control mi-selector3" id="proyecto_id_proyecto" name="proyecto_id_proyecto" required>
+								<select class="form-control mi-selector3" id="proyecto_id_proyecto" name="proyecto_id_proyecto" >
 								
 										<option value="<?php echo($proyecto_id_proyecto);?>" selected><?php echo utf8_encode($nombreproyecto);?></option>
-										<?php
-										$rubros = Proyectos::obtenerListaProyectos();
-										foreach ($rubros as $campo){
-											$id_proyecto = $campo['id_proyecto'];
-											$nombre_proyecto = $campo['nombre_proyecto'];
-										?>
-										<option value="<?php echo $id_proyecto; ?>"><?php echo utf8_encode($nombre_proyecto); ?></option>
-										<?php } ?>
+										
 								</select>
+												</div>
+											</div>
+
+											<div class="col-md-12">
+												<div class="form-group">
+													<label> Seleccione el Frente: <span>*</span></label>
+						<select class="form-control" id="frente_id_frente" name="frente_id_frente" >
+											<option value="<?php echo($frente_id_frente); ?>"><?php echo($nomfrente); ?></option>
+										<?php
+										$rubros = Frentes::ListaFrentesObras($getobra);
+										foreach ($rubros as $campo){
+											$id_frente = $campo['id_frente'];
+											$nombre_frente = $campo['nombre_frente'];
+											
+										?>
+										<option value="<?php echo $id_frente; ?>"><?php echo utf8_encode($nombre_frente); ?></option>
+										<?php } ?>
+							</select>
+
 												</div>
 											</div>
 											

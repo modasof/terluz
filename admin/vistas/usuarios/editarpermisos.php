@@ -100,6 +100,7 @@
   $m_salidasdetalleinv=$campo['m_salidasdetalleinv'];
   $m_inventario=$campo['m_inventario'];
   $m_cuentasxpagarusuario= $campo['m_cuentasxpagarusuario'];
+  $m_retenciones= $campo['m_retenciones'];
 
 
             }
@@ -168,6 +169,28 @@
               {
                 ?>
                 <a href="#" onclick="activarpermiso(<?php echo $id_usuario; ?>,'m_documentos');" class="tooltip-primary text-danger" data-rel="tooltip" data-placement="top" title="" data-original-title="Activar Permisos">
+                <i class="fa fa-close bigger-110 "></i>
+                </a>
+                <?php
+              }
+
+               ?></td>
+            </tr>
+              <tr>
+              <td><i class="fa fa-th-list"></i></td>
+              <td class=""><strong>Retenciones:</strong> Parámetriza las retenciones que se aplican en las compras realizadas.</td>
+              <td><?php 
+              if ($m_retenciones=="Si") {
+               ?>
+                <a href="#" onclick="desactivarpermiso(<?php echo $id_usuario; ?>,'m_retenciones');" class="tooltip-primary text-success" data-rel="tooltip" data-placement="top" title="" data-original-title="Desactivar Permisos">
+                <i class="fa fa-check bigger-110 "></i>
+               </a>
+               <?php
+              }
+              else
+              {
+                ?>
+                <a href="#" onclick="activarpermiso(<?php echo $id_usuario; ?>,'m_retenciones');" class="tooltip-primary text-danger" data-rel="tooltip" data-placement="top" title="" data-original-title="Activar Permisos">
                 <i class="fa fa-close bigger-110 "></i>
                 </a>
                 <?php

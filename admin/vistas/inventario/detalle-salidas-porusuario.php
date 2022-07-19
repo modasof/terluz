@@ -16,6 +16,14 @@ include_once 'modelos/unidadesmed.php';
 include_once 'controladores/insumosController.php';
 include_once 'modelos/insumos.php';
 
+
+include_once 'controladores/serviciosController.php';
+include_once 'modelos/servicios.php';
+
+
+include_once 'controladores/obrasController.php';
+include_once 'modelos/obras.php';
+
 include_once 'controladores/equiposController.php';
 include_once 'modelos/equipos.php';
 
@@ -101,10 +109,10 @@ for ($i = 0; $i < $min; $i++) {
     $aplica = Inventario::Aplicaequipo($Cadena[$i]);
 
     if ($aplica == "Si") {
-        $equipo_id_equipo = Inventario::Idequipo($Cadena[$i]);
-        $nombreequipo     = Equipos::ObtenerNombreEquipo($equipo_id_equipo);
+        $obra_id_obra = Inventario::Idequipo($Cadena[$i]);
+        $nombreobra     = Obras::obtenernombreobra($obra_id_obra);
     } else {
-        $nombreequipo = "No aplica";
+        $nombreobra = "No aplica";
     }
 
     $fecha_recepcion = Inventario::fecharecepciondespacho($Cadena[$i]);
@@ -131,7 +139,7 @@ for ($i = 0; $i < $min; $i++) {
                 <th>Fecha Recibido</th>
                 <th>Cantidad</th>
                 <th>Insumo</th>
-                <th>Equipo</th>
+                <th>Obra</th>
                 </tr>
          <?php
 
@@ -141,6 +149,7 @@ for ($i = 0; $i < $min; $i++) {
         $item_id               = $campo2['item_id'];
         $requisicion_id        = $campo2['requisicion_id'];
         $insumo_id             = $campo2['insumo_id'];
+        $servicio_id           = $campo2['servicio_id'];
         $cantidad              = $campo2['cantidad'];
         $salida_id             = $campo2['salida_id'];
         $fecha_registro        = $campo2['fecha_registro'];
@@ -149,19 +158,26 @@ for ($i = 0; $i < $min; $i++) {
         $marca_temporal        = $campo2['marca_temporal'];
         $creado_por            = $campo2['creado_por'];
 
-        $nominsumo     = Insumos::obtenerNombreInsumo($insumo_id);
-        $unidad_id     = Insumos::obtenerUnidadmed($insumo_id);
-        $unidad_nombre = Unidadesmed::obtenerNombre($unidad_id);
-        $unidad_nombre = Unidadesmed::obtenerNombre($unidad_id);
+    if ($insumo_id != 0) {
+        $nominsumo       = Insumos::obtenerNombreInsumo($insumo_id);
+        $unidadmedida    = Insumos::obtenerUnidadmed($insumo_id);
+        $nomunidadmedida = Unidadesmed::obtenerNombre($unidadmedida);
+    } else {
+        $nominsumo       = Servicios::obtenerNombre($servicio_id);
+        $unidadmedida    = Servicios::obtenerUnidadServicio($servicio_id);
+        $nomunidadmedida = Unidadesmed::obtenerNombre($unidadmedida);
+
+    }
+
 
         ?>
                 <tr>
                   <td>RQ<?php echo ($requisicion_id . "-" . $item_id) ?></td>
                    <td><?php echo ($fecha_registro); ?></td>
                     <td><?php echo ($fecha_recepcion); ?></td>
-                  <td><?php echo ($cantidad . " " . $unidad_nombre); ?></td>
+                  <td><?php echo ($cantidad . " " . $nomunidadmedida); ?></td>
                   <td><?php echo ($nominsumo); ?></td>
-                   <td><?php echo ($nombreequipo); ?></td>
+                   <td><?php echo ($nombreobra); ?></td>
 
                 </tr>
 <?php

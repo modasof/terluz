@@ -6,6 +6,10 @@ include_once 'modelos/productos.php';
 include_once 'controladores/productosController.php';
 include_once 'modelos/insumos.php';
 include_once 'controladores/insumosController.php';
+
+include_once 'modelos/obras.php';
+include_once 'controladores/obrasController.php';
+
 include_once 'modelos/proveedores.php';
 include_once 'controladores/proveedoresController.php';
 include 'vistas/index/estadisticas.php';

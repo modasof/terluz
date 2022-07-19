@@ -28,7 +28,8 @@
 });
 </script>
 
-<div class="box box-primary collapsed-box	">
+
+<div class="box box-primary ">
             <div class="box-header with-border">
               <h3 class="box-title"> Registrar Horas / Máquinaria 
               	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
@@ -43,7 +44,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-	<form role="form" autocomplete="off" action="?controller=horasmq&&action=guardarhoras" method="POST" enctype="multipart/form-data" >
+	<form role="form" autocomplete="off" action="?controller=horasmq&&action=guardarhoras&&id_obra=<?php echo($getobra); ?>" method="POST" enctype="multipart/form-data" >
 							<?php  
 								date_default_timezone_set("America/Bogota");
 								$TiempoActual = date('Y-m-d H:i:s');
@@ -55,7 +56,7 @@
 					<input type="hidden" name="marca_temporal" value="<?php echo($TiempoActual);?>">
 					<div class="card-body">
 							<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-12">
                     <div class="form-group">
                       <label for="fila2_columna1">Documento <small>Tamaño máximo 10MB</small></label>
                         <div class="custom-file">
@@ -63,7 +64,7 @@
                         </div>
                     </div>
                 </div>
-											<div class="col-md-3">
+											<div class="col-md-12">
 												<div class="form-group">
 													<label>Fecha del Reporte: <span>*</span></label>
 													<input type="date" name="fecha_reporte" placeholder="Fecha" class="form-control required" required id="fecha_reporte">
@@ -71,51 +72,50 @@
 											</div>
 											
 											
-											
-											
-											<div class="col-md-3">
+											<div style="display: none;" class="col-md-12">
 												<div class="form-group">
 													<label>Horómetro Inicial<span>*</span></label>
-													<input type="number" step="any" name="indicador" placeholder="Horómetro Inicial" class="form-control" required value="">
+													<input type="number" step="any" name="indicador" placeholder="Horómetro Inicial" class="form-control" required value="0">
 													<small>Decimales separados con punto</small>
 												</div>
 											</div>
-										<div class="col-md-3">
+										<div style="display: none;" class="col-md-12">
 												<div class="form-group">
 													<label>Horómetro Final<span>*</span></label>
-													<input type="number" step="any" name="cantidad" placeholder="Horómetro Final" class="form-control" required value="">
+													<input type="number" step="any" name="cantidad" placeholder="Horómetro Final" class="form-control" required value="0">
 													<small>Decimales separados con punto</small>
 												</div>
 										</div>
-										<div class="col-md-3">
+										<div class="col-md-12">
 												<div class="form-group">
 													<label>Total Horas<span>*</span></label>
 													<input type="number" step="any" name="hora_inactiva" placeholder="Total Horas" class="form-control" required value="">
 													<small>Decimales separados con punto</small>
 												</div>
 										</div>
-										<div class="col-md-3">
+										<div style="display: none;" class="col-md-3">
 												<div class="form-group">
 													<label>Valor Hora: <span>*</span></label>
-													<input type="text" name="valor_m3" placeholder="Valor Hora" class="form-control" id="demo1">
+													<input type="text" name="valor_m3" placeholder="Valor Hora" class="form-control" id="demo1" value="0">
 												</div>
-											</div>
-							<div id="divplaca" class="col-md-6">
+										</div>
+						<div id="divplaca" class="col-md-12">
+
 												<div class="form-group">
 													<label> Seleccione el Equipo: <span>*</span></label>
 								<select style="width: 300px;" class="form-control mi-selector" id="equipo_id_equipo" name="equipo_id_equipo" required>
 										<option value="" selected>Seleccionar...</option>
 										<?php
-										$rubros = Equipos::ListaEquiposAsfMaqAmarilla();
-										foreach ($rubros as $campo){
-											$id_equipo = $campo['id_equipo'];
-											$nombre_equipo = $campo['nombre_equipo'];
+										$equipos = Proyeccioneslme::obtenerlmeObra($getobra);
+										foreach ($equipos as $campo_eq){
+											$id_equipo = $campo_eq['lme_id_lme'];
+											$nombre_equipo = Listame::obtenerNombre($id_equipo);
 										?>
-										<option value="<?php echo $id_equipo; ?>"><?php echo utf8_encode($nombre_equipo); ?></option>
+										<option value="<?php echo $id_equipo; ?>"><?php echo utf8_decode($nombre_equipo); ?></option>
 										<?php } ?>
 								</select>
 												</div>
-											</div>
+						</div>
 								<div style="display: none;" id="" class="col-md-4">
 												<div class="form-group">
 													<label> Punto Despacho: <span>*</span></label>
@@ -132,7 +132,7 @@
 													<label> Reportado por: <span>*</span></label>
 								
 									<select style="width: 300px;" class="form-control mi-selector2" id="despachado_por" name="despachado_por" required>
-										<option value="0" selected >Seleccionar...</option>
+										<option value="<?php echo($IdSesion); ?>" selected >Seleccionar...</option>
 										<?php
 										$rubros = Usuarios::ListaUsuariosOperadores();
 										foreach ($rubros as $campo){
@@ -144,10 +144,11 @@
 								</select>
 												</div>
 											</div>
-											<div id="" class="col-md-6">
+
+											<div id="" class="col-md-12">
 												<div class="form-group">
 													<label> Operado por: <span>*</span></label>
-							<select style="width: 200px;" class="form-control mi-selector3" id="recibido_por" name="recibido_por" required>
+							<select style="width: 300px;" class="form-control mi-selector3" id="recibido_por" name="recibido_por" required>
 								
 										<option value="" selected>Seleccionar...</option>
 										<?php
@@ -161,19 +162,19 @@
 								</select>
 												</div>
 											</div>
-											<div class="col-md-3">
+											<div style="display: none;" class="col-md-3">
 												<div class="form-group">
 													<label>Valor Hora Operador: <span>*</span></label>
-													<input type="text" name="valor_hora_operador" placeholder="Valor Hora Operador" class="form-control" id="demo2">
+													<input type="text" name="valor_hora_operador" placeholder="Valor Hora Operador" class="form-control" id="demo2" value="0">
 												</div>
 											</div>
 
-											<div id="adicional" class="col-md-3">
+											<div style="display: none;" id="adicional" class="col-md-3">
 												<div class="form-group">
 													<label> ¿Incluye equipo adicional?: <span>*</span></label>
 							<select style="width: 200px;" class="form-control mi-selector3" id="equipo_adicional" name="equipo_adicional" required>
 								
-										<option value="" selected>Seleccionar...</option>
+										<option value="0" selected>Seleccionar...</option>
 										<option value="Si">Si</option>
 										<option value="No">No</option>
 								</select>
@@ -188,38 +189,41 @@
 
 											
 
-										<div class="col-md-4">
+										<div style="display: none;" class="col-md-4">
 												<div class="form-group">
 													<label> Seleccione el Cliente: <span>*</span></label>
 								<select style="width: 200px;" class="form-control mi-selector" id="cliente_id_cliente" name="cliente_id_cliente" required>
-										<option value="" selected>Seleccionar...</option>
-										<?php
-										$rubros = Clientes::obtenerListaClientes();
-										foreach ($rubros as $campo){
-											$id_cliente = $campo['id_cliente'];
-											$nombre_cliente = $campo['nombre_cliente'];
-										?>
-										<option value="<?php echo $id_cliente; ?>"><?php echo utf8_encode($nombre_cliente); ?></option>
-										<?php } ?>
+										<option value="0" selected>Seleccionar...</option>
 								</select>
 
 												</div>
 											</div>
 
-										<div class="col-md-4">
+										<div style="display: none;" class="col-md-12">
 												<div class="form-group">
 													<label> Seleccione el Proyecto: <span>*</span></label>
-								<select style="width: 200px;" class="form-control mi-selector" id="proyecto_id_proyecto" name="proyecto_id_proyecto" required>
-										<option value="" selected>Seleccionar Proyecto...</option>
-										<?php
-										$rubros = Proyectos::obtenerListaProyectos();
-										foreach ($rubros as $campo){
-											$id_proyecto = $campo['id_proyecto'];
-											$nombre_proyecto = $campo['nombre_proyecto'];
-										?>
-										<option value="<?php echo $id_cliente; ?>"><?php echo utf8_encode($nombre_proyecto); ?></option>
-										<?php } ?>
+								<select style="width: 300px;" class="form-control mi-selector" id="obra_id_obra" name="obra_id_obra" required>
+										<option value="<?php echo($getobra); ?>" selected>Seleccionar Proyecto...</option>
 								</select>
+
+												</div>
+										</div>
+
+										<div class="col-md-12">
+												<div class="form-group">
+													<label> Seleccione el Frente: <span>*</span></label>
+						<select class="form-control" id="frente_id_frente" name="frente_id_frente" >
+													  	<option value="">Seleccionar...</option>
+										<?php
+										$rubros = Frentes::ListaFrentesObras($getobra);
+										foreach ($rubros as $campo){
+											$id_frente = $campo['id_frente'];
+											$nombre_frente = $campo['nombre_frente'];
+											
+										?>
+										<option value="<?php echo $id_frente; ?>"><?php echo utf8_decode($nombre_frente); ?></option>
+										<?php } ?>
+							</select>
 
 												</div>
 											</div>

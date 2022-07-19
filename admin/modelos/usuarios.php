@@ -191,6 +191,23 @@ public static function ListaUsuariosSofia(){
 /*******************************************************
 ** FUNCION PARA OBTENER LA LISTA DE CLIENTES	  **
 ********************************************************/
+public static function ListaDirectoresObra(){
+	try {
+		$db=Db::getConnect();
+		$select=$db->query("SELECT * FROM usuarios WHERE estado_usuario='1' and rol_id_rol='15' order by nombre_usuario");
+    	$campos=$select->fetchAll();
+		$camposs = new Usuarios('',$campos);
+		$campostraidos = $camposs->getCampos();
+		return $campostraidos;
+	}
+	catch(PDOException $e) {
+		echo '{"error en obtener la pagina":{"text":'. $e->getMessage() .'}}';
+	}
+}
+
+/*******************************************************
+** FUNCION PARA OBTENER LA LISTA DE CLIENTES	  **
+********************************************************/
 public static function ListaUsuariosOperadores(){
 	try {
 		$db=Db::getConnect();
@@ -735,6 +752,29 @@ public static function notificacionleida($id,$marcadapor){
 		echo '{"error en obtener la pagina":{"text":'. $e->getMessage() .'}}';
 	}
 }
+
+/***************************************************************
+** FUNCION PARA ELIINAR POR ID  **
+***************************************************************/
+public static function notificacionleidatodas($marcadapor){
+	try {
+		$db=Db::getConnect();
+
+		date_default_timezone_set("America/Bogota");
+		$TiempoActual = date('Y-m-d H:i:s');
+		$diactual = date('Y-m-d');
+		$estadonotificacion=1;
+
+		$select=$db->query("UPDATE modulo_alertas SET estado_alerta='1', fecha_leida='".$diactual."',marca_leida='".$TiempoActual."' WHERE usuario_receptor='".$marcadapor."'");
+		if ($select){
+			return true;
+			}else{return false;}
+	}
+	catch(PDOException $e) {
+		echo '{"error en obtener la pagina":{"text":'. $e->getMessage() .'}}';
+	}
+}
+
 
 }
 

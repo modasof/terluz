@@ -1,21 +1,32 @@
 <?php
 ini_set('display_errors', '0');
-include_once 'modelos/clientes.php';
-include_once 'controladores/clientesController.php';
-include_once 'modelos/productos.php';
-include_once 'controladores/productosController.php';
-include_once 'modelos/proyectos.php';
-include_once 'controladores/proyectosController.php';
-include_once 'modelos/equipos.php';
-include_once 'controladores/equiposController.php';
+
+
+include_once 'modelos/obras.php';
+include_once 'controladores/obrasController.php';
+
+include_once 'modelos/proyeccioneslme.php';
+include_once 'controladores/proyeccioneslmeController.php';
+
+include_once 'modelos/listame.php';
+include_once 'controladores/listameController.php';
+
+include_once 'modelos/frentes.php';
+include_once 'controladores/frentesController.php';
+
+
 include_once 'modelos/funcionarios.php';
 include_once 'controladores/funcionariosController.php';
-include_once 'modelos/proyectos.php';
-include_once 'controladores/proyectosController.php';
+
 include_once 'modelos/usuarios.php';
 include_once 'controladores/usuariosController.php';
+
 $RolSesion = $_SESSION['IdRol'];
 $IdSesion = $_SESSION['IdUser'];
+
+$getobra = $_GET['id_obra'];
+$nombreobra=Obras::obtenernombreobra($getobra);
+
 
 //id, fecha_reporte, cliente_id_cliente, producto_id_producto, valor_m3, cantidad, creado_por, estado_reporte, reporte_publicado, marca_temporal, observaciones.
 
@@ -89,7 +100,7 @@ else
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0 text-dark">Reporte Horas Máquinaria</h1>
+          <h1 class="m-0 text-dark">Reporte Horas Máquinaria <?php echo($nombreobra); ?></h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
@@ -110,7 +121,7 @@ else
 					
 						<!-- ESTE DIV LO USO PARA CENTRAR EL FORMULARIO -->
 						<!-- left column -->
-						<div class="col-md-12">
+						<div class="col-md-3">
 						  <?php
           
             	require_once 'formreportehoras.php';
@@ -118,10 +129,7 @@ else
             ?>
 					  </div>
 
-					 
-					
-
-					 <div class="col-md-12">
+					 <div class="col-md-9">
 
 					 	<div style="display: none;" class="row">
 					 		<div id="chartContainer" style="height: 400px; width: 100%;"></div>
@@ -145,7 +153,7 @@ else
             <!-- /.box-header -->
             <div class="box-body">
             	            <div class="row">
-        <form action="?controller=horasmq&&action=horasporfecha" method="post" id="FormFechas" autocomplete="off">
+        <form action="?controller=horasmq&&action=horasporfecha&&id_obra=<?php echo($id_obra); ?>" method="post" id="FormFechas" autocomplete="off">
          <div class="col-md-8">
                         <div class="form-group">
                           <label>Seleccione el Rango de Fecha<span>*</span></label>
@@ -243,55 +251,34 @@ else
                                        <th style="background-color: #fcf8e3" class="success"></th>
                                         <th style="background-color: #fcf8e3" class="success"></th>
                                         <th style="background-color: #fcf8e3" class="success"></th>
-                                        <th style="background-color: #fcf8e3" class="success"></th>
-                                        <th style="background-color: #fcf8e3" class="success"></th>
-                                        <th style="background-color: #fcf8e3" class="success"></th>
-                                        <th style="background-color: #fcf8e3" class="success"></th>
-                                        <th style="background-color: #fcf8e3" class="success"></th>
-                                       
-                                         
-                                        <th style="background-color: #fcf8e3" class="success"></th>
+                                        
                             </tfoot>
           <thead>
             <tr style="background-color: #4f5962;color: white;">
               <th style="width: 2%;"><i class="fa fa-edit"></i></th>
               <th>Fecha</th>
               <th >Equipo</th>
-             <th >Vr. Hora</th>
-             <th >Vr. Operador</th>
-             <th >Total Horas</th>
-             
-               <th >Total Venta</th>
-             <th >Total Operador</th>
-              <th >Adicional</th>
-              <th >Equipo</th>
-             <th>Operado por</th>
-            <th>Cliente</th>
-               <th>Proyecto</th>
+              <th >Total Horas</th>
+              <th>Operado por</th>
+              <th>Obra</th>
+              <th>Frente</th>
               <th>Observaciones</th>
             </tr>
             <tr>
               <th style="width: 2%;"><i class="fa fa-edit"></i></th>
-             <th>Fecha</th>
+              <th>Fecha</th>
               <th >Equipo</th>
-             <th >Vr. Hora</th>
-             <th >Vr. Operador</th>
-             <th >Total Horas</th>
-             
-               <th >Total Venta</th>
-             <th >Total Operador</th>
-              <th >Adicional</th>
-              <th >Equipo</th>
-             <th>Operado por</th>
-            <th>Cliente</th>
-               <th>Proyecto</th>
+              <th >Total Horas</th>
+              <th>Operado por</th>
+              <th>Obra</th>
+              <th>Frente</th>
               <th>Observaciones</th>
             </tr>
           </thead>
        <tbody>
             <?php
             if ($fechaform!="") {
-              $res=horasmq::ReporteHorasporfecha($FechaStart,$FechaEnd);
+              $res=horasmq::ReporteHorasporfecha($FechaStart,$FechaEnd,$getobra);
               $campos = $res->getCampos();
             }
             else
@@ -316,20 +303,23 @@ else
             $punto_despacho = $campo['punto_despacho'];
             $marca_temporal = $campo['marca_temporal'];
             $observaciones = $campo['observaciones'];
+            $obra_id_obra = $campo['obra_id_obra'];
+            $frente_id_frente = $campo['frente_id_frente'];
+
             $cliente_id_cliente = $campo['cliente_id_cliente'];
              $equipo_adicional = $campo['equipo_adicional'];
               $nombre_equipo_adicional = $campo['nombre_equipo_adicional'];
             $proyecto_id_proyecto = $campo['proyecto_id_proyecto'];
 
             $equipo_id_equipo = $campo['equipo_id_equipo'];
-            $nomequipo=Equipos::obtenerNombreEquipo($equipo_id_equipo);
-            $nomdespachador=Funcionarios::obtenerNombreFuncionario($despachado_por);
-            $nomreportador=usuarios::obtenerNombreUsuario($recibido_por);
-            $nombrecliente= Clientes::obtenerNombreCliente($cliente_id_cliente);
-             $nombreproyecto= Proyectos::obtenerNombreProyecto($proyecto_id_proyecto);
+            $nomequipo=Listame::obtenerNombre($equipo_id_equipo);
+           
+           $nomobra=Obras::obtenernombreobra($obra_id_obra);
+           $nomfrente=Frentes::obtenerNombre($frente_id_frente);
+          $nomreportador=usuarios::obtenerNombreUsuario($recibido_por);
+            
 
-            $totaloperador=$hora_inactiva*$valor_hora_operador;
-            $ventatotal=$hora_inactiva*$valor_m3;
+           
             ?>
             <tr>
               <td>
@@ -339,25 +329,22 @@ else
                 <a download="Soporte" href="<?php echo($imagen); ?>"  class="tooltip-primary text-dark" title="Descargar Soporte">
                 <i class="fa fa-cloud-download bigger-110 "></i>
                 </a>
-              <a href="?controller=horasmq&&action=editarhoras&&id=<?php echo $id; ?>&&vereditar=1" class="tooltip-primary text-success" data-rel="tooltip" data-placement="top" title="" data-original-title="Editar Horas">
+              <a href="?controller=horasmq&&action=editarhoras&&id=<?php echo $id; ?>&&vereditar=1&&id_obra=<?php echo($id_obra); ?>" class="tooltip-primary text-success" data-rel="tooltip" data-placement="top" title="" data-original-title="Editar Horas">
                 <i class="fa fa-edit bigger-110 "></i>
               </a>
-              <a href="#" onclick="eliminar(<?php echo $id; ?>);" class="tooltip-primary text-danger" data-rel="tooltip" data-placement="top" title="" data-original-title="Eliminar Horas">
+              <a href="#" onclick="eliminar(<?php echo $id; ?>,<?php echo $obra_id_obra; ?>);" class="tooltip-primary text-danger" data-rel="tooltip" data-placement="top" title="" data-original-title="Eliminar Horas">
                 <i class="fa fa-trash bigger-110 "></i>
               </a>
               </td>
               <td><?php echo ($fecha_reporte) ?></td>
                <td><?php echo ($nomequipo) ?></td>
-               <td><?php echo ("$".number_format($valor_m3)) ?></td>
-             <td><?php echo ("$".number_format($valor_hora_operador)) ?></td>
               <td><?php echo ($hora_inactiva) ?></td>
-               <td><?php echo ("$".number_format($ventatotal)) ?></td>
-                <td><?php echo ("$".number_format($totaloperador)) ?></td>
-                <td><?php echo utf8_encode($equipo_adicional); ?></td>
-                <td><?php echo utf8_encode($nombre_equipo_adicional); ?></td>
+              
+               
                 <td><?php echo utf8_encode($nomreportador); ?></td>
-                 <td><?php echo utf8_encode($nombrecliente); ?></td>
-                <td><?php echo utf8_encode($nombreproyecto); ?></td>
+                 
+                <td><?php echo utf8_encode($nomobra); ?></td>
+                <td><?php echo utf8_encode($nomfrente); ?></td>
                <td><?php echo utf8_encode($observaciones); ?></td>
               
               
@@ -471,10 +458,10 @@ else
 
 </div> <!-- Fin Content-Wrapper -->
 <script>
-function eliminar(id){
+function eliminar(id,obra){
    eliminar=confirm("¿Deseas eliminar este registro?");
    if (eliminar)
-     window.location.href="?controller=horasmq&&action=eliminarhoras&&id="+id;
+     window.location.href="?controller=horasmq&&action=eliminarhoras&&id="+id+"&&id_obra="+obra;
 else
   //Y aquí pon cualquier cosa que quieras que salga si le diste al boton de cancelar
     alert('No se ha podido eliminar el registro...')
@@ -596,41 +583,23 @@ $('#cotizaciones thead tr:eq(1) th').each( function () {
            
             
             
-          pageTotal5 = api
-                .column( 5, { page: 'current'} )
+          pageTotal3 = api
+                .column( 3, { page: 'current'} )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
 
-           pageTotal6 = api
-                .column( 6, { page: 'current'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-           
-            pageTotal7 = api
-                .column( 7, { page: 'current'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
+          
             
            
           
 
 
-                $( api.column( 5 ).footer() ).html(
-                ''+formatmoneda(pageTotal5,'' )
-            );  
+              
 
-                   $( api.column( 6 ).footer() ).html(
-                '$'+formatmoneda(pageTotal6,'' )
-            );  
-
-   $( api.column( 7 ).footer() ).html(
-                '$'+formatmoneda(pageTotal7,'' )
+   $( api.column( 3 ).footer() ).html(
+                ''+formatmoneda(pageTotal3,'Hr' )
             );  
             
         },

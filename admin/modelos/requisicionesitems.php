@@ -846,14 +846,14 @@ public static function obtenerNombreProveedor($id){
  * `id`, `imagen`, `fecha_reporte`, `valor_total`, `valor_retenciones`, `estado_orden`, `proveedor_id_proveedor`, `medio_pago`, `observaciones`, `marca_temporal`, `usuario_creador`
  ***************************************************************/
 
-    public static function guardaroccompra($imagen,$imagen_cot, $fecha_reporte, $valor_total, $valor_retenciones, $valor_iva, $estado_orden, $proveedor_id_proveedor, $medio_pago, $observaciones, $marca_temporal, $usuario_creador, $items, $rubro_id,$subrubro_id,$factura, $estado_recibido, $compra_de)
+    public static function guardaroccompra($imagen,$imagen_cot, $fecha_reporte, $valor_total, $valor_retenciones, $valor_iva, $estado_orden, $proveedor_id_proveedor, $medio_pago, $observaciones, $marca_temporal, $usuario_creador, $items, $rubro_id,$subrubro_id,$factura, $estado_recibido, $compra_de,$aplica_obra,$obra_id_obra,$id_factura_compra)
     {
         try {
             $db = Db::getConnect();
             //$campostraidos = $campos->getCampos();
             //extract($campostraidos);
 
-            $insert = $db->prepare('INSERT INTO ordenescompra VALUES (NULL,:imagen,:imagen_cot,:fecha_reporte,:valor_total,:valor_retenciones,:valor_iva,:estado_orden,:proveedor_id_proveedor,:medio_pago,:observaciones,:marca_temporal,:usuario_creador,:rubro_id,:subrubro_id,:vencimiento,:factura,:estado_recibido,:compra_de,:id_factura_compra)');
+            $insert = $db->prepare('INSERT INTO ordenescompra VALUES (NULL,:imagen,:imagen_cot,:fecha_reporte,:valor_total,:valor_retenciones,:valor_iva,:estado_orden,:proveedor_id_proveedor,:medio_pago,:observaciones,:marca_temporal,:usuario_creador,:rubro_id,:subrubro_id,:vencimiento,:factura,:estado_recibido,:compra_de,:id_factura_compra,:aplica_obra,:obra_id_obra)');
 
             $V1          = str_replace(".", "", $valor_total);
             $V2          = str_replace(" ", "", $V1);
@@ -881,6 +881,8 @@ public static function obtenerNombreProveedor($id){
             $insert->bindValue('estado_recibido', utf8_decode($estado_recibido));
             $insert->bindValue('compra_de', utf8_decode($compra_de));
             $insert->bindValue('id_factura_compra', utf8_decode($id_factura_compra));
+            $insert->bindValue('aplica_obra', utf8_decode($aplica_obra));
+            $insert->bindValue('obra_id_obra', utf8_decode($obra_id_obra));
             $insert->execute();
             return true;
         } catch (Exception $e) {
@@ -1099,6 +1101,29 @@ public static function actualizarvalorfinal($id,$valornuevo){
             $marcas  = $campos->getCampos();
             foreach ($marcas as $marca) {
                 $mar = $marca['insumo_id_insumo'];
+            }
+            return $mar;
+        } catch (PDOException $e) {
+            echo '{"error en obtener la pagina":{"text":' . $e->getMessage() . '}}';
+        }
+    }
+
+
+/*******************************************************
+ ** FUNCION PARA MOSTRAR  **
+ ********************************************************/
+    public static function sqlservicioitem($id)
+    {
+        try {
+            $db  = Db::getConnect();
+            $sql = "SELECT servicio_id_servicio FROM requisiciones_items WHERE id='" . $id . "'";
+            //echo($sql);
+            $select  = $db->query($sql);
+            $camposs = $select->fetchAll();
+            $campos  = new Requisicionesitems('', $camposs);
+            $marcas  = $campos->getCampos();
+            foreach ($marcas as $marca) {
+                $mar = $marca['servicio_id_servicio'];
             }
             return $mar;
         } catch (PDOException $e) {

@@ -166,14 +166,14 @@ class Inventario
     {
         try {
             $db     = Db::getConnect();
-            $sql    = "SELECT aplica_equipo FROM salidas_ins WHERE id_salida_ins='" . $id . "'";
+            $sql    = "SELECT aplica_obra FROM salidas_ins WHERE id_salida_ins='" . $id . "'";
             $select = $db->query($sql);
             //echo($sql);
             $camposs = $select->fetchAll();
             $campos  = new Inventario('', $camposs);
             $marcas  = $campos->getCampos();
             foreach ($marcas as $marca) {
-                $mar = $marca['aplica_equipo'];
+                $mar = $marca['aplica_obra'];
             }
             return $mar;
         } catch (PDOException $e) {
@@ -189,14 +189,14 @@ class Inventario
     {
         try {
             $db     = Db::getConnect();
-            $sql    = "SELECT equipo_id_equipo FROM salidas_ins WHERE id_salida_ins='" . $id . "'";
+            $sql    = "SELECT obra_id_obra FROM salidas_ins WHERE id_salida_ins='" . $id . "'";
             $select = $db->query($sql);
             //echo($sql);
             $camposs = $select->fetchAll();
             $campos  = new Inventario('', $camposs);
             $marcas  = $campos->getCampos();
             foreach ($marcas as $marca) {
-                $mar = $marca['equipo_id_equipo'];
+                $mar = $marca['obra_id_obra'];
             }
             return $mar;
         } catch (PDOException $e) {
@@ -319,6 +319,30 @@ class Inventario
         }
     }
 # ======  End of Consulta entradas por fecha  =======
+
+
+# ===================================================
+    # =           Consulta entradas por fecha           =
+    # ===================================================
+
+    public static function salidasporfechaobra($FechaStart, $FechaEnd,$obra,$rubro)
+    {
+        try {
+
+            $db      = Db::getConnect();
+            $sql="SELECT * FROM salidas_ins as A,detalle_salida_ins as B WHERE A.fecha_reporte >='".$FechaStart."' and A.fecha_reporte <='".$FechaEnd."' and A.obra_id_obra='".$obra."' and A.id_salida_ins=B.salida_id and A.id_rubro='".$rubro."' order by A.fecha_reporte DESC;";
+            $select  = $db->query($sql);
+            //echo($sql);
+            $camposs = $select->fetchAll();
+            $campos  = new Inventario('', $camposs);
+            return $campos;
+
+        } catch (PdoException $e) {
+            echo '{"error en obtener la pagina":{"text":' . $e->getMessage() . '}}';
+        }
+    }
+# ======  End of Consulta entradas por fecha  =======
+
 
 # =================================================
     # =           Consulta Detalle Entradas           =
@@ -625,7 +649,7 @@ LEFT JOIN detalle_salida_ins ON  detalle_salida_ins.fecha_registro=detalle_entra
             $campostraidos = $campos->getCampos();
             extract($campostraidos);
 
-            $insert = $db->prepare('INSERT INTO detalle_salida_ins VALUES (NULL,:item_id,:requisicion_id,:insumo_id,:cantidad,:valor_entregado,:salida_id,:fecha_registro,:estado_detalle_salida,:estado_recibido,:marca_temporal,:creado_por,:salida_por)');
+            $insert = $db->prepare('INSERT INTO detalle_salida_ins VALUES (NULL,:item_id,:requisicion_id,:insumo_id,:servicio_id,:cantidad,:valor_entregado,:salida_id,:fecha_registro,:estado_detalle_salida,:estado_recibido,:marca_temporal,:creado_por,:salida_por)');
 
             $V1          = str_replace(".", "", $valor_entregado);
             $V2          = str_replace(" ", "", $V1);
@@ -637,6 +661,7 @@ LEFT JOIN detalle_salida_ins ON  detalle_salida_ins.fecha_registro=detalle_entra
             $insert->bindValue('item_id', utf8_decode($item_id));
             $insert->bindValue('requisicion_id', utf8_decode($requisicion_id));
             $insert->bindValue('insumo_id', utf8_decode($insumo_id));
+            $insert->bindValue('servicio_id', utf8_decode($servicio_id));
             $insert->bindValue('cantidad', utf8_decode($cantidad));
             $insert->bindValue('valor_entregado', utf8_decode($valorentregado));
             $insert->bindValue('salida_id', utf8_decode($salida_id));
@@ -759,14 +784,15 @@ LEFT JOIN detalle_salida_ins ON  detalle_salida_ins.fecha_registro=detalle_entra
 
     # ===============================================
     # =           Guardar Salida Insumo            =
+    //(`id_salida_ins`, `fecha_reporte`, `proyecto_id_proyecto`, `aplica_obra`, `obra_id_obra`, `requisicion_id`, `marca_temporal`, `solicitado_por`, `creado_por`, `recibido_por`, `observaciones`, `tipo_salida`, `valor_salida`, `estado_salida`, `fecha_recepcion`, `id_rubro`, `id_subrubro`)
     # ===============================================
 
-    public static function guardarsalidains($fecha_reporte, $proyecto_id_proyecto, $aplica_equipo, $equipo_id_equipo, $requisicion_id, $marca_temporal, $solicitado_por, $creado_por, $recibido_por, $observaciones, $tipo_salida, $valor_salida, $estado_salida, $fecha_recepcion)
+    public static function guardarsalidains($fecha_reporte, $proyecto_id_proyecto, $aplica_obra, $obra_id_obra, $requisicion_id, $marca_temporal, $solicitado_por, $creado_por, $recibido_por, $observaciones, $tipo_salida, $valor_salida, $estado_salida, $fecha_recepcion,$id_rubro,$id_subrubro)
     {
         try {
             $db = DB::getConnect();
 
-            $insert = $db->query("INSERT INTO salidas_ins (fecha_reporte, proyecto_id_proyecto,aplica_equipo,equipo_id_equipo, requisicion_id, marca_temporal, solicitado_por, creado_por, recibido_por, observaciones, tipo_salida,valor_salida, estado_salida, fecha_recepcion) VALUES ('" . $fecha_reporte . "','" . $proyecto_id_proyecto . "','" . $aplica_equipo . "','" . $equipo_id_equipo . "','" . $requisicion_id . "','" . $marca_temporal . "','" . $solicitado_por . "','" . $creado_por . "','" . $recibido_por . "','" . $observaciones . "','" . $tipo_salida . "','" . $valor_salida . "','" . $estado_salida . "','" . $fecha_recepcion . "')");
+            $insert = $db->query("INSERT INTO salidas_ins (fecha_reporte, proyecto_id_proyecto,aplica_obra,obra_id_obra, requisicion_id, marca_temporal, solicitado_por, creado_por, recibido_por, observaciones, tipo_salida,valor_salida, estado_salida, fecha_recepcion,id_rubro,id_subrubro) VALUES ('" . $fecha_reporte . "','" . $proyecto_id_proyecto . "','" . $aplica_obra . "','" . $obra_id_obra . "','" . $requisicion_id . "','" . $marca_temporal . "','" . $solicitado_por . "','" . $creado_por . "','" . $recibido_por . "','" . $observaciones . "','" . $tipo_salida . "','" . $valor_salida . "','" . $estado_salida . "','" . $fecha_recepcion . "','".$id_rubro."','".$id_subrubro."')");
 
         } catch (PDOException $e) {
             echo '{"error en obtener la pagina":{"text":' . $e->getMessage() . '}}';

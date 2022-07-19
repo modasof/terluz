@@ -4,20 +4,58 @@ ini_set('display_errors', '1');
 $controllers = array(
 //AQUI SE ESTABLACE LAS FUNCIONES QUE VA A TENER CADA MODULO
 //OJO, CADA OPCION DEBE ESTAR EN EL ARCHIVO NombreModuloController.php dentro del directorio controladores
-	'index' => ['index','informe1','informegerencia','informeclientes','informedetalleclientes','informeventaclientes','informedetalleclientesventas','micajamenor','dashboardalmacen','vistarqusuariosdashboard','aprobarRq'],
+	'index' => ['index','informe1','informegerencia','informeclientes','informedetalleclientes','informeventaclientes','informedetalleclientesventas','micajamenor','dashboardalmacen','vistarqusuariosdashboard','aprobarRq','obras'],
+
+	'obras' => ['dashboard','detalle_obra','nueva_obra','eliminarobra','guardarobra','actualizarobra','guardarcapitulo','guardaractividad','eliminarcapitulo','eliminaractividad','actualizarcapitulo','actualizaractividad','guardarcantmayores','eliminarcantidades','modificaciones','avance_obra','guardaravance','proyecciones','guardarcantidadesproyectadas','eliminarcantidadesproyectadas','proyeccionesrango'],
+
+
+	// Funcionalidad Frentes 
+	'frentes' => ['nuevo','actualizar','guardar','eliminar','todosobra','todos'],
+
+	// Funcionalidad Proyecciones L-ME (Máquinaría y Equipos) 
+	'proyeccioneslme' => ['nuevo','actualizar','guardar','eliminarango','eliminaequipo','todosobra','todos','proyeccionesrango','ejecutadorango'],
+
+	// Funcionalidad Proyecciones L-MO (Mano de Obra) 
+	'proyeccioneslmo' => ['nuevo','actualizar','guardar','eliminarango','eliminaequipo','todosobra','todos','proyeccionesrango'],
+
+	// Funcionalidad Proyecciones (Administración) 
+	'proyeccionesadm' => ['nuevo','actualizar','guardar','eliminarango','eliminafila','todosobra','todos','proyeccionesrango'],
+
+	// Funcionalidad Proyecciones (Insumos)
+	'proyeccionesins' => ['nuevo','actualizar','guardar','eliminarango','eliminaequipo','todosobra','todos','proyeccionesrango'],
+
+	// Funcionalidad Rangos 
+	'rangos' => ['nuevo','actualizar','guardar','eliminar','todosobra','todos'],
+
+	// Reporte Avances 
+	'avances' => ['todosporobra','todosporcapitulo','todosporfrente','todosporactividad','todosporusuario','guardar','eliminar','editar','actualizar','porfecha'],
+
+	// Funcionalidad Personal Obras
+	'personalobras' => ['nuevo','actualizar','guardar','eliminar','todosobranomina','todosobraextra','todos'],
 
 	'informes' =>['cuentas','movimientoscuentas','subrubrosegresos','cajas','movimientoscaja','subrubrosegresoscaja','ventas','detallelineanegocio','clientes','compras','totalrq','rqporfecha'],
 
 'cuentas' => ['editar','guardar','actualizar','todos','nuevo','eliminar','reporteporfecha','crucecuentas','detallecruce'],
 
 	// Funcionalidad Gestión Usuarios
-	'usuarios' => ['editar','guardar','actualizar','todos','nuevo','eliminar','editarpermisos','activarmenuPor','desactivarmenuPor','activartodo','desactivartodo','activarrubros','notificacionleida','notificaciones'],
+	'usuarios' => ['editar','guardar','actualizar','todos','nuevo','eliminar','editarpermisos','activarmenuPor','desactivarmenuPor','activartodo','desactivartodo','activarrubros','notificacionleida','notificaciones','notificacionleidatodas'],
 
 	'reportes' => ['ventas','clienteextra','productoextra','guardarventa','eliminarventa','cambiarestadoventa','editarventa','actualizarventa','ventasporfecha','compras','insumoextra','guardarcompra','eliminarcompra','editarcompra','actualizarcompra','comprasporfecha','despachos','guardardespacho','eliminardespacho','editardespacho','actualizardespacho','despachosporfecha','despachosclientes','despachosclientesf','despachosclientesunico','despachosproveedorunico','despachospropietario','guardardespachoclientes','eliminardespachoclientes','editardespachoclientes','actualizardespachoclientes','despachosporfechaclientes','despachosporfechaclientesunico','despachosporfechaproveedorunico','despachosporfechapropietario','facturas','guardarfactura','eliminarfactura','editarfactura','actualizarfactura','facturasporfecha','guardarabono','eliminarabono','cuentasxpagar','cuentasxpagarconsolidado','cuentasxpagardetalle','guardarcuentaxpagar','eliminarcuentaxpagar','cancelarcuentaxpagar','editarcuentaxpagar','actualizarcuentaxpagar','cuentasxpagarporfecha','cuentasxpagarporfechaconsolidado','cuentasxpagarporfechadetalle','prestamos','guardarprestamo','eliminarprestamo','cambiarestadoprestamo','editarprestamo','actualizarprestamo','prestamosporfecha','combustibles','combustiblescisterna','combustiblesporfechacisterna','mescombustibleseq','mesfletes','meshorasmq','infovolqueta','guardarcombustible','eliminarcombustible','editarcombustible','actualizarcombustible','combustiblesporfecha','proveedorextra','horas','guardarhoras','eliminarhoras','editarhoras','actualizarhoras','horasporfecha','despachostrituradora','guardardespachotrituradora','eliminardespachotrituradora','editardespachotrituradora','actualizardespachotrituradora','despachosporfechatrituradora','insumosxpagar','guardarinsumoxpagar','eliminarinsumoxpagar','cancelarinsumoxpagar','editarinsumoxpagar','actualizarinsumoxpagar','insumosxpagarporfecha'],
 
 	// Reporte Horas Máquinaria 
 	'horasmq' => ['horas','guardarhoras','eliminarhoras','editarhoras','actualizarhoras','horasporfecha'],
 
+	// Reporte Material en Obra 
+	'agregadosobra' => ['agregados','guardar','eliminar','editar','actualizar','porfecha'],
+
+	// Reporte Listado de Máquinas y equipos
+	'listame' => ['todos','guardar','eliminar','editar','actualizar'],
+
+	// Reporte Listado de Mano de Obra
+	'listamo' => ['todos','guardar','eliminar','editar','actualizar'],
+
+	// Reporte Listado de Máquinas y equipos
+	'personalextra' => ['todos','guardar','eliminar','editar','actualizar'],
 
 	// Funcionalidad Requisiciones 
 	'requisiciones' => ['todosporusuario','todosalmacen','todosmiusuario','todos','guardar','eliminar','editar','actualizar','porfecha','todosporusuarioestado','reqalmacenestado','todosporusuarioadmin','todosporusuarioestadoadmin','cotizaciones','vercotizacion','eliminaritemcot','reqparaentrega'],
@@ -132,6 +170,46 @@ function call($controller, $action) {
 		$controller = new UsuarioController();
 		break;
 
+	case 'obras':
+	require_once 'modelos/obras.php';
+		$controller = new ObrasController();
+		break;
+
+	case 'frentes':
+	require_once 'modelos/frentes.php';
+		$controller = new FrentesController();
+		break;
+
+	case 'proyeccioneslme':
+	require_once 'modelos/proyeccioneslme.php';
+		$controller = new ProyeccioneslmeController();
+		break;
+
+	case 'proyeccioneslmo':
+	require_once 'modelos/proyeccioneslmo.php';
+		$controller = new ProyeccioneslmoController();
+		break;
+
+	case 'proyeccionesadm':
+	require_once 'modelos/proyeccionesadm.php';
+		$controller = new ProyeccionesadmController();
+		break;
+
+	case 'proyeccionesins':
+	require_once 'modelos/proyeccionesins.php';
+		$controller = new ProyeccionesinsController();
+		break;
+
+	case 'rangos':
+	require_once 'modelos/rangos.php';
+		$controller = new RangosController();
+		break;
+
+	case 'personalobras':
+	require_once 'modelos/personalobras.php';
+		$controller = new PersonalobrasController();
+		break;
+
 	case 'informes':
 		require_once 'modelos/informes.php';
 		$controller = new InformesController();
@@ -158,6 +236,32 @@ function call($controller, $action) {
 		require_once 'modelos/horasmq.php';
 		$controller = new HorasmqController();
 		break;
+
+	case 'agregadosobra':
+		require_once 'modelos/agregadosobra.php';
+		$controller = new AgregadosobraController();
+		break;
+
+	case 'avances':
+		require_once 'modelos/avances.php';
+		$controller = new AvancesController();
+		break;
+
+	case 'listame':
+		require_once 'modelos/listame.php';
+		$controller = new ListameController();
+		break;
+
+	case 'personalextra':
+		require_once 'modelos/personalextra.php';
+		$controller = new PersonalextraController();
+		break;
+
+	case 'listamo':
+		require_once 'modelos/listamo.php';
+		$controller = new ListamoController();
+		break;
+
 	case 'concreto':
 		require_once 'modelos/concreto.php';
 		$controller = new ConcretoController();

@@ -66,12 +66,12 @@ foreach ($campos as $campo){
 
 								   <div class="col-12">
 									<div class="form-group">
-									  <label for="nombres">Abreviatura (Max 3 letras)</label>
+									  <label for="nombres">Abreviatura (Max 10 letras)</label>
 									  <div class="input-group">
 										<div class="input-group-prepend">
 										  <span class="input-group-text"><i class="fa fa-align-justify"></i></span>
 										</div>
-										<input type="text" name="abreviatura" value="<?php echo $abreviatura;?>" class="form-control" id="funcion" placeholder="Ingrese Abreviatura" maxlength="3" required>
+										<input type="text" name="abreviatura" value="<?php echo $abreviatura;?>" class="form-control" id="funcion" placeholder="Ingrese Abreviatura" maxlength="20" required>
 										
 									  </div>
 									</div>

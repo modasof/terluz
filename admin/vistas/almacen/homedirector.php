@@ -67,6 +67,19 @@ require_once 'vistas/index/header-formdate.php';
     <!-- Main content -->
     <section class="content">
     <div class="row">
+         <div class="box-body">
+        
+
+<a href="?controller=obras&&action=dashboard" class="btn btn-app">
+<i class="fa fa-building"></i>Mis Obras</a>
+
+
+  <a href="?controller=obras&&action=nueva_obra" class="btn btn-app">
+                <i class="fa fa-plus-square"></i> Nueva Obra
+</a>
+              
+            </div>
+
          <div class="col-md-6">
 
           <div class="box box-default">

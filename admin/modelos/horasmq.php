@@ -45,15 +45,35 @@ class Horasmq
 		}
 	}
 
+    /*******************************************************
+** FUNCION PARA MOSTRAR EL NOMBRE DEL PRODUCTO **
+********************************************************/
+public static function validarduplicado($fecha_reporte,$equipo_id_equipo,$obra){
+	try {
+		$db=Db::getConnect();
+
+		$select=$db->query("SELECT count(id) as totales FROM reporte_horasmq WHERE fecha_reporte='".$fecha_reporte."' and equipo_id_equipo='".$equipo_id_equipo."' and obra_id_obra='".$obra."'");
+    	$camposs=$select->fetchAll();
+    	$campos = new Horasmq('',$camposs);
+    	$marcas = $campos->getCampos();
+		foreach($marcas as $marca){
+			$mar = $marca['totales'];
+		}
+		return $mar;
+	}
+	catch(PDOException $e) {
+		echo '{"error en obtener la pagina":{"text":'. $e->getMessage() .'}}';
+	}
+}
 
 /*******************************************************
 ** FUNCION PARA MOSTRAR TODOS LOS CAMPOS DE FECHAS	  **
 ********************************************************/
-public static function ReporteHoras(){
+public static function ReporteHoras($id){
 	try {
 		$db=Db::getConnect();
 
-		$select=$db->query("SELECT * FROM reporte_horasmq WHERE reporte_publicado='1' and fecha_reporte BETWEEN DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND CURDATE() order by fecha_reporte DESC");
+		$select=$db->query("SELECT * FROM reporte_horasmq WHERE reporte_publicado='1' and fecha_reporte BETWEEN DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND CURDATE() and obra_id_obra='".$id."' order by fecha_reporte DESC");
     	$camposs=$select->fetchAll();
     	$campos = new Horasmq('',$camposs);
 		return $campos;
@@ -66,11 +86,11 @@ public static function ReporteHoras(){
 /*******************************************************
 ** FUNCION PARA MOSTRAR TODOS LOS CAMPOS POR RANGO DE FECHA	  **
 ********************************************************/
-public static function ReporteHorasporfecha($FechaStart,$FechaEnd){
+public static function ReporteHorasporfecha($FechaStart,$FechaEnd,$obra){
 	try {
 		$db=Db::getConnect();
 
-		$select=$db->query("SELECT * FROM reporte_horasmq WHERE reporte_publicado='1' and fecha_reporte >='".$FechaStart."' and fecha_reporte <='".$FechaEnd."' order by fecha_reporte DESC");
+		$select=$db->query("SELECT * FROM reporte_horasmq WHERE reporte_publicado='1' and fecha_reporte >='".$FechaStart."' and fecha_reporte <='".$FechaEnd."' and obra_id_obra='".$obra."' order by fecha_reporte DESC");
     	$camposs=$select->fetchAll();
     	$campos = new Horasmq('',$camposs);
 		return $campos;
@@ -91,7 +111,7 @@ public static function guardarhoras($campos,$imagen){
 		$campostraidos = $campos->getCampos();
 		extract($campostraidos);
 
-		$insert=$db->prepare('INSERT INTO reporte_horasmq VALUES (NULL,:imagen,:fecha_reporte,:equipo_id_equipo,:despachado_por,:punto_despacho,:recibido_por,:valor_m3,:valor_hora_operador,:cantidad,:indicador,:hora_inactiva,:creado_por, :estado_reporte, :reporte_publicado,:marca_temporal, :observaciones,:proyecto_id_proyecto,:cliente_id_cliente,:equipo_adicional,:nombre_equipo_adicional )');
+		$insert=$db->prepare('INSERT INTO reporte_horasmq VALUES (NULL,:imagen,:fecha_reporte,:equipo_id_equipo,:despachado_por,:punto_despacho,:recibido_por,:valor_m3,:valor_hora_operador,:cantidad,:indicador,:hora_inactiva,:creado_por, :estado_reporte, :reporte_publicado,:marca_temporal, :observaciones,:obra_id_obra,:frente_id_frente,:cliente_id_cliente,:equipo_adicional,:nombre_equipo_adicional )');
 
 		$V1=str_replace(".","",$valor_m3);
 		$V2=str_replace(" ", "", $V1);
@@ -130,7 +150,8 @@ public static function guardarhoras($campos,$imagen){
 		$insert->bindValue('reporte_publicado',utf8_decode($reporte_publicado));
 		$insert->bindValue('marca_temporal',utf8_decode($marca_temporal));
 		$insert->bindValue('observaciones',utf8_decode($observaciones));
-		$insert->bindValue('proyecto_id_proyecto',utf8_decode($proyecto_id_proyecto));
+		$insert->bindValue('obra_id_obra',utf8_decode($obra_id_obra));
+		$insert->bindValue('frente_id_frente',utf8_decode($frente_id_frente));
 		$insert->bindValue('cliente_id_cliente',utf8_decode($cliente_id_cliente));
 		$insert->bindValue('equipo_adicional',utf8_decode($equipo_adicional));
 		$insert->bindValue('nombre_equipo_adicional',utf8_decode($nombre_equipo_adicional));
@@ -193,7 +214,8 @@ public static function actualizarhoras($id,$campos,$imagen){
 								recibido_por=:recibido_por,
 								valor_m3=:valor_m3,
 								cliente_id_cliente=:cliente_id_cliente,
-								proyecto_id_proyecto=:proyecto_id_proyecto,
+								obra_id_obra=:obra_id_obra,
+								frente_id_frente=:frente_id_frente,
 								valor_hora_operador=:valor_hora_operador,
 								cantidad=:cantidad,
 								indicador=:indicador,
@@ -228,7 +250,8 @@ public static function actualizarhoras($id,$campos,$imagen){
 		$update->bindValue('recibido_por',utf8_decode($recibido_por));
 		$update->bindValue('valor_m3',utf8_decode($valornumero));
 		$update->bindValue('cliente_id_cliente',utf8_decode($cliente_id_cliente));
-		$update->bindValue('proyecto_id_proyecto',utf8_decode($proyecto_id_proyecto));
+		$update->bindValue('obra_id_obra',utf8_decode($obra_id_obra));
+		$update->bindValue('frente_id_frente',utf8_decode($frente_id_frente));
 		$update->bindValue('valor_hora_operador',utf8_decode($valornumero1));
 		$update->bindValue('cantidad',utf8_decode($cantidad));
 		$update->bindValue('indicador',utf8_decode($indicador));

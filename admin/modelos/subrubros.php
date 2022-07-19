@@ -281,6 +281,23 @@ public static function activarmenuPor($id){
 	}
 }
 
+/*******************************************************
+** FUNCION PARA OBTENER LA LISTA DE CLIENTES	  **
+********************************************************/
+public static function obtenerListaSubrubrosAdmin($id){
+	try {
+		$db=Db::getConnect();
+		$select=$db->query("SELECT * FROM subrubros WHERE rubro_id_rubro='".$id."' order by nombre_subrubro");
+    	$campos=$select->fetchAll();
+		$camposs = new Subrubros('',$campos);
+		$campostraidos = $camposs->getCampos();
+		return $campostraidos;
+	}
+	catch(PDOException $e) {
+		echo '{"error en obtener la pagina":{"text":'. $e->getMessage() .'}}';
+	}
+}
+
 
 }
 

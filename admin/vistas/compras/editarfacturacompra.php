@@ -19,6 +19,7 @@ include_once 'controladores/cuentasController.php';
 
 include_once 'modelos/egresoscuenta.php';
 include_once 'controladores/egresoscuentaController.php';
+
 include_once 'modelos/compras.php';
 include_once 'controladores/comprasController.php';
 
@@ -36,7 +37,6 @@ foreach ($campos as $campo) {
     $correo          = $campo['correo'];
     $nombreproveedor = Proveedores::obtenerNombreProveedor($Proveedor);
 }
-
 
 $resultado    = Compras::obtenerdatosfactura($Selfactura);
 $campostabla = $resultado->getcampos();
@@ -69,34 +69,8 @@ foreach ($campostabla as $camposeleccionado) {
     
 }
 
-?>
-<?php
-$itemsget = $_GET['des'];
-$items    = explode(",", $itemsget);
-foreach ($items as $key => $despachounico) {
-
-    $res    = compras::editarpor($despachounico);
-    $campos = $res->getCampos();
-    foreach ($campos as $campo) {
-        $imagenfactura = $campo['imagen'];
-        $estado_orden  = $campo['estado_orden'];
-        $factura_num   = $campo['factura'];
-        $rubro_id      = $campo['rubro_id'];
-        $subrubro_id   = $campo['subrubro_id'];
-        $compra_de     = $campo['compra_de'];
-        $observaciones = $campo['observaciones'];
-        $valor_total = $campo['valor_total'];
-        $valor_retenciones=$campo['valor_retenciones'];
-        $valor_iva=$campo['valor_iva'];
-        $id_factura_compra= $campo['id_factura_compra'];
-        $fac_fecha_reporte =$campo['fecha_reporte'];
-
-    }
-}
 
 ?>
-
-
 <!-- CCS Y JS PARA LA CARGA DE IMAGEN -->
 
 <!-- CCS Y JS PARA LA CARGA DE IMAGEN -->
@@ -116,7 +90,7 @@ foreach ($items as $key => $despachounico) {
       <div class="row mb-2">
         <div class="col-sm-6">
           <h2 class="page-header">
-<i class="fa fa-plus-square"></i> Relación Facturas.
+<i class="fa fa-plus-square"></i> Actualizar  Factura Nº <?php echo($fac_facturanum); ?>.
 <small class="pull-right"></small>
 </h2>
         </div><!-- /.col -->
@@ -156,6 +130,477 @@ foreach ($items as $key => $despachounico) {
                             <!-- form start -->
 
 
+<div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Ordenes de Compra</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+    <table class="table  table-responsive  table-bordered table-hover" style="font-size: 12px;">
+                <tbody><tr>
+                <th style="width: 10%;">OC</th>
+                <th style="width: 8%;">Rq</th>
+                <th style="width: 8%;">F. Solicitud</th>
+                <th style="width: 30%;">Detalle </th>
+                <th style="width: 10%;">Cant</th>
+                <th style="width: 5%;">-</th>
+                <th style="width: 10%;">Vr. Unitario</th>
+                <th style="width: 10%;">Subtotal</th>
+                <th style="width: 10%;">IVA</th>
+                <th style="width: 10%;">Vr. Iva</th>
+
+                </tr>
+<?php
+$itemsget = $_GET['des'];
+
+
+$items    = explode(",", $itemsget);
+foreach ($items as $key => $despachounico) {
+
+    $res    = compras::editarpor($despachounico);
+    $campos = $res->getCampos();
+    foreach ($campos as $campo) {
+        $imagenfactura = $campo['imagen'];
+        $estado_orden  = $campo['estado_orden'];
+        $factura_num   = $campo['factura'];
+        $rubro_id      = $campo['rubro_id'];
+        $subrubro_id   = $campo['subrubro_id'];
+        $compra_de     = $campo['compra_de'];
+        $observaciones = $campo['observaciones'];
+    }
+
+// Consulta de los item de las ordenes de compras //
+    $res    = Compras::detalleocfacturacion($despachounico);
+    $campos = $res->getcampos();
+
+    foreach ($campos as $campo) {
+        $id_cotizacion          = $campo['id'];
+        $proveedor_id_proveedor = $campo['proveedor_id_proveedor'];
+        $vr_unitario            = $campo['vr_unitario'];
+        $insumo_id_insumo       = $campo['insumo_id_insumo'];
+        $servicio_id_servicio   = $campo['servicio_id_servicio'];
+        $ordencompra_num        = $campo['ordencompra_num'];
+        $requisicion_id         = $campo['requisicion_id'];
+        $cantidadcot            = $campo['cantidadcot'];
+        $fecha_reporte          = $campo['fecha_reporte'];
+        $item_id                = $campo['item_id'];
+        $iva                    = $campo['iva'];
+        $valor_iva              = $campo['valor_iva'];
+
+        if ($iva == 0) {
+            $mascarcaiva = "No aplica";
+        } else {
+            $mascarcaiva = $iva;
+        }
+
+        $Lista    = $Lista . $campo['id'] . ",";
+        $subtotal = $cantidadcot * $vr_unitario;
+        $sumasubtotal += $subtotal;
+        $sumaiva += $valor_iva;
+
+        if ($insumo_id_insumo != '0') {
+            $detalle      = Insumos::obtenerNombreInsumo($insumo_id_insumo);
+            $unidad       = Insumos::obtenerUnidadmed($insumo_id_insumo);
+            $nombremedida = Unidadesmed::obtenerNombre($unidad);
+        } elseif ($servicio_id_servicio != '0') {
+            $detalle = Servicios::obtenerNombre($servicio_id_servicio);
+        } else {
+            $detalle = "Verificar dato";
+        }
+
+        ?>
+        <tr>
+            <td>
+        <a href="?controller=compras&&action=descartar&&id=<?php echo ($id_cotizacion); ?>&&des=<?php echo ($itemsget); ?>"  class="tooltip-primary text-danger" data-rel="tooltip" data-placement="top" title="" data-original-title="Descartar">
+                <i class="fa fa-close bigger-110 "></i>
+        </a>
+             OC00<?php echo ($ordencompra_num); ?>
+             <br>
+             <?php
+if ($nomestado == "Facturado") {
+            echo ("<small class='text-success'><strong>" . $nomestado . "</strong></small>");
+        } elseif ($nomestado == "Sin Facturar") {
+            echo ("<small class='text-danger'><strong>" . $nomestado . "</strong></small>");
+        }
+
+        ?>
+
+         </td>
+            <td> RQ<?php echo ($requisicion_id . "-" . $item_id); ?> </td>
+            <td> <?php echo ($fecha_reporte); ?> </td>
+            <td> <?php echo ($detalle); ?> </td>
+            <td>
+                <input id="cantidades<?php echo ($item_id); ?>" class="col-sm-12 activeform-control input-sm" type="text" value="<?php echo ($cantidadcot); ?>">
+            </td>
+            <td> <?php echo ($nombremedida); ?> </td>
+            <td>
+
+
+
+        <input type="hidden" id="idcotizacion<?php echo ($item_id); ?>" value="<?php echo ($id_cotizacion); ?>">
+        <input type="hidden" id="cantidad<?php echo ($item_id); ?>" value="<?php echo ($cantidadcot); ?>">
+
+
+
+
+    <input id="valorunit<?php echo ($item_id); ?>" class=" activeform-control input-sm" type="text" value="<?php echo ($vr_unitario); ?>">
+
+            </td>
+             <td id="subtotal<?php echo ($item_id); ?>">
+                <input disabled="" type="text" value="$<?php echo (number_format($subtotal, 0)); ?>">
+            </td>
+             <td>
+                <select name="" id="iva<?php echo ($item_id); ?>" class="input-sm">
+                    <option selected="" value="<?php echo ($mascarcaiva); ?>"><?php echo ($iva); ?>%</option>
+                    <option value="No aplica">0%</option>
+                     <option value="5">5%</option>
+                     <option value="19">19%</option>
+                </select>
+    <small style="display: none;" id="msjcalculariva<?php echo ($item_id); ?>" class="text-danger"><strong>Recalcular Iva</strong></small>
+              </td>
+             <td id="valoriva<?php echo ($item_id); ?>">
+                <input disabled="" type="text" value="$<?php echo (number_format($valor_iva, 0)); ?>">
+            </td>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#valorunit<?php echo ($item_id); ?>').on('change',function(){
+
+        var valorunitario = $(this).val();
+        var IdItem= $('#idcotizacion<?php echo ($item_id); ?>').val();
+        var cantidadajax= $('#cantidad<?php echo ($item_id); ?>').val();
+        //alert (IdItem);
+        //alert (valorunitario);
+
+         $('#msjcalculariva<?php echo ($item_id); ?>').show();
+
+          if(valorunitario){
+            $.ajax({
+                type:'POST',
+                url:'vistas/compras/ajaxvalorunitario.php',
+                data:'field_valor_unitario='+valorunitario+'&&field_item_id='+IdItem+'&&field_cantidad='+cantidadajax,
+                success:function(html){
+                    $('#subtotal<?php echo ($item_id); ?>').html(html);
+                }
+            });
+        }else{
+        $('#subtotal<?php echo ($item_id); ?>').html('<span>Hola mundo</span>');
+        }
+    });
+});
+</script>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#cantidades<?php echo ($item_id); ?>').on('change',function(){
+
+        var valorcantidad = $(this).val();
+        var IdItem= $('#idcotizacion<?php echo ($item_id); ?>').val();
+        var valorunitarioactual= $('#valorunit<?php echo ($item_id); ?>').val();
+
+         $('#msjcalculariva<?php echo ($item_id); ?>').show();
+
+          if(valorcantidad){
+            $.ajax({
+                type:'POST',
+                url:'vistas/compras/ajaxcantidades.php',
+                data:'field_valor_unitario='+valorunitarioactual+'&&field_item_id='+IdItem+'&&field_cantidad='+valorcantidad,
+                success:function(html){
+                    $('#subtotal<?php echo ($item_id); ?>').html(html);
+                }
+            });
+        }else{
+        $('#subtotal<?php echo ($item_id); ?>').html('<span>Hola mundo</span>');
+
+        }
+
+    });
+});
+</script>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#iva<?php echo ($item_id); ?>').on('change',function(){
+
+        var valoriva = $(this).val();
+        var IdItem= $('#idcotizacion<?php echo ($item_id); ?>').val();
+
+        //alert (valoriva);
+        //alert (IdItem);
+
+         $('#msjcalculariva<?php echo ($item_id); ?>').hide();
+
+         if(valoriva){
+            $.ajax({
+                type:'POST',
+                url:'vistas/compras/ajaxvaloriva.php',
+                data:'field_valor_iva='+valoriva+'&&field_item_id='+IdItem,
+                success:function(html){
+                    $('#valoriva<?php echo ($item_id); ?>').html(html);
+                }
+            });
+        }else{
+        $('#valoriva<?php echo ($item_id); ?>').html('<h1>Hola mundo</h1>');
+
+        }
+
+
+    });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#valorunit<?php echo ($item_id); ?>').on('change',function(){
+
+        var totalid= $('#listadata').val();
+        //alert (totalid);
+
+        if(totalid){
+            $.ajax({
+                type:'POST',
+                url:'vistas/compras/ajaxvalorsubtotal.php',
+                data:'field_lista='+totalid,
+                success:function(html){
+
+                    $('#subtotalfinal').html(html);
+                }
+            });
+        }else{
+        $('#subtotal<?php echo ($item_id); ?>').html('<span>Hola mundo</span>');
+
+        }
+
+
+    });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#cantidades<?php echo ($item_id); ?>').on('change',function(){
+
+        var listaid= $('#listadata').val();
+        //alert (totalid);
+
+        if(listaid){
+            $.ajax({
+                type:'POST',
+                url:'vistas/compras/ajaxvalorsubtotal.php',
+                data:'field_listacantidades='+listaid,
+                success:function(html){
+
+                    $('#subtotalfinal').html(html);
+                }
+            });
+        }else{
+        $('#subtotal<?php echo ($item_id); ?>').html('<span>Hola mundo</span>');
+
+        }
+
+
+    });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#iva<?php echo ($item_id); ?>').on('change',function(){
+
+        var totalid= $('#listadata').val();
+        //alert (totalid);
+
+        if(totalid){
+            $.ajax({
+                type:'POST',
+                url:'vistas/compras/ajaxvalorivafinal.php',
+                data:'field_lista='+totalid,
+                success:function(html){
+                    $('#valorivafinal').html(html);
+                }
+            });
+        }else{
+        $('#subtotal<?php echo ($item_id); ?>').html('<span>Hola mundo</span>');
+
+        }
+
+
+    });
+});
+</script>
+
+
+
+<script src="dist/js/jquery.maskMoney.js" type="text/javascript"></script>
+    <script type="text/javascript">
+$("#valorunit<?php echo ($item_id); ?>").maskMoney({
+prefix:'$ ', // The symbol to be displayed before the value entered by the user
+allowZero:true, // Prevent users from inputing zero
+allowNegative:true, // Prevent users from inputing negative values
+defaultZero:false, // when the user enters the field, it sets a default mask using zero
+thousands: '.', // The thousands separator
+decimal: '.' , // The decimal separator
+precision: 0, // How many decimal places are allowed
+affixesStay : true, // set if the symbol will stay in the field after the user exits the field.
+symbolPosition : 'left' // use this setting to position the symbol at the left or right side of the value. default 'left'
+}); //
+</script>
+
+         </tr>
+
+
+            <?php
+}
+
+}
+?>
+
+<?php
+$cadenalista = trim($Lista, ',');
+?>
+
+
+<input type="hidden" name="" id="listadata" value="<?php echo ($Lista) ?>">
+
+
+              </tbody></table>
+
+
+
+
+
+
+
+
+
+
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+</div>
+
+
+
+
+
+<div class="col-xs-12">
+          <div class="box">
+
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+    <table class="table  table-responsive  table-bordered table-hover" style="font-size: 12px;">
+                <tbody>
+<?php
+$itemsget = $_GET['des'];
+$items    = explode(",", $itemsget);
+foreach ($items as $key => $despachounico) {
+
+    $res    = Compras::detalleocfacturaciondescartada($despachounico);
+    $campos = $res->getcampos();
+
+    foreach ($campos as $campo) {
+        $id_cotizacion          = $campo['id'];
+        $proveedor_id_proveedor = $campo['proveedor_id_proveedor'];
+        $vr_unitario            = $campo['vr_unitario'];
+        $insumo_id_insumo       = $campo['insumo_id_insumo'];
+        $servicio_id_servicio   = $campo['servicio_id_servicio'];
+        $ordencompra_num        = $campo['ordencompra_num'];
+        $requisicion_id         = $campo['requisicion_id'];
+        $cantidadcot            = $campo['cantidadcot'];
+        $fecha_reporte          = $campo['fecha_reporte'];
+        $item_id                = $campo['item_id'];
+        $iva                    = $campo['iva'];
+        $valor_iva              = $campo['valor_iva'];
+
+        if ($iva == 0) {
+            $mascarcaiva = "No aplica";
+        } else {
+            $mascarcaiva = $iva;
+        }
+
+        $Lista = $Lista . $campo['id'] . ",";
+
+        $subtotal = $cantidadcot * $vr_unitario;
+        $sumasubtotal += $subtotal;
+
+        $sumaiva += $valor_iva;
+
+        if ($insumo_id_insumo != '0') {
+            $detalle      = Insumos::obtenerNombreInsumo($insumo_id_insumo);
+            $unidad       = Insumos::obtenerUnidadmed($insumo_id_insumo);
+            $nombremedida = Unidadesmed::obtenerNombre($unidad);
+        } elseif ($servicio_id_servicio != '0') {
+            $detalle = Servicios::obtenerNombre($servicio_id_servicio);
+        } else {
+            $detalle = "Verificar dato";
+        }
+
+        ?>
+        <tr class="danger">
+            <td>
+        <a href="?controller=compras&&action=descartarinversa&&id=<?php echo ($id_cotizacion); ?>&&des=<?php echo ($itemsget); ?>"  class="tooltip-primary text-success" data-rel="tooltip" data-placement="top" title="" data-original-title="Regresar">
+                <i class="fa fa-check bigger-110 "></i>
+        </a>
+             OC00<?php echo ($ordencompra_num); ?> </td>
+            <td> RQ<?php echo ($requisicion_id . "-" . $item_id); ?> </td>
+            <td> <?php echo ($fecha_reporte); ?> </td>
+            <td> <?php echo ($detalle); ?> </td>
+            <td> <?php echo ($cantidadcot); ?> </td>
+            <td> <?php echo ($nombremedida); ?> </td>
+            <td><?php echo ($vr_unitario); ?></td>
+             <td id="subtotal<?php echo ($item_id); ?>">
+                <input disabled="" type="text" value="$<?php echo (number_format($subtotal, 0)); ?>">
+            </td>
+             <td>
+                <select disabled name="" id="iva<?php echo ($item_id); ?>" class="input-sm">
+                    <option selected="" value="<?php echo ($mascarcaiva); ?>"><?php echo ($iva); ?>%</option>
+                    <option value="No aplica">0%</option>
+                     <option value="5">5%</option>
+                     <option value="19">19%</option>
+                </select>
+              </td>
+             <td id="valoriva<?php echo ($item_id); ?>">
+                <input disabled="" type="text" value="$<?php echo (number_format($valor_iva, 0)); ?>">
+            </td>
+
+
+
+
+         </tr>
+
+
+            <?php
+}
+
+}
+
+?>
+
+
+              </tbody></table>
+
+
+
+
+
+
+
+
+
+
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+</div>
 <form id="formulario1" role="form" action="?controller=compras&&action=actualizarfacturacompras&&des=<?php echo ($itemsget); ?>&&id=<?php echo ($Proveedor); ?>&&factura=<?php echo($Selfactura); ?>" method="POST" enctype="multipart/form-data">
     <?php
 date_default_timezone_set("America/Bogota");
@@ -169,7 +614,7 @@ $Diareporte   = date('Y-m-d');
             <input type="hidden" name="factura_publicada" value="1">
             <input type="hidden" name="rubro_id" value="<?php echo ($rubro_id); ?>">
             <input type="hidden" name="subrubro_id" value="<?php echo ($subrubro_id); ?>">
-            <input type="hidden" name="listacotizaciones" value="no-aplica">
+            <input type="hidden" name="listacotizaciones" value="<?php echo ($cadenalista); ?>">
             <input type="hidden" name="listaordenescompra" value="<?php echo ($itemsget); ?>">
 
 
@@ -177,24 +622,29 @@ $Diareporte   = date('Y-m-d');
 
       <div class="form-group">
                     <label for="fila2_columna1">Soporte <small>Tamaño máximo 4MB</small>
-                        <a target="_blank" href="<?php echo $imagenfactura; ?>">Ver Soporte</a>
+                        <a target="_blank" href="<?php echo $fac_imagen; ?>">Ver Soporte</a>
                     </label>
                                                 <div class="custom-file">
-                                         <input name="imagen" type="file" id="input-file-now" class="dropify" data-default-file="<?php echo $fac_imagen; ?>" multiple="multiple" data-allowed-file-extensions="png jpg jpeg mp4 pdf xls xlsx webm" data-show-errors="true" data-max-file-size="5M" data-errors-position="outside" accept="image/png, .jpeg, .jpg, image/gif,.pdf,.xlsx"/ >
+            <input name="imagen" type="file" id="input-file-now" class="dropify" data-default-file="<?php echo $fac_imagen; ?>" multiple="multiple" data-allowed-file-extensions="png jpg jpeg mp4 pdf xls xlsx webm" data-show-errors="true" data-max-file-size="4M" data-errors-position="outside" accept="image/png, .jpeg, .jpg, image/gif,.pdf,.xlsx"/ >
                                                      <input type="hidden" name="ruta1" value="<?php echo $fac_imagen; ?>" >
                                                 </div>
-
+                   
          <label for="nombres">Observaciones Adicionales (Máx 500 Carácteres)</label>
                         <textarea class="form-control" rows="2" name="observaciones" id="descripcion" placeholder="Observaciones Adicionales" maxlength="500"><?php echo($fac_observaciones); ?></textarea>
         </div>
 
 </div>
 
+ <?php
+$valorapagar = $sumasubtotal + $sumaiva;
+?>
+
 
 <div class="col-xs-8">
 <div class="table-responsive">
 <table class="table">
 <tbody>
+
 <tr>
 <th>Fecha Factura: </th>
 <td>
@@ -202,51 +652,70 @@ $Diareporte   = date('Y-m-d');
 </td>
 </tr>
 
-    <tr>
+<tr>
 <th style="width:80%">Factura Nº:</th>
-<td><input name="facturanum" type="text" class="input-sm" value="<?php echo ($fac_facturanum); ?>" placeholder="Número Factura"></td>
+<td><input name="facturanum" required="" type="text" class="input-sm" value="<?php echo ($fac_facturanum); ?>" placeholder="Número Factura"></td>
 </tr>
+
+
 <tr>
 <th>Subtotal</th>
 <td id="subtotalfinal">
-    <input  type="text"  id="camposubtotal" class="clasesubtotal input-sm" value="<?php echo ($fac_valor_subtotal); ?>" name="valor_subtotal_txt">
+    <input disabled type="text"  class="clasesubtotal input-sm" value="<?php echo (number_format($sumasubtotal, 0)); ?>" name="valor_subtotal">
+    <input  type="hidden" id='camposubtotal' class="clasesubtotal input-sm" value="<?php echo ($sumasubtotal); ?>" name="valor_subtotal_txt">
 </td>
 </tr>
 <tr>
 <th>
-    IVA
+     <li style="list-style: none;" class="dropdown">
+<a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+Iva <span class="caret"></span>
+</a>
+<ul class="dropdown-menu">
+
+            <li role='presentation'><a role='menuitem' tabindex='-1' href='?controller=compras&action=ivamultiple&&listaid=<?php echo ($cadenalista); ?>&&des=<?php echo ($itemsget); ?>&&ivasel=NA&&id=<?php echo ($Proveedor); ?>'>No Aplica</a></li>
+            <li role='presentation'><a role='menuitem' tabindex='-1' href='?controller=compras&action=ivamultiple&&listaid=<?php echo ($cadenalista); ?>&&des=<?php echo ($itemsget); ?>&&ivasel=5&&id=<?php echo ($Proveedor); ?>'>5%</a></li>
+
+            <li role='presentation'><a role='menuitem' tabindex='-1' href='?controller=compras&action=ivamultiple&&listaid=<?php echo ($cadenalista); ?>&&des=<?php echo ($itemsget); ?>&&ivasel=19&&id=<?php echo ($Proveedor); ?>'>19%</a></li>
+
+</ul>
+</li>
 </th>
 <td id="valorivafinal">
 
-    <input  type="text" class="claseiva input-sm" value="<?php echo ($fac_valor_iva); ?>" name="valor_iva_txt" id='campoiva'>
+    <input disabled type="text" class="claseiva input-sm" value="$<?php echo (number_format($fac_valor_iva, 0)); ?>" name="valor_iva">
+    <input type="hidden" id='campoiva' class="claseiva input-sm" value="<?php echo (round($fac_valor_iva,0)); ?>" name="valor_iva_txt">
 </td>
 </tr>
 <tr>
 <th>
      <i id="btnretencion" class="fa fa-plus-square text-success"></i>
      RET1
-     <input type="text" class="input-sm" placeholder="Base" id="rf1" name="base_uno" value="<?php echo ($fac_base_uno); ?>">
+     <input type="text" class="input-sm" placeholder="Base" id="rf1" name="base_uno" value="<?php echo($fac_base_uno); ?>">
 <select name="porcentaje_ret" id="textretencion">
 
-    <?php 
-    $valueretencionseleccionada = $fac_retefuente_id_retefuente1."-".$fac_valor_ret;
-    $valueretencionseleccionada2 = $fac_retefuente_id_retefuente2."-".$fac_valor_ret2;
+<?php 
+    $valueretencionseleccionada = $fac_retefuente_id_retefuente1."-".$fac_porcentaje_ret;
+    $valueretencionseleccionada2 = $fac_retefuente_id_retefuente2."-".$fac_porcentaje_ret2;
 
     if ($fac_retefuente_id_retefuente1==0) {
         $nomretencion1= "0% No aplica";
     }else{
+        
         $nomretencion1= Retefuente::obtenerNombre($fac_retefuente_id_retefuente1);
+        $porcent1= $fac_porcentaje_ret*100;
     }
 
     if ($fac_retefuente_id_retefuente2==0) {
         $nomretencion2= "0% No aplica";
     }else{
         $nomretencion2= Retefuente::obtenerNombre($fac_retefuente_id_retefuente2);
+        $porcent2= $fac_porcentaje_ret2*100;
     } 
 
  ?>
 
-    <option value="<?php echo($valueretencionseleccionada); ?>"><?php echo($nomretencion1) ;?></option>
+     <option value="<?php echo($valueretencionseleccionada); ?>"><?php echo($nomretencion1."[".$porcent1."%]") ;?></option>
      <option value="0-0">0% No aplica</option>
 
 <?php
@@ -267,7 +736,7 @@ foreach ($camposres as $campotraido) {
 </th>
 <td>
 
-    <input class="input-sm" type="text" id="demo1" value="<?php echo($fac_valor_ret) ?>" name="valor_ret">
+    <input class="input-sm" type="text" id="demo1" value="<?php echo($fac_valor_ret); ?>" name="valor_ret">
 </td>
 </tr>
 
@@ -306,7 +775,7 @@ $( "#btnretencion" ).click(function() {
      <input type="text" class="input-sm" placeholder="Base" id="rf2" name="base_dos" value="<?php echo($fac_base_dos) ?>">
 
 <select name="porcentaje_ret2" id="textretencion2">
-   <option value="<?php echo($valueretencionseleccionada2); ?>"><?php echo($nomretencion2) ;?></option>
+      <option value="<?php echo($valueretencionseleccionada2); ?>"><?php echo($nomretencion2."[".$porcent2."%]") ;?></option>
      <option value="0-0">0% No aplica</option>
     <?php
 $resultado = Retefuente::obtenerListado();
@@ -325,7 +794,7 @@ foreach ($camposres as $campotraido) {
 
 </th>
 <td>
-    <input class="input-sm" type="text" id="demo3" value="<?php echo($fac_valor_ret2) ?>" name="valor_ret2">
+    <input class="input-sm" type="text" id="demo3" value="<?php echo($fac_valor_ret2); ?>" name="valor_ret2">
 </td>
 </tr>
 
@@ -408,15 +877,12 @@ foreach ($camposres as $campotraido) {
 
     $( "#calculopago" ).click(function() {
 
-        var subtotal =$('#camposubtotal').val();
-        var s1 = subtotal.replaceAll(".", "");
-        var s2 = s1.replaceAll(" ", "");
-        var s3 = s1.replaceAll("$", "");
+        var subtotal =$('#camposubtotal').val().replace(/\,/g,'');
 
 
-        //alert('Valor a pagar: '+s3);
+        //alert('Valor a pagar: '+subtotal);
         var iva = $('#campoiva').val();
-        var iva1 = iva.replaceAll(".", "");
+        var iva1 = iva.replaceAll(",", "");
         var iva2 = iva1.replaceAll(" ", "");
         var iva3 = iva1.replaceAll("$", "");
 
@@ -443,12 +909,14 @@ foreach ($camposres as $campotraido) {
 
          //alert('Valor Descuento'+v3);
 
-         var calculototal=parseFloat(s3)+parseFloat(iva3)-parseFloat(r3)-parseFloat(ra3)-parseFloat(v3);
+         var calculototal=parseInt(subtotal)+parseInt(iva3)-parseInt(r3)-parseInt(ra3)-parseInt(v3);
 
           //alert('Suma de dos valores: '+calculototal);
 
-       //
-        var formatonumero = parseFloat(calculototal).toLocaleString('es-ES');
+       // 
+
+
+        var formatonumero = parseInt(calculototal).toLocaleString('es-ES');
        $('#totalpago').text('$'+formatonumero);
 
 
@@ -468,7 +936,7 @@ foreach ($camposres as $campotraido) {
 </tr>
 </tbody></table>
 </div>
-<input class="btn btn-success" id="button" type="button" value="Actualizar Factura"/>
+<input class="btn btn-success" id="button" type="submit" value="Actualizar Factura"/>
 </div>
 
 </form>
@@ -486,72 +954,9 @@ foreach ($camposres as $campotraido) {
 
 </div> <!-- Fin Content-Wrapper -->
 
-<script type="text/javascript">
-$( "#button" ).click(function() {
-  Swal.fire({
-  title: 'Verificó todos los datos de la factura ?',
-  text: "Recuerde que esta acción no se puede deshacer!",
-  icon: 'warning',
-  showCancelButton: true,
-  confirmButtonColor: '#00a65a',
-  cancelButtonColor: '#d33',
-  confirmButtonText: 'Si, deseo guardarlo!',
-  cancelButtonText: 'Cancelar',
-}).then((result) => {
-  if (result.isConfirmed) {
-
-     Swal.fire(
-      'Enviado!',
-      'Datos enviados correctamente',
-      'success'
-    );
-
-    $('#formulario1').submit();
-
-  }
-})
-
-});
-</script>
-
-
-
-
 
 
 <script src="dist/js/jquery.maskMoney.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-$("#camposubtotal").maskMoney({
-prefix:'$ ', // The symbol to be displayed before the value entered by the user
-allowZero:true, // Prevent users from inputing zero
-allowNegative:true, // Prevent users from inputing negative values
-defaultZero:false, // when the user enters the field, it sets a default mask using zero
-thousands: '.', // The thousands separator
-decimal: '.' , // The decimal separator
-precision: 0, // How many decimal places are allowed
-affixesStay : true, // set if the symbol will stay in the field after the user exits the field.
-symbolPosition : 'left' // use this setting to position the symbol at the left or right side of the value. default 'left'
-}); //
-        </script>
-
-
-<script type="text/javascript">
-$("#campoiva").maskMoney({
-prefix:'$ ', // The symbol to be displayed before the value entered by the user
-allowZero:true, // Prevent users from inputing zero
-allowNegative:true, // Prevent users from inputing negative values
-defaultZero:false, // when the user enters the field, it sets a default mask using zero
-thousands: '.', // The thousands separator
-decimal: '.' , // The decimal separator
-precision: 0, // How many decimal places are allowed
-affixesStay : true, // set if the symbol will stay in the field after the user exits the field.
-symbolPosition : 'left' // use this setting to position the symbol at the left or right side of the value. default 'left'
-}); //
-        </script>
-
-
-
 <script type="text/javascript">
 $("#demo1").maskMoney({
 prefix:'$ ', // The symbol to be displayed before the value entered by the user

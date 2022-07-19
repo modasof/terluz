@@ -68,29 +68,29 @@ class InventarioController
         require_once 'vistas/inventario/totalentradas.php';
     }
 
+    /*=============================================
+    =  Section para visualizar todas los insumos por recibir           =
+    =============================================*/
 
- /*=============================================
-=  Section para visualizar todas los insumos por recibir           =
-=============================================*/
-    
-    function entregaspendientesusuario() {
-        $id=$_GET['id'];
-        $estado="Despachado";
-        $campos=Inventario::todosporusuariorecibir($id,$estado);;
+    public function entregaspendientesusuario()
+    {
+        $id     = $_GET['id'];
+        $estado = "Despachado";
+        $campos = Inventario::todosporusuariorecibir($id, $estado);
         require_once 'vistas/inventario/recibirinsumos.php';
     }
 
- /*=============================================
-=  Section para visualizar todas los insumos por recibir           =
-=============================================*/
-    
-    function entregasrecibidasusuario() {
-        $id=$_GET['id'];
-        $estado="Recibido";
-        $campos=Inventario::todosporusuariorecibir($id,$estado);;
+    /*=============================================
+    =  Section para visualizar todas los insumos por recibir           =
+    =============================================*/
+
+    public function entregasrecibidasusuario()
+    {
+        $id     = $_GET['id'];
+        $estado = "Recibido";
+        $campos = Inventario::todosporusuariorecibir($id, $estado);
         require_once 'vistas/inventario/detalle-salidas-porusuario.php';
     }
-
 
 # -----------  Subsection comment block  -----------
 
@@ -255,8 +255,8 @@ class InventarioController
         $res = Inventario::deletedellsalidatemp($iddelete);
         if ($res) {
             # ======  Se redirecciona a la url original para eviar doble envío de datos  =======
-             echo "<script>jQuery(function(){Swal.fire(\"¡Datos Actualizados!\", \"Se han actualizado correctamente los datos\", \"success\");});</script>";
-           // echo "<script>jQuery(function(){Swal.fire(\"¡Datos actualizados!\", \"Se ha actualizado correctamente la pagina\", \"success\").then(function(){window.location='?controller=inventario&action=cargarsalidasrq&des=" . $itemsget . "&id=" . $id . "';});});</script>";
+            echo "<script>jQuery(function(){Swal.fire(\"¡Datos Actualizados!\", \"Se han actualizado correctamente los datos\", \"success\");});</script>";
+            // echo "<script>jQuery(function(){Swal.fire(\"¡Datos actualizados!\", \"Se ha actualizado correctamente la pagina\", \"success\").then(function(){window.location='?controller=inventario&action=cargarsalidasrq&des=" . $itemsget . "&id=" . $id . "';});});</script>";
         } else {
             echo "<script>jQuery(function(){Swal.fire(\"¡Error al actualizar!\", \"Hubo un error al actualizar, comunique con el administrador del sistema\", \"error\");});</script>";
         }
@@ -284,15 +284,15 @@ class InventarioController
 
     }
 
-     # =============================================
+    # =============================================
     # =           Section Aceptar Despachos           =
     # =============================================
 
     public function recibirdespacho()
     {
-        $idsalida       = $_GET['id'];
+        $idsalida  = $_GET['id'];
         $idusuario = $_GET['idusuario'];
-        $estado="Despachado";
+        $estado    = "Despachado";
 
         $res = Inventario::actualizarestadodespacho($idusuario, $idsalida);
         $res = Inventario::actualizardetalledespacho($idsalida);
@@ -302,8 +302,8 @@ class InventarioController
         } else {
             echo "<script>jQuery(function(){Swal.fire(\"¡Error al actualizar!\", \"Hubo un error al actualizar, comunique con el administrador del sistema\", \"error\");});</script>";
         }
-        
-        $campos=Inventario::todosporusuariorecibir($idusuario,$estado);;
+
+        $campos = Inventario::todosporusuariorecibir($idusuario, $estado);
         require_once 'vistas/inventario/recibirinsumos.php';
 
     }
@@ -368,36 +368,35 @@ class InventarioController
         $estado_salida        = $_POST['estado_salida'];
         $fecha_recepcion      = $_POST['fecha_recepcion'];
         $solicitado_por       = $_POST['solicitado_por'];
-        $aplica_equipo        = $_POST['aplica_equipo'];
-        $equipo_id_equipo     = $_POST['equipo_id_equipo'];
+        $aplica_obra          = $_POST['aplica_obra'];
+        $id_rubro             = $_POST['id_rubro'];
+        $id_subrubro          = $_POST['id_subrubro'];
+        $obra_id_obra         = $_POST['obra_id_obra'];
         $valor_salida         = $_POST['valor_salida'];
         $estadoOC             = $_POST['estadoOC'];
 
         $nombrerecibe = Usuarios::obtenerNombreUsuario($recibido_por);
 
-       
-
-        if ($estadoOC=="Entrega Parcial") {
-             $estadofinalrq = 13;
-        }
-        else if ($estadoOC=="Entrega Completa"){
-             $estadofinalrq = 14;
+        if ($estadoOC == "Entrega Parcial") {
+            $estadofinalrq = 13;
+        } else if ($estadoOC == "Entrega Completa") {
+            $estadofinalrq = 14;
         }
 
         # -----------  Guardado de Salida  -----------
 
-        $res = Inventario::guardarsalidains($fecha_reporte, $proyecto_id_proyecto, $aplica_equipo, $equipo_id_equipo, $requisicion_id, $marca_temporal, $solicitado_por, $creado_por, $recibido_por, $observaciones, $tipo_salida, $valor_salida, $estado_salida, $fecha_recepcion);
+        $res = Inventario::guardarsalidains($fecha_reporte, $proyecto_id_proyecto, $aplica_obra, $obra_id_obra, $requisicion_id, $marca_temporal, $solicitado_por, $creado_por, $recibido_por, $observaciones, $tipo_salida, $valor_salida, $estado_salida, $fecha_recepcion, $id_rubro, $id_subrubro);
 
         # -----------  Actualización de Id Salida en detalle entradas  -----------
 
-        $idsalida      = Inventario::obtenerultimoidsalida();
+        $idsalida = Inventario::obtenerultimoidsalida();
 
-        $observacionestrazabilidad="Se notifica despacho al usuario ".$nombrerecibe." con salida N.".$idsalida." en estado ".$estadoOC;
-       
-        $res           = Inventario::actualizardetallesalida($idsalida, $estadoOC, $items);
-        $res           = Inventario::actualizarestadoRqfinalizada($estadofinalrq, $items);
+        $observacionestrazabilidad = "Se notifica despacho al usuario " . $nombrerecibe . " con salida N." . $idsalida . " en estado " . $estadoOC;
 
-        $res           =Inventario::guardartrazabilidad($estadofinalrq, $items, $creado_por, $observacionestrazabilidad);
+        $res = Inventario::actualizardetallesalida($idsalida, $estadoOC, $items);
+        $res = Inventario::actualizarestadoRqfinalizada($estadofinalrq, $items);
+
+        $res = Inventario::guardartrazabilidad($estadofinalrq, $items, $creado_por, $observacionestrazabilidad);
 
         if ($res) {
             echo "<script>jQuery(function(){Swal.fire(\"¡Datos Actualizados!\", \"Se han actualizado correctamente los datos\", \"success\");});</script>";
