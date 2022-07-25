@@ -65,6 +65,15 @@ function guardar() {
 			$nuevoarreglo[$campo]=$valor;
 		}
 	}
+
+$nombre_cliente=$_POST['nombre_cliente'];
+$validarduplicado=Clientes::validacionpor($nombre_cliente);
+
+	if ($validarduplicado>0) {
+
+		echo "<script>jQuery(function(){Swal.fire(\"¡Erro al guardar!\", \"No se han guardado los datos, el cliente ".$nombre_cliente." ya existe\", \"info\");});</script>";
+	}else{
+
 	$campo = new Clientes('',$nuevoarreglo);
 	$res = Clientes::guardar($campo);
 	if ($res){
@@ -72,6 +81,7 @@ function guardar() {
 	}else{
 		echo "<script>jQuery(function(){Swal.fire(\"¡Erro al guardar!\", \"No se han guardado correctamente los datos\", \"error\");});</script>";
 	}
+}
 	$this->show();
 }
 

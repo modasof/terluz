@@ -94,7 +94,8 @@ Este es el repositorio inicial del proyecto 2022
 - Informe de reporte de recepción de material 
 - Informe de indicadores porcentuales por avances, gastos
 
-
+# Actualización 25 de Julio 2022
+- Depuración de valores duplicados en los módulos 
 
 
 

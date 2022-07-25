@@ -65,6 +65,15 @@ function guardar() {
 			$nuevoarreglo[$campo]=$valor;
 		}
 	}
+
+$nombre_destino=$_POST['nombre_destino'];
+$validarduplicado=Destinos::validacionpor($nombre_destino);
+
+if ($validarduplicado>0) {
+
+		echo "<script>jQuery(function(){Swal.fire(\"¡Erro al guardar!\", \"No se han guardado los datos, el dato ".$nombre_destino." ya existe\", \"info\");});</script>";
+}else{
+
 	$campo = new Destinos('',$nuevoarreglo);
 	$res = Destinos::guardar($campo);
 	if ($res){
@@ -72,6 +81,7 @@ function guardar() {
 	}else{
 		echo "<script>jQuery(function(){Swal.fire(\"¡Erro al guardar!\", \"No se han guardado correctamente los datos\", \"error\");});</script>";
 	}
+}
 	$this->show();
 }
 

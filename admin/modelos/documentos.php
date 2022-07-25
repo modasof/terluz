@@ -51,7 +51,26 @@ public static function obtenerRubros(){
 	}
 }
 
+/*******************************************************
+** FUNCION PARA VALIDAR UN REGISTRO DUPLICADO **
+********************************************************/
+public static function validacionpor($nombre_documento,$modulo_id_modulo){
+	try {
+		$db=Db::getConnect();
 
+		$select=$db->query("SELECT COUNT(nombre_documento) AS total FROM documentos WHERE nombre_documento='".$nombre_documento."' and modulo_id_modulo='".$modulo_id_modulo."' and estado_documento='1'");
+    	$camposs=$select->fetchAll();
+    	$campos = new Documentos('',$camposs);
+    	$marcas = $campos->getCampos();
+		foreach($marcas as $marca){
+			$mar = $marca['total'];
+		}
+		return $mar;
+	}
+	catch(PDOException $e) {
+		echo '{"error en obtener la pagina":{"text":'. $e->getMessage() .'}}';
+	}
+}
 
 
 /*******************************************************

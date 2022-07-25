@@ -53,6 +53,27 @@ public static function obtenerPagina(){
 }
 
 /*******************************************************
+** FUNCION PARA MOSTRAR EL NOMBRE DEL EQUIPO **
+********************************************************/
+public static function validarpor($nombre){
+	try {
+		$db=Db::getConnect();
+
+		$select=$db->query("SELECT COUNT(nombre_equipo) as totales FROM equipos WHERE  nombre_equipo LIKE '%".$nombre."%' and equipo_publicado='1'");
+    	$camposs=$select->fetchAll();
+    	$campos = new Equipos('',$camposs);
+    	$marcas = $campos->getCampos();
+		foreach($marcas as $marca){
+			$mar = $marca['totales'];
+		}
+		return $mar;
+	}
+	catch(PDOException $e) {
+		echo '{"error en obtener la pagina":{"text":'. $e->getMessage() .'}}';
+	}
+}
+
+/*******************************************************
 ** FUNCION PARA MOSTRAR TODOS LOS CAMPOS 	  **
 ********************************************************/
 public static function obtenerPaginavolquetas(){

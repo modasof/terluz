@@ -207,6 +207,13 @@ function guardar() {
 		}
 	}
 
+$nombre_equipo=$_POST['nombre_equipo'];
+$validacionduplicado = Equipos::validarpor($nombre_equipo);
+
+	if ($validacionduplicado>0) {
+		echo "<script>jQuery(function(){Swal.fire(\"¡Erro al guardar!\", \"No se han guardado los datos, el equipo ".$nombre_equipo." ya existe\", \"info\");});</script>";
+	}else{
+
 	$campo = new Equipos('',$nuevoarreglo);
 	$res = Equipos::guardar($campo,$ruta_imagen);
 	if ($res){
@@ -214,6 +221,7 @@ function guardar() {
 	}else{
 		echo "<script>jQuery(function(){Swal.fire(\"¡Erro al guardar!\", \"No se han guardado correctamente los datos\", \"error\");});</script>";
 	}
+}
 	$this->show();
 }
 

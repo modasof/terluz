@@ -107,6 +107,15 @@ function guardar() {
 			$nuevoarreglo[$campo]=$valor;
 		}
 	}
+
+$documento=$_POST['documento'];
+$validarduplicado=Funcionarios::validacionpor($documento);
+
+if ($validarduplicado>0) {
+		echo "<script>jQuery(function(){Swal.fire(\"¡Error al guardar!\", \"No se han guardado los datos, el documento Nº".$documento." ya existe\", \"info\");});</script>";
+}else
+{
+
 	$campo = new Usuarios('',$nuevoarreglo);
 	$res = Funcionarios::guardar($campo,$ruta_imagen);
 	if ($res){
@@ -114,6 +123,7 @@ function guardar() {
 	}else{
 		echo "<script>jQuery(function(){Swal.fire(\"¡Erro al guardar!\", \"No se han guardado correctamente los datos\", \"error\");});</script>";
 	}
+}
 	$this->show();
 }
 
