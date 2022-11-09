@@ -260,6 +260,17 @@ function guardaravance() {
 			$nuevoarreglo[$campo]=$valor;
 		}
 	}
+
+	$fecha_reporte=$_POST['fecha_reporte'];
+	$actividad_id_actividad=$_POST['actividad_id_actividad'];
+
+	$validarduplicado=Obras::validacionpor($actividad_id_actividad,$fecha_reporte);
+
+	if ($validarduplicado>0) {
+
+		echo "<script>jQuery(function(){Swal.fire(\"¡Erro al guardar!\", \"No se han guardado los datos, la actividad ya tiene un reporte del día  ".$fecha_reporte.".\", \"info\");});</script>";
+	}else{
+
 	$campo = new Obras('',$nuevoarreglo);
 	$res = Obras::guardar_avance($campo);
 
@@ -268,6 +279,7 @@ function guardaravance() {
 	}else{
 		echo "<script>jQuery(function(){Swal.fire(\"¡Error al guardar!\", \"No se han guardado correctamente los datos\", \"error\");});</script>";
 	}
+}
 	$campos=Obras::obtenerpaginapor($idobra);
 	require_once 'vistas/obras/avance_obra.php';
 }

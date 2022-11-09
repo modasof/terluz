@@ -292,6 +292,7 @@ elseif ($RolSesion==14) {
           <thead>
               <tr style="background-color: #4f5962;color: white;">
             <th>Id</th>
+            <th>Cronogramas</th>
             <th>Obra</th>
             <th>% Avance</th>
             <th>R. Humano</th>
@@ -352,15 +353,78 @@ foreach ($campos as $campo) {
                 <i class="fa fa-list bigger-110"> Recepción Materiales</i>
             </a>
         </li>
+
+         <li>
+            <a href="?controller=inconvenientes&&action=todos&&id_obra=<?php echo($id_obra); ?>"  class="tooltip-primary text-success" data-rel="tooltip" data-placement="top" title="" data-original-title="Reportar Inconveniente">
+                <i class="fa fa-list bigger-110"> Reportar Inconveniente</i>
+            </a>
+        </li>
     
                         </ul>
                       </div>        
 
           </td>
+              <td>
+
+        <div class="btn-group">
+                        <button data-toggle="dropdown" class="btn btn-info btn-sm dropdown-toggle">
+                          Cronogramas
+                          <span class="ace-icon fa fa-caret-down icon-on-left"></span>
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-info dropdown-menu-left">
+
+         
+        <li>
+            <a href="?controller=obras&&action=proyecciones&&id=<?php echo($id_obra); ?>"  class="tooltip-primary text-success" data-rel="tooltip" data-placement="top" title="" data-original-title="Cronograma Actividades">
+                <i class="fa fa-calendar bigger-110 "> Actividades</i>
+            </a>
+        </li>
+        <li>
+            <a href="?controller=proyeccioneslme&&action=todosobra&&id=<?php echo($id_obra); ?>"  class="tooltip-primary text-success" data-rel="tooltip" data-placement="top" title="" data-original-title="Cronograma Equipos">
+                <i class="fa fa-truck bigger-110 "> Equipos</i>
+            </a>
+        </li>
+        <li>
+            <a href="?controller=proyeccionesins&&action=todosobra&&id=<?php echo($id_obra); ?>"  class="tooltip-primary text-success" data-rel="tooltip" data-placement="top" title="" data-original-title="Cronograma Materiales">
+                <i class="fa  fa-area-chart bigger-110 "> Materiales</i>
+            </a>
+        </li>
+        <li>
+             <a href="?controller=proyeccioneslmo&&action=todosobra&&id=<?php echo($id_obra); ?>"  class="tooltip-primary text-success" data-rel="tooltip" data-placement="top" title="" data-original-title="Cronograma Mano de Obra">
+                <i class="fa fa-street-view bigger-110 "> Mano de Obra</i>
+            </a>
+        </li>
+        <li>
+            <a href="?controller=proyeccionesadm&&action=todosobra&&id=<?php echo($id_obra); ?>"  class="tooltip-primary text-success" data-rel="tooltip" data-placement="top" title="" data-original-title="Administración">
+                <i class="fa fa-dollar bigger-110 "> Administración</i>
+            </a>
+            
+        </li>
+            
+
+                        </ul>
+                      </div>
+
+        <?php 
+        if ($RolSesion==1) {
+            ?>
+
+            <a style="display: none;" href="#" onclick="eliminar(<?php echo $id_obra; ?>);" class="tooltip-primary text-danger" data-rel="tooltip" data-placement="top" title="" data-original-title="Eliminar Obra">
+                <i class="fa fa-trash bigger-110 "></i>
+            </a>
+
+            <?php
+        }
+
+         ?>
+               
+
+          </td>
     
 <td>
-    <?php echo utf8_decode($nombre_obra); ?> 
-    
+    <a href="?controller=obras&&action=detalle_obra&&id=<?php echo($id_obra); ?>"><?php echo utf8_decode($nombre_obra); ?> 
+    </a>
 </td>
      <td><a href="?controller=obras&&action=avance_obra&&id=<?php echo($id_obra); ?>"><span class="badge bg-yellow"> <?php echo($porcentaje_obra) ?>%</span></a></td>
           
@@ -465,6 +529,7 @@ foreach ($campos as $campo) {
             <th>Reportes</th>
             <th>% Avance</th>
             <th>Obra</th>
+            <th>Informe</th>
             <th>Frentes</th>
             <th>R. Humano</th>
             <th>Valor Final</th>
@@ -606,6 +671,8 @@ if ($RolSesion!=1) {
     <a href="?controller=obras&&action=detalle_obra&&id=<?php echo($id_obra); ?>"><?php echo utf8_decode($nombre_obra); ?> 
     </a>
 </td>
+   <td><a href="?controller=rangos&&action=todosobra&&id_obra=<?php echo($id_obra); ?>"><i class="fa fa-dashboard"> Informe </i></a>
+    </td>
 
           
     <td><a href="?controller=frentes&&action=todosobra&&id_obra=<?php echo($id_obra); ?>"><i class="fa fa-external-link-square"> Frentes <?php 

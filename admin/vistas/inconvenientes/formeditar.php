@@ -1,6 +1,70 @@
+<?php
+ini_set('display_errors', '0');
+
+include_once 'modelos/obras.php';
+include_once 'controladores/obrasController.php';
+
+include_once 'modelos/proyeccionesins.php';
+include_once 'controladores/proyeccionesinsController.php';
+
+include_once 'modelos/insumos.php';
+include_once 'controladores/insumosController.php';
+
+include_once 'modelos/destinos.php';
+include_once 'controladores/destinosController.php';
+
+include_once 'modelos/agregadosobra.php';
+include_once 'controladores/agregadosobraController.php';
+
+include_once 'modelos/frentes.php';
+include_once 'controladores/frentesController.php';
+
+include_once 'modelos/usuarios.php';
+include_once 'controladores/usuariosController.php';
+
+$RolSesion = $_SESSION['IdRol'];
+$IdSesion = $_SESSION['IdUser'];
+$idventa=$_GET['id'];
+$getobra=$_GET['id_obra'];
+$vereditar=$_GET['vereditar'];
+
+$res=Agregadosobra::editarPor($idventa);
+$campos = $res->getCampos();
+foreach($campos as $campo){
+            $id = $campo['id'];
+            $imagen = $campo['imagen'];
+            $fecha_reporte = $campo['fecha_reporte'];
+            $insumo_id_insumo = $campo['insumo_id_insumo'];
+            $origen_id_origen = $campo['origen_id_origen'];
+            $recibido_por = $campo['recibido_por'];
+            $cantidad = $campo['cantidad'];
+            $placa = $campo['placa'];
+            $localizacion = $campo['localizacion'];
+            $creado_por = $campo['creado_por'];
+            $estado_reporte = $campo['estado_reporte'];
+            $reporte_publicado = $campo['reporte_publicado'];
+            $marca_temporal = $campo['marca_temporal'];
+            $observaciones = $campo['observaciones'];
+            $obra_id_obra = $campo['obra_id_obra'];
+            $frente_id_frente = $campo['frente_id_frente'];
+
+            $nominsumo=Insumos::obtenerNombreInsumo($insumo_id_insumo);
+            $nomcantera=Destinos::obtenerNombreDestino($origen_id_origen);
+            $nomobra=Obras::obtenernombreobra($obra_id_obra);
+            $nomfrente=Frentes::obtenerNombre($frente_id_frente);
+            $nomreportador=usuarios::obtenerNombreUsuario($recibido_por);        
+
+}
+
+?>
+
 <!-- CCS Y JS PARA LA CARGA DE IMAGEN -->
 <script src="plugins/dropify/dropify.min.js"></script>
 <link rel="stylesheet" href="plugins/dropify/dropify.min.css">
+ <!-- CCS Y JS DATERANGE -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
@@ -27,49 +91,65 @@
     });
 });
 </script>
+<!-- Content Wrapper. Contains page content -->
 
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0 text-dark">Editar Recepción Material</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="?controller=index&&action=index">Inicio</a></li>
+           
+            <!--<li class="breadcrumb-item active"><a href="?controller=equipos&&action=todos">Equipos</a></li>-->
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+    <!-- /.content-header -->
 
-<div class="box box-primary ">
-            <div class="box-header with-border">
-              <h3 class="box-title"> Recepción de Material en Obra
-              	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
-                </button>
-              </h3>
-
-              <div class="box-tools pull-right">
-              <!--   <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
-                </button> -->
-              </div>
-              <!-- /.box-tools -->
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-	<form role="form" autocomplete="off" action="?controller=agregadosobra&&action=guardar&&id_obra=<?php echo($getobra); ?>" method="POST" enctype="multipart/form-data" >
+	<!-- Main content -->
+	<div class="content">
+		<div class="container-fluid">
+			<div class="row">
+				
+					
+						<!-- ESTE DIV LO USO PARA CENTRAR EL FORMULARIO -->
+						<!-- left column -->
+						<div class="col-md-8">
+	<form role="form" autocomplete="off" action="?controller=agregadosobra&&action=actualizar&&id=<?php echo($idventa); ?>&&id_obra=<?php echo($getobra); ?>" method="POST" enctype="multipart/form-data" >
 							<?php  
 								date_default_timezone_set("America/Bogota");
 								$TiempoActual = date('Y-m-d H:i:s');
 							?>
 							
-					<input type="hidden" name="creado_por" value="<?php echo($IdSesion);?>">
+				<input type="hidden" name="creado_por" value="<?php echo($IdSesion);?>">
 					<input type="hidden" name="recibido_por" value="<?php echo($IdSesion);?>">
 					<input type="hidden" name="obra_id_obra" value="<?php echo($getobra);?>">
-					<input type="hidden" name="estado_reporte" value="1">
-					<input type="hidden" name="reporte_publicado" value="1">
+					<input type="hidden" name="estado_reporte" value="<?php echo($estado_reporte);?>">
+					<input type="hidden" name="reporte_publicado" value="<?php echo($reporte_publicado);?>">
 					<input type="hidden" name="marca_temporal" value="<?php echo($TiempoActual);?>">
 					<div class="card-body">
 							<div class="row">
-				<div class="col-md-12">
-                    <div class="form-group">
-                      <label for="fila2_columna1">Soporte <small>Tamaño máximo 5MB</small></label>
-                        <div class="custom-file">
-                           <input name="imagen" type="file" id="input-file-now" class="dropify" data-default-file=""  multiple="multiple" data-allowed-file-extensions="png jpg jpeg mp4 pdf xls xlsx webm" data-show-errors="true" data-max-file-size="5M" data-errors-position="outside" accept="image/png, .jpeg, .jpg, image/gif,.pdf,.xlsx"/ required>
-                        </div>
-                    </div>
-                </div>
+			 <div class="col-md-12">
+										<div class="form-group">
+										  <label for="fila2_columna1">Documento <small>Tamaño máximo 10MB</small></label>
+												<div class="custom-file">
+													 <input name="imagen" type="file" id="input-file-now" class="dropify" data-default-file="<?php echo $imagen;?>" multiple="multiple" data-allowed-file-extensions="png jpg jpeg mp4 pdf xls xlsx webm" data-show-errors="true" data-max-file-size="10M" data-errors-position="outside" accept="image/png, .jpeg, .jpg, image/gif,.pdf,.xlsx"/ >
+													 <input type="hidden" name="ruta1" value="<?php echo $imagen;?>" >
+												</div>
+										</div>
+									   </div>
 											<div class="col-md-12">
 												<div class="form-group">
 													<label>Fecha del Reporte: <span>*</span></label>
-													<input type="date" name="fecha_reporte" placeholder="Fecha" class="form-control required" required id="fecha_reporte">
+													<input type="date" name="fecha_reporte" placeholder="Fecha" class="form-control required" required id="fecha_reporte" value="<?php echo utf8_decode($fecha_reporte); ?>">
 												</div>
 											</div>
 											
@@ -77,32 +157,30 @@
 										
 										<div class="col-md-12">
 												<div class="form-group">
-													<label>Cantidad<span>*</span></label>
-													<input type="number" step="any" name="cantidad" placeholder="Cantidad" class="form-control" required value="">
+													<label>Cantidad (m3)<span>*</span></label>
+													<input type="number" step="any" name="cantidad" placeholder="Cantidad" class="form-control" required value="<?php echo utf8_decode($cantidad); ?>">
 													<small>Decimales separados con punto</small>
 												</div>
 										</div>
-
 											<div class="col-md-12">
 												<div class="form-group">
 													<label>Placa<span>*</span></label>
-													<input type="text" name="placa" placeholder="Placa" class="form-control" required value="">
+													<input type="text" name="placa" placeholder="Placa" class="form-control" required value="<?php echo utf8_decode($placa); ?>">
 												</div>
 										</div>
-
-											<div class="col-md-12">
+										<div class="col-md-12">
 												<div class="form-group">
 													<label>Localización<span>*</span></label>
-													<input type="text" name="localizacion" placeholder="Ej. KM 0" class="form-control" required value="">
+													<input type="text" name="localizacion" placeholder="Ej. KM 0" class="form-control" required value="<?php echo utf8_decode($localizacion); ?>">
 												</div>
 										</div>
 
 						<div class="col-md-12">
 
 												<div class="form-group">
-													<label> Proveedor: <span>*</span></label>
-								<select class="form-control mi-selector" id="origen_id_origen" name="origen_id_origen" required>
-										<option value="" selected>Seleccionar...</option>
+													<label> Selecione el Origen: <span>*</span></label>
+								<select style="width: 300px;" class="form-control mi-selector" id="origen_id_origen" name="origen_id_origen" required>
+										<option value="<?php echo utf8_decode($origen_id_origen); ?>" selected><?php echo utf8_decode($nomcantera); ?></option>
 										<?php
 										$equipos = Destinos::obtenerListaDestinos();
 										foreach ($equipos as $campo_dest){
@@ -119,8 +197,8 @@
 
 												<div class="form-group">
 													<label> Seleccione el Insumo: <span>*</span></label>
-								<select  class="form-control mi-selector" id="insumo_id_insumo" name="insumo_id_insumo" required>
-										<option value="" selected>Seleccionar...</option>
+								<select style="width: 300px;" class="form-control mi-selector" id="insumo_id_insumo" name="insumo_id_insumo" required>
+										<option value="<?php echo utf8_decode($insumo_id_insumo); ?>" selected><?php echo utf8_decode($nominsumo); ?></option>
 										<?php
 										$equipos = Proyeccionesins::obtenerinsObra($getobra);
 										foreach ($equipos as $campo_eq){
@@ -137,7 +215,7 @@
 												<div class="form-group">
 													<label> Seleccione el Frente: <span>*</span></label>
 						<select class="form-control" id="frente_id_frente" name="frente_id_frente" >
-													  	<option value="">Seleccionar...</option>
+			<option value="<?php echo utf8_decode($frente_id_frente); ?>"><?php echo utf8_decode($nomfrente); ?></option>
 										<?php
 										$rubros = Frentes::ListaFrentesObras($getobra);
 										foreach ($rubros as $campo){
@@ -155,20 +233,28 @@
 											<div class="col-md-12">
 												<div class="form-group">
 													<label>Observaciones<span>*</span></label>
-									<textarea class="form-control" rows="2" id="descripcion" name="observaciones"></textarea>
+									<textarea class="form-control" rows="2" id="descripcion" name="observaciones"><?php echo utf8_decode($observaciones); ?></textarea>
 												</div>
 											</div>
 											
 										</div>
 							<div class="row">
 								<div class="card-footer">
-								  <button name="Submit" type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Haz clic aqui para guardar la información">Guardar Registro</button>
+								  <button name="Submit" type="submit" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Haz clic aqui para actualizar la información">Actualizar</button>
 								</div>
 						  </div>
 						  </form>
-</div>
-</div>
+					  </div>
 
+					 
+					
+
+
+					</div> <!-- FIN DE ROW-->
+				</div><!-- FIN DE CONTAINER FORMULARIO-->
+			</div> <!-- Fin Row -->
+		</div> <!-- Fin Container -->
+	</div> <!-- Fin Content -->
 
 </div> <!-- Fin Content-Wrapper -->
 <!-- Inicio Libreria formato moneda -->
@@ -199,17 +285,6 @@ affixesStay : true, // set if the symbol will stay in the field after the user e
 symbolPosition : 'left' // use this setting to position the symbol at the left or right side of the value. default 'left'
 }); //
 		</script>
-		<script type="text/javascript">
- $('#equipo_adicional').change(function() {
-    var el = $(this);
-    if(el.val() === "No") {
-          $('#campo_equipo').hide();   
-    } else {
-      alert("Has seleccionado Equipo adicional, indica cuál?"); 
-          $('#campo_equipo').show();
-    }      
-});
-</script>
 <script type="text/javascript">
 	var datefield = document.createElement("input")
 
@@ -225,12 +300,6 @@ if (datefield.type != "date"){ //if browser doesn't support input type="date", i
         //dateFormat: 'dd/mm/yy'
     }); 
 } 
-</script>
-
-<script type="text/javascript">
-  $(function () {
-   $('[data-toggle="tooltip"]').tooltip();
-  })
 </script>
 
 <script>
@@ -289,3 +358,4 @@ if (datefield.type != "date"){ //if browser doesn't support input type="date", i
 		alert('Archivo Eliminado');
 	});
 </script>
+

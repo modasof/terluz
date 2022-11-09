@@ -4,13 +4,145 @@ ini_set('display_errors', '1');
 $controllers = array(
 //AQUI SE ESTABLACE LAS FUNCIONES QUE VA A TENER CADA MODULO
 //OJO, CADA OPCION DEBE ESTAR EN EL ARCHIVO NombreModuloController.php dentro del directorio controladores
-	'index' => ['index','informe1','informegerencia','informeclientes','informedetalleclientes','informeventaclientes','informedetalleclientesventas','micajamenor','dashboardalmacen','vistarqusuariosdashboard','aprobarRq','obras'],
 
-	'obras' => ['dashboard','detalle_obra','nueva_obra','eliminarobra','guardarobra','actualizarobra','guardarcapitulo','guardaractividad','eliminarcapitulo','eliminaractividad','actualizarcapitulo','actualizaractividad','guardarcantmayores','eliminarcantidades','modificaciones','avance_obra','guardaravance','proyecciones','guardarcantidadesproyectadas','eliminarcantidadesproyectadas','proyeccionesrango'],
+	// Reporte Material en Obra 
+	'agregadosobra' => ['agregados','guardar','eliminar','editar','actualizar','porfecha'],
 
+	// Reporte Avances 
+	'avances' => ['todosporobra','todosporcapitulo','todosporfrente','todosporactividad','todosporusuario','guardar','eliminar','editar','actualizar','porfecha'],
+
+	// Módulo cajas menores
+	'cajas' => ['editar','guardar','actualizar','todos','nuevo','vista','grafica','eliminar', 'detalles','micaja'],
+
+
+	// Módulo Campamentos
+	'campamento' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
+
+	// Cargos
+	'cargos' => ['todos','nuevo','guardar','eliminar','editar','actualizar'],
+
+	// Categorias de Insumos
+	'categoriainsumos' => ['todos','nuevo','guardar','eliminar','editar','actualizar'],
+
+	// Categorias de Insumos
+	'clientes' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
+
+	// Funcionalidad compras
+	'compras' => ['todos','formulario','guardar','eliminar','editar','actualizar','porfecha','verdetalle','cambiarestado','actualizarpago','cambiarestadocreditos','pagotemporal','deletepagotemporal','actualizarpagocredito','recibiroc','todospormes','cxpusuario','actualizardetallecot','editardetallecot','todosrecibirinsumos','porfechainsumos','cargarinventario','retornar','todosproveedorpagos','cargarfactura','ivamultiple','descartar','descartarinversa','guardarfacturacompras','detallefacturacompra','facturascompraspormes','cargarfacturacp','todosporproveedorespera','pagofacturacompra','editarfacturacompra','actualizarfacturacompras','editarfacturacompracp','guardarpagoanticipo','guardarpagofactura'],
+
+	// Reporte Concreto
+    'concreto' => ['todos','formularioconcreto','guardar','eliminar','editar','actualizar','despachosporfecha','detallepuntos'],
+
+    // Funcionalidad Consolidados
+    'consolidados' => ['editar','guardar','actualizar','todos','nuevo','eliminar','documentoscuentas','documentosequipos','totalreporteseq'],
+
+	// Cotizaciones
+	'cotizaciones' => ['todos','editar','actualizar','porfecha','todosporinsumo'],
+
+	// Reporte Cuentas 
+     'cuentas' => ['editar','guardar','actualizar','todos','nuevo','eliminar','reporteporfecha','crucecuentas','detallecruce'],
+
+     // Egresos Cuentas
+     'egresoscuenta' => ['editar','guardar','actualizarcm','actualizarcu','actualizarot','todos','nuevo','eliminar','egresos','editarcm','editarcu','editarot','eliminarcm','eliminarmvs','eliminarot','egresosporfecha'],
+
+	// Estaciones de Servicio
+     'estaciones' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
+
+    // Estados Requisiciones
+	'estadosreq' => ['todos','nuevo','guardar','eliminar','editar','actualizar'],
+
+	'estadisticavolqueta' => ['todos','buscarReporteVolquetas'],
+
+	'equipos' => ['editar','guardar','actualizar','todos','todosmantenimiento','nuevo','eliminar','editarvol','guardarvol','actualizarvol','volquetas','nuevovol','eliminarvol','reporte','guardareporte','reportediario','eliminareporte','editareporte','actualizareporte','formreportedia','reportedia','reporteporfecha','gastosmantenimientoporfecha','cambiarvisualizacion','estado','guardarestado','actualizarestado','todosestados','eliminarestado','timelineestados'],
+
+	// Equipos Temporales
+	'equipostemporales' => ['todos','nuevo','guardar','eliminar','editar','actualizar'],
+
+	// Módulo de Dashboard 
+	'dashboards' =>['dashboardcompras'],
+
+	// Módulo de Destinos 
+	'destinos' => ['editar','guardar','actualizar','todos','nuevo','eliminar','destinoextra'],
+
+	// Funcionalidad Documentos 
+	'documentos' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
+
+	// Módulo Folder
+	'folders' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
 
 	// Funcionalidad Frentes 
 	'frentes' => ['nuevo','actualizar','guardar','eliminar','todosobra','todos'],
+
+	// Funcionalidad Empleados
+	'funcionarios' => ['editar','guardar','actualizar','todos','todosinactivos','nuevo','eliminar','reportarnovedad','eliminarnovedad','reportarsoporte','eliminarsoporte','activarempleadoPor','desactivarempleadoPor'],
+
+	// Gastos cajas menores
+	'gastos' => ['editar','guardar','actualizarex','todos','nuevo','eliminar','egresos','totalegresos','totalegresoslegal','eliminarcajasistema','porfecha','porfechalegal','eliminargastopor','eliminarcajasistemapor','cambiarestado','actualizarestado'],
+
+	// Gestión Documental 
+	'gestiondocumental' => ['editar','guardar','actualizar','todos','nuevo','eliminar','listacuentas','configuracion','cargartodos','desactivarDocumento','varios','guardarvarios','eliminarvarios','editarvarios','actualizarvarios','activar','carpetaextra'],
+
+	// Gestión Documental Equipos 
+	'gestiondocumentaleq' => ['editar','guardar','actualizar','todos','nuevo','eliminar','listaequipos','configuracion','cargartodos','desactivarDocumento','varios','guardarvarios','eliminarvarios','editarvarios','actualizarvarios','activar'],
+
+	// Gestión Documenta Empleados
+	'gestiondocumentalemp' => ['editar','guardar','actualizar','todos','nuevo','eliminar','listaequipos','configuracion','cargartodos','desactivarDocumento','varios','guardarvarios','eliminarvarios','editarvarios','actualizarvarios','activar','carpetaextra'],
+
+	// Gestión Documental Proveedores
+	'gestiondocumentalprov' => ['editar','guardar','actualizar','todos','nuevo','eliminar','listaequipos','configuracion','cargartodos','desactivarDocumento','varios','guardarvarios','eliminarvarios','editarvarios','actualizarvarios','activar'],
+
+	// Reporte Horas Máquinaria 
+	'horasmq' => ['horas','guardarhoras','eliminarhoras','editarhoras','actualizarhoras','horasporfecha'],
+
+	// Reporte Inconvenientes 
+	'inconvenientes' => ['todos','guardar','eliminar','editar','actualizar','porfecha'],
+
+	// Funcionalidad Index 
+	'index' => ['index','informe1','informegerencia','informeclientes','informedetalleclientes','informeventaclientes','informedetalleclientesventas','micajamenor','dashboardalmacen','vistarqusuariosdashboard','aprobarRq','obras'],
+
+	'informes' =>['cuentas','movimientoscuentas','subrubrosegresos','cajas','movimientoscaja','subrubrosegresoscaja','ventas','detallelineanegocio','clientes','compras','totalrq','rqporfecha'],
+
+	// Cuentas por Pagar
+	'informecuentasporcobrar' => ['cuentasxcobrarconsolidado','cuentasxcobrarporfechaconsolidado','cuentasxcobrardetalle','cuentasxcobrarporfechadetalle'],
+
+	// Ingresos caja menor
+	'ingresos' => ['editar','guardar','actualizarex','todos','nuevo','eliminar','ingresos'],
+
+	// Ingresos Cuenas
+	'ingresoscuenta' => ['editar','guardar','actualizarex','todos','nuevo','eliminar','ingresos','ingresosporfecha'],
+
+	// Reporte Inventarios
+	'inventario' => ['cargarentradaoc','guardarentradadetalletem','guardarsalidadetalletem','deletedellentradatemp','deletedellsalidatemp','actualizarentradaoc','actualizarsalidarq','totalentradas','totalsalidas','entradasporfecha','salidasporfecha','entradasdetalle','salidasdetalle','entradasdetalletotal','salidasdetalletotal','cargarsalidasrq','verinventario','kardexporinsumo','despachosporfecha','entregaspendientesusuario','recibirdespacho','entregasrecibidasusuario'],
+
+	// Funcionalidad Insumos 
+	'insumos' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
+
+	// Reporte Listado de Máquinas y equipos
+	'listame' => ['todos','guardar','eliminar','editar','actualizar'],
+
+	// Reporte Listado de Mano de Obra
+	'listamo' => ['todos','guardar','eliminar','editar','actualizar'],
+
+	// Documentos
+	'misdocumentos' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
+
+	// Movimientos Item 
+	'movimientositem' => ['todospor','guardar','eliminar'],
+
+	// Funcionalidad Módulos 
+	'modulos' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
+
+	// Novedades
+	'novedades' => ['editar','guardar','actualizar','todos','nuevo','eliminar','novedadesporfecha'],
+
+	// Funcionalidad Obras
+	'obras' => ['dashboard','detalle_obra','nueva_obra','eliminarobra','guardarobra','actualizarobra','guardarcapitulo','guardaractividad','eliminarcapitulo','eliminaractividad','actualizarcapitulo','actualizaractividad','guardarcantmayores','eliminarcantidades','modificaciones','avance_obra','guardaravance','proyecciones','guardarcantidadesproyectadas','eliminarcantidadesproyectadas','proyeccionesrango'],
+
+	// Reporte Listado de Máquinas y equipos
+	'personalextra' => ['todos','guardar','eliminar','editar','actualizar'],
+
+	// Funcionalidad Personal Obras
+	'personalobras' => ['nuevo','actualizar','guardar','eliminar','todosobranomina','todosobraextra','todos'],
 
 	// Funcionalidad Proyecciones L-ME (Máquinaría y Equipos) 
 	'proyeccioneslme' => ['nuevo','actualizar','guardar','eliminarango','eliminaequipo','todosobra','todos','proyeccionesrango','ejecutadorango'],
@@ -24,129 +156,70 @@ $controllers = array(
 	// Funcionalidad Proyecciones (Insumos)
 	'proyeccionesins' => ['nuevo','actualizar','guardar','eliminarango','eliminaequipo','todosobra','todos','proyeccionesrango'],
 
+	// Funcionalidad Productos
+	'productos' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
+
+	// Funcionalidad Proveedores
+	'proveedores' => ['editar','guardar','actualizar','todos','nuevo','eliminar','cxpproveedor','estadocuenta','listadoproveedorespago','proyecciontemporal','deleteproyecciontemporal','actualizarrelacionpagos','showrelacionpagos','eliminarrelacion'],
+
+	// Funcionalidad Proyectos
+	'proyectos' => ['editar','guardar','actualizar','todos','nuevo','eliminar','proyectoextra'],
+
 	// Funcionalidad Rangos 
 	'rangos' => ['nuevo','actualizar','guardar','eliminar','todosobra','todos'],
 
-	// Reporte Avances 
-	'avances' => ['todosporobra','todosporcapitulo','todosporfrente','todosporactividad','todosporusuario','guardar','eliminar','editar','actualizar','porfecha'],
 
-	// Funcionalidad Personal Obras
-	'personalobras' => ['nuevo','actualizar','guardar','eliminar','todosobranomina','todosobraextra','todos'],
-
-	'informes' =>['cuentas','movimientoscuentas','subrubrosegresos','cajas','movimientoscaja','subrubrosegresoscaja','ventas','detallelineanegocio','clientes','compras','totalrq','rqporfecha'],
-
-'cuentas' => ['editar','guardar','actualizar','todos','nuevo','eliminar','reporteporfecha','crucecuentas','detallecruce'],
-
-	// Funcionalidad Gestión Usuarios
-	'usuarios' => ['editar','guardar','actualizar','todos','nuevo','eliminar','editarpermisos','activarmenuPor','desactivarmenuPor','activartodo','desactivartodo','activarrubros','notificacionleida','notificaciones','notificacionleidatodas'],
-
+	// Funcionalidad Reportes
 	'reportes' => ['ventas','clienteextra','productoextra','guardarventa','eliminarventa','cambiarestadoventa','editarventa','actualizarventa','ventasporfecha','compras','insumoextra','guardarcompra','eliminarcompra','editarcompra','actualizarcompra','comprasporfecha','despachos','guardardespacho','eliminardespacho','editardespacho','actualizardespacho','despachosporfecha','despachosclientes','despachosclientesf','despachosclientesunico','despachosproveedorunico','despachospropietario','guardardespachoclientes','eliminardespachoclientes','editardespachoclientes','actualizardespachoclientes','despachosporfechaclientes','despachosporfechaclientesunico','despachosporfechaproveedorunico','despachosporfechapropietario','facturas','guardarfactura','eliminarfactura','editarfactura','actualizarfactura','facturasporfecha','guardarabono','eliminarabono','cuentasxpagar','cuentasxpagarconsolidado','cuentasxpagardetalle','guardarcuentaxpagar','eliminarcuentaxpagar','cancelarcuentaxpagar','editarcuentaxpagar','actualizarcuentaxpagar','cuentasxpagarporfecha','cuentasxpagarporfechaconsolidado','cuentasxpagarporfechadetalle','prestamos','guardarprestamo','eliminarprestamo','cambiarestadoprestamo','editarprestamo','actualizarprestamo','prestamosporfecha','combustibles','combustiblescisterna','combustiblesporfechacisterna','mescombustibleseq','mesfletes','meshorasmq','infovolqueta','guardarcombustible','eliminarcombustible','editarcombustible','actualizarcombustible','combustiblesporfecha','proveedorextra','horas','guardarhoras','eliminarhoras','editarhoras','actualizarhoras','horasporfecha','despachostrituradora','guardardespachotrituradora','eliminardespachotrituradora','editardespachotrituradora','actualizardespachotrituradora','despachosporfechatrituradora','insumosxpagar','guardarinsumoxpagar','eliminarinsumoxpagar','cancelarinsumoxpagar','editarinsumoxpagar','actualizarinsumoxpagar','insumosxpagarporfecha'],
 
-	// Reporte Horas Máquinaria 
-	'horasmq' => ['horas','guardarhoras','eliminarhoras','editarhoras','actualizarhoras','horasporfecha'],
-
-	// Reporte Material en Obra 
-	'agregadosobra' => ['agregados','guardar','eliminar','editar','actualizar','porfecha'],
-
-	// Reporte Listado de Máquinas y equipos
-	'listame' => ['todos','guardar','eliminar','editar','actualizar'],
-
-	// Reporte Listado de Mano de Obra
-	'listamo' => ['todos','guardar','eliminar','editar','actualizar'],
-
-	// Reporte Listado de Máquinas y equipos
-	'personalextra' => ['todos','guardar','eliminar','editar','actualizar'],
+	'reportesproduccion' => ['reportesproduccion','guardarreporteproduccion','eliminarreporteproduccion','editarreporteproduccion','actualizarreporteproduccion','reportesporfechaproduccion'],
 
 	// Funcionalidad Requisiciones 
 	'requisiciones' => ['todosporusuario','todosalmacen','todosmiusuario','todos','guardar','eliminar','editar','actualizar','porfecha','todosporusuarioestado','reqalmacenestado','todosporusuarioadmin','todosporusuarioestadoadmin','cotizaciones','vercotizacion','eliminaritemcot','reqparaentrega'],
 
+	
+	
+
 	// Funcionalidad Requisiciones Items
 	'requisicionesitems' => ['todosporreq','todos','guardar','eliminar','editar','actualizar','porfecha','cambiarestado','guardarestado','actualizarestado','trazabilidad','agregarvalores','guardarcotizacion','cambiarestadoadmin','actualizarestadoadmin','trazabilidadadmin','guardarocompra','actualizaritem','actualizarcantidadcot','gestionarvalores','guardarcotizacionmultiple','eliminarcotizacion','finalizarrq','aprobarrq','guardarsoportecotizacionmultiple'],
 
-	// Reporte Inventarios
-	'inventario' => ['cargarentradaoc','guardarentradadetalletem','guardarsalidadetalletem','deletedellentradatemp','deletedellsalidatemp','actualizarentradaoc','actualizarsalidarq','totalentradas','totalsalidas','entradasporfecha','salidasporfecha','entradasdetalle','salidasdetalle','entradasdetalletotal','salidasdetalletotal','cargarsalidasrq','verinventario','kardexporinsumo','despachosporfecha','entregaspendientesusuario','recibirdespacho','entregasrecibidasusuario'],
+	// Funcionalidad Retefuente
+	'retefuente' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
 
-	// Estados Requisiciones
-	'estadosreq' => ['todos','nuevo','guardar','eliminar','editar','actualizar'],
-
-
-	// Módulo de Dashboard 
-	'dashboards' =>['dashboardcompras'],
-	
-	// Movimientos Item 
-	'movimientositem' => ['todospor','guardar','eliminar'],
+	// Rubros
+	'rubros' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
 
 	// Servicios
 	'servicios' => ['todos','nuevo','guardar','eliminar','editar','actualizar'],
 
-	// Cargos
-	'cargos' => ['todos','nuevo','guardar','eliminar','editar','actualizar'],
+	// Funcionalidad Subrubros
+	'subrubros' => ['editar','guardar','actualizar','todos','nuevo','eliminar','desactivarcxp','activarcxp'],
 
-	// Equipos Temporales
-	'equipostemporales' => ['todos','nuevo','guardar','eliminar','editar','actualizar'],
 
-	// Categorias de Insumos
-	'categoriainsumos' => ['todos','nuevo','guardar','eliminar','editar','actualizar'],
+// Funcionalidad Mantenimientos
+	'tipomantenimiento' => ['todos','nuevo','editar','guardar','actualizar','eliminar'],
 
 	// Unidades de Medidas
 	'unidadesmed' => ['todos','nuevo','guardar','eliminar','editar','actualizar'],
 
-	// Cotizaciones
-	'cotizaciones' => ['todos','editar','actualizar','porfecha','todosporinsumo'],
-
-	// Reporte Concreto
-    'concreto' => ['todos','formularioconcreto','guardar','eliminar','editar','actualizar','despachosporfecha','detallepuntos'],
-
-	// Funcionalidad compras
-	'compras' => ['todos','formulario','guardar','eliminar','editar','actualizar','porfecha','verdetalle','cambiarestado','actualizarpago','cambiarestadocreditos','pagotemporal','deletepagotemporal','actualizarpagocredito','recibiroc','todospormes','cxpusuario','actualizardetallecot','editardetallecot','todosrecibirinsumos','porfechainsumos','cargarinventario','retornar','todosproveedorpagos','cargarfactura','ivamultiple','descartar','descartarinversa','guardarfacturacompras','detallefacturacompra','facturascompraspormes','cargarfacturacp','todosporproveedorespera','pagofacturacompra','editarfacturacompra','actualizarfacturacompras','editarfacturacompracp','guardarpagoanticipo','guardarpagofactura'],
-
-	// Reporte Producción
-	'reportesproduccion' => ['reportesproduccion','guardarreporteproduccion','eliminarreporteproduccion','editarreporteproduccion','actualizarreporteproduccion','reportesporfechaproduccion'],
-	// Nuevo Reporte
-	'informecuentasporcobrar' => ['cuentasxcobrarconsolidado','cuentasxcobrarporfechaconsolidado','cuentasxcobrardetalle','cuentasxcobrarporfechadetalle'],
-
-	'funcionarios' => ['editar','guardar','actualizar','todos','todosinactivos','nuevo','eliminar','reportarnovedad','eliminarnovedad','reportarsoporte','eliminarsoporte'],
-	'novedades' => ['editar','guardar','actualizar','todos','nuevo','eliminar','novedadesporfecha'],
-	'equipos' => ['editar','guardar','actualizar','todos','todosmantenimiento','nuevo','eliminar','editarvol','guardarvol','actualizarvol','volquetas','nuevovol','eliminarvol','reporte','guardareporte','reportediario','eliminareporte','editareporte','actualizareporte','formreportedia','reportedia','reporteporfecha','gastosmantenimientoporfecha','cambiarvisualizacion','estado','guardarestado','actualizarestado','todosestados','eliminarestado','timelineestados'],//Harold Gutierrez 14/08/2020
-	'cajas' => ['editar','guardar','actualizar','todos','nuevo','vista','grafica','eliminar', 'detalles','micaja'],
-	'gastos' => ['editar','guardar','actualizarex','todos','nuevo','eliminar','egresos','totalegresos','totalegresoslegal','eliminarcajasistema','porfecha','porfechalegal','eliminargastopor','eliminarcajasistemapor','cambiarestado','actualizarestado'],
-	'gestiondocumental' => ['editar','guardar','actualizar','todos','nuevo','eliminar','listacuentas','configuracion','cargartodos','desactivarDocumento','varios','guardarvarios','eliminarvarios','editarvarios','actualizarvarios','activar','carpetaextra'],
-	'gestiondocumentaleq' => ['editar','guardar','actualizar','todos','nuevo','eliminar','listaequipos','configuracion','cargartodos','desactivarDocumento','varios','guardarvarios','eliminarvarios','editarvarios','actualizarvarios','activar'],
-	'gestiondocumentalemp' => ['editar','guardar','actualizar','todos','nuevo','eliminar','listaequipos','configuracion','cargartodos','desactivarDocumento','varios','guardarvarios','eliminarvarios','editarvarios','actualizarvarios','activar','carpetaextra'],
-	'gestiondocumentalprov' => ['editar','guardar','actualizar','todos','nuevo','eliminar','listaequipos','configuracion','cargartodos','desactivarDocumento','varios','guardarvarios','eliminarvarios','editarvarios','actualizarvarios','activar'],
-	'misdocumentos' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
-	'ingresoscuenta' => ['editar','guardar','actualizarex','todos','nuevo','eliminar','ingresos','ingresosporfecha'],
-	'egresoscuenta' => ['editar','guardar','actualizarcm','actualizarcu','actualizarot','todos','nuevo','eliminar','egresos','editarcm','editarcu','editarot','eliminarcm','eliminarmvs','eliminarot','egresosporfecha'],
-	'ingresos' => ['editar','guardar','actualizarex','todos','nuevo','eliminar','ingresos'],
-	'rubros' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
-	'estaciones' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
-	'clientes' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
-	'folders' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
-	'productos' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
-	'insumos' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
-	'destinos' => ['editar','guardar','actualizar','todos','nuevo','eliminar','destinoextra'],
-	'proyectos' => ['editar','guardar','actualizar','todos','nuevo','eliminar','proyectoextra'],
-	
-	'proveedores' => ['editar','guardar','actualizar','todos','nuevo','eliminar','cxpproveedor','estadocuenta','listadoproveedorespago','proyecciontemporal','deleteproyecciontemporal','actualizarrelacionpagos','showrelacionpagos','eliminarrelacion'],
-	
-	'modulos' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
-	'documentos' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
-	'consolidados' => ['editar','guardar','actualizar','todos','nuevo','eliminar','documentoscuentas','documentosequipos','totalreporteseq'],
-	'subrubros' => ['editar','guardar','actualizar','todos','nuevo','eliminar','desactivarcxp','activarcxp'],
-	'plantilla' => ['index'],
-	//Estadisticas
-	'estadisticavolqueta' => ['todos','buscarReporteVolquetas'],
-	'visorgraficas' => ['todos'],
-	'campamento' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
-	'insumoscampamento' => ['todos','nuevo','guardar'],
-	'ventasdespachos' => ['todos','nuevo','guardar','eliminar'],
-	'productosinsumos' => ['todos','nuevo','guardar','eliminar'],
-	'tipomantenimiento' => ['todos','nuevo','editar','guardar','actualizar','eliminar'],
-
-	'retefuente' => ['editar','guardar','actualizar','todos','nuevo','eliminar'],
+	// Funcionalidad Gestión Usuarios
+	'usuarios' => ['editar','guardar','actualizar','todos','nuevo','eliminar','editarpermisos','activarmenuPor','desactivarmenuPor','activartodo','desactivartodo','activarrubros','notificacionleida','notificaciones','notificacionleidatodas'],
 
 	// Funcionalidad Activar Rubros por Usuario
 	'usuariosrubros' => ['todospor','activarrubroPor','desactivarrubroPor','activartodo','activarporRol'],
+
+
+
+	'visorgraficas' => ['todos'],
+	
+	
+	'plantilla' => ['index'],
+	//Estadisticas
+	
+	'insumoscampamento' => ['todos','nuevo','guardar'],
+	'ventasdespachos' => ['todos','nuevo','guardar','eliminar'],
+	'productosinsumos' => ['todos','nuevo','guardar','eliminar'],
+	
 
 );
 
@@ -214,6 +287,12 @@ function call($controller, $action) {
 		require_once 'modelos/informes.php';
 		$controller = new InformesController();
 		break;
+
+	case 'inconvenientes':
+		require_once 'modelos/inconvenientes.php';
+		$controller = new InconvenientesController();
+		break;
+
 
 // MENÚ CONFIGURACIÓN HOME ADMIN
 

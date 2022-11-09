@@ -27,7 +27,7 @@ function rangominimo($obra){
 function rangomaximo($obra){
 	$db = Db::getConnect();
 	//$mesactual = date("n");
-	$select = $db->prepare("SELECT MAX(fecha_inicio) as totales FROM rangos_obra WHERE obra_id_obra='".$obra."' and rango_publicado='1'");
+	$select = $db->prepare("SELECT MAX(fecha_fin) as totales FROM rangos_obra WHERE obra_id_obra='".$obra."' and rango_publicado='1'");
 	$select->execute();
 	$valor = $select->fetchAll(); 
 	foreach($valor as $campo){
@@ -190,6 +190,19 @@ function Cantidadejecutadoporrango($obra,$fecha_inicial,$fecha_final,$idactivida
 	$db = Db::getConnect();
 	//$mesactual = date("n");
 	$select = $db->prepare("SELECT IFNULL(sum(A.avance),0) as totales FROM actividades_avance as A WHERE A.fecha_reporte >='".$fecha_inicial."' and A.fecha_reporte <='".$fecha_final."' and A.obra_id_obra='".$obra."' and A.actividad_id_actividad='".$idactividad."' ");
+	$select->execute();
+	$valor = $select->fetchAll(); 
+	foreach($valor as $campo){
+		$total = $campo['totales'];
+		}
+	return $total;
+	}
+
+
+function CantidadInconvenientes($obra){
+	$db = Db::getConnect();
+	//$mesactual = date("n");
+	$select = $db->prepare("SELECT COUNT(id) as totales FROM reporte_inconvenientes  WHERE obra_id_obra='".$obra."' and reporte_publicado='1'");
 	$select->execute();
 	$valor = $select->fetchAll(); 
 	foreach($valor as $campo){

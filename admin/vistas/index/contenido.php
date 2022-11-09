@@ -270,6 +270,9 @@ function myFunctioncerrar<?php echo($id); ?>(usuario) {
       //require_once "vistas/obras/home_director.php";
       require_once "vistas/almacen/homedirector.php";
     }
+     elseif ($RolSesion==16) {  // Requisiciones
+      require_once "vistas/almacen/homesolicitante.php";
+    }
   
  ?>
 <!--Final Contenido Según Perfil-->

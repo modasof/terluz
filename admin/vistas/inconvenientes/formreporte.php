@@ -1,8 +1,3 @@
-<?php 
-error_reporting(E_ALL);
-ini_set('display_errors', '0');
-
- ?>
 <!-- CCS Y JS PARA LA CARGA DE IMAGEN -->
 <script src="plugins/dropify/dropify.min.js"></script>
 <link rel="stylesheet" href="plugins/dropify/dropify.min.css">
@@ -18,12 +13,25 @@ ini_set('display_errors', '0');
     });
 });
 </script>
+<script type="text/javascript">
+  jQuery(document).ready(function($){
+    $(document).ready(function() {
+        $('.mi-selector2').select2();
+    });
+});
+</script>
+<script type="text/javascript">
+  jQuery(document).ready(function($){
+    $(document).ready(function() {
+        $('.mi-selector3').select2();
+    });
+});
+</script>
 
 
-<!--<div class="box box-primary collapsed-box	">-->
-<div class="box box-primary	">
+<div class="box box-primary ">
             <div class="box-header with-border">
-              <h3 class="box-title"> Crear Registro
+              <h3 class="box-title"> Inconvenientes en Obra
               	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
                 </button>
               </h3>
@@ -36,60 +44,92 @@ ini_set('display_errors', '0');
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-	<form role="form" autocomplete="off" action="?controller=listame&&action=guardar" method="POST" enctype="multipart/form-data"  id="formulario" name="formulario" onsubmit="return validateForm();">
+	<form role="form" autocomplete="off" action="?controller=inconvenientes&&action=guardar&&id_obra=<?php echo($getobra); ?>" method="POST" enctype="multipart/form-data" >
 							<?php  
 								date_default_timezone_set("America/Bogota");
 								$TiempoActual = date('Y-m-d H:i:s');
-								$diaactual = date('Y-m-d');
 							?>
 							
 					<input type="hidden" name="creado_por" value="<?php echo($IdSesion);?>">
+					<input type="hidden" name="recibido_por" value="<?php echo($IdSesion);?>">
+					<input type="hidden" name="obra_id_obra" value="<?php echo($getobra);?>">
 					<input type="hidden" name="estado_reporte" value="1">
 					<input type="hidden" name="reporte_publicado" value="1">
 					<input type="hidden" name="marca_temporal" value="<?php echo($TiempoActual);?>">
-					<input type="hidden" name="fecha_reporte" value="<?php echo($diaactual);?>">
 					<div class="card-body">
 							<div class="row">
-
-								 <div class="col-md-12">
-                        <div class="form-group">
-                          <label for="nombres">Descripción</label>
-                            <textarea class="form-control" rows="2" name="nombre_lme" id="nombre_lme" placeholder="Descripción" maxlength="500" required></textarea>
+				<div class="col-md-12">
+                    <div class="form-group">
+                      <label for="fila2_columna1">Soporte <small>Tamaño máximo 5MB</small></label>
+                        <div class="custom-file">
+                           <input name="imagen" type="file" id="input-file-now" class="dropify" data-default-file=""  multiple="multiple" data-allowed-file-extensions="png jpg jpeg mp4 pdf xls xlsx webm" data-show-errors="true" data-max-file-size="5M" data-errors-position="outside" accept="image/png, .jpeg, .jpg, image/gif,.pdf,.xlsx"/ >
                         </div>
+                    </div>
                 </div>
-			
-							
-											 <div  id="divcajas" class="col-md-12">
-                          <div class="form-group">
-                              <label for="sel1">Unidad Medida:<span>*</span></label>
-                              <select class="form-control mi-selector"  name="unidad_id_unidad" required >
-                                  <option value="" selected>Seleccionar...</option>
-                                <?php
-$cajas = Unidadesmed::obtenerListaUnidades();
-foreach ($cajas as $caja) {
-    $id_unidad   = $caja['id'];
-    $abreviatura = $caja['abreviatura'];
-    $nombre = $caja['nombre'];
-    ?>
-                                <option value="<?php echo $id_unidad; ?>"><?php echo utf8_decode($nombre."[".$abreviatura."]"); ?></option>
-                                <?php }?>
-                              </select>
-                          </div>
-                </div>
-									
-										<div style="display: none;" class="col-md-12">
+											<div class="col-md-12">
 												<div class="form-group">
-													<label>Valor Unitario<span>*</span></label>
-													<input type="text" id="demo1" name="valor_unitario" placeholder="Valor Unitario" class="form-control" required value="0">
-													
+													<label>Fecha del Reporte: <span>*</span></label>
+													<input type="date" name="fecha_reporte" placeholder="Fecha" class="form-control required" required id="fecha_reporte">
+												</div>
+											</div>
+											
+											
+										
+					
+
+											<div class="col-md-12">
+												<div class="form-group">
+													<label>Localización<span>*</span></label>
+													<input type="text" name="localizacion" placeholder="Ej. KM 0" class="form-control" required value="">
 												</div>
 										</div>
+
+						<div class="col-md-12">
+
+												<div class="form-group">
+													<label> Inconveniente Presentado: <span>*</span></label>
+			<select class="form-control mi-selector" id="tipo_inconveniente" name="tipo_inconveniente" required>
+			<option value="" selected>Seleccionar...</option>
+			<option value="lluvias">Lluvias</option>
+			<option value="Maquinaria fuera de servicio" >Máquinaria fuera de Servicio</option>
+			<option value="Falta de Material" >Falta de Material</option>
+			<option value="Imprevistos" >Imprevistos</option>	
+								</select>
+												</div>
+						</div>
 										
-							
+					
+			
+										<div class="col-md-12">
+												<div class="form-group">
+													<label> Seleccione el Frente: <span>*</span></label>
+						<select class="form-control" id="frente_id_frente" name="frente_id_frente" >
+													  	<option value="">Seleccionar...</option>
+										<?php
+										$rubros = Frentes::ListaFrentesObras($getobra);
+										foreach ($rubros as $campo){
+											$id_frente = $campo['id_frente'];
+											$nombre_frente = $campo['nombre_frente'];
+											
+										?>
+										<option value="<?php echo $id_frente; ?>"><?php echo utf8_decode($nombre_frente); ?></option>
+										<?php } ?>
+							</select>
+
+												</div>
+											</div>
+											
+											<div class="col-md-12">
+												<div class="form-group">
+													<label>Describa el Inconveniente<span>*</span></label>
+									<textarea class="form-control" rows="8" id="descripcion" name="observaciones"></textarea>
+												</div>
+											</div>
+											
 										</div>
 							<div class="row">
 								<div class="card-footer">
-								  <button type="submit" class="btn btn-primary" id="boton_enviar"  data-toggle="tooltip" data-placement="bottom" title="Haz clic aqui para guardar la información">Guardar</button>
+								  <button name="Submit" type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Haz clic aqui para guardar la información">Guardar Registro</button>
 								</div>
 						  </div>
 						  </form>
@@ -98,9 +138,6 @@ foreach ($cajas as $caja) {
 
 
 </div> <!-- Fin Content-Wrapper -->
-
-
-
 <!-- Inicio Libreria formato moneda -->
 <script src="dist/js/jquery.maskMoney.js" type="text/javascript"></script>
 <script type="text/javascript">			
@@ -116,8 +153,30 @@ affixesStay : true, // set if the symbol will stay in the field after the user e
 symbolPosition : 'left' // use this setting to position the symbol at the left or right side of the value. default 'left'
 }); //
 		</script>
-
-		
+<script type="text/javascript">			
+$("#demo2").maskMoney({
+prefix:'$ ', // The symbol to be displayed before the value entered by the user
+allowZero:true, // Prevent users from inputing zero
+allowNegative:true, // Prevent users from inputing negative values
+defaultZero:false, // when the user enters the field, it sets a default mask using zero
+thousands: '.', // The thousands separator
+decimal: '.' , // The decimal separator
+precision: 0, // How many decimal places are allowed
+affixesStay : true, // set if the symbol will stay in the field after the user exits the field. 
+symbolPosition : 'left' // use this setting to position the symbol at the left or right side of the value. default 'left'
+}); //
+		</script>
+		<script type="text/javascript">
+ $('#equipo_adicional').change(function() {
+    var el = $(this);
+    if(el.val() === "No") {
+          $('#campo_equipo').hide();   
+    } else {
+      alert("Has seleccionado Equipo adicional, indica cuál?"); 
+          $('#campo_equipo').show();
+    }      
+});
+</script>
 <script type="text/javascript">
 	var datefield = document.createElement("input")
 

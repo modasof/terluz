@@ -559,7 +559,7 @@ foreach ($campos as $campo) {
                       </div>
 
                         <div class="col-md-12 col-xs-12">
-   <textarea class="form-control" rows="3" name="observaciones" id="observaciones" placeholder="observaciones" maxlength="500" required></textarea>
+   <textarea class="form-control" rows="3" name="observaciones" id="observaciones" placeholder="observaciones" maxlength="500" ></textarea>
   </div>
 
                        <div class="col-md-12 col-xs-12">

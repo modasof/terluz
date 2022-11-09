@@ -5,18 +5,6 @@ ini_set('display_errors', '0');
 include_once 'modelos/obras.php';
 include_once 'controladores/obrasController.php';
 
-include_once 'modelos/proyeccionesins.php';
-include_once 'controladores/proyeccionesinsController.php';
-
-include_once 'modelos/insumos.php';
-include_once 'controladores/insumosController.php';
-
-include_once 'modelos/unidadesmed.php';
-include_once 'controladores/unidadesmedController.php';
-
-include_once 'modelos/destinos.php';
-include_once 'controladores/destinosController.php';
-
 include_once 'modelos/frentes.php';
 include_once 'controladores/frentesController.php';
 
@@ -104,7 +92,7 @@ else
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0 text-dark">Recepción Material <?php echo($nombreobra); ?></h1>
+          <h1 class="m-0 text-dark">Reporte Inconvenientes <?php echo utf8_decode($nombreobra); ?></h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
@@ -144,7 +132,7 @@ else
           <!-- TABLE: LATEST ORDERS -->
           <div class="box box-success">
             <div class="box-header with-border">
-              <h3 class="box-title">Reportes Recepción Material </h3>
+              <h3 class="box-title">Reporte Inconvenientes </h3>
 
         
 
@@ -157,7 +145,7 @@ else
             <!-- /.box-header -->
             <div class="box-body">
             	            <div class="row">
-        <form action="?controller=agregadosobra&&action=porfecha&&id_obra=<?php echo($id_obra); ?>" method="post" id="FormFechas" autocomplete="off">
+        <form action="?controller=inconvenientes&&action=porfecha&&id_obra=<?php echo($id_obra); ?>" method="post" id="FormFechas" autocomplete="off">
          <div class="col-md-8">
                         <div class="form-group">
                           <label>Seleccione el Rango de Fecha<span>*</span></label>
@@ -226,13 +214,13 @@ else
         <?php 
         if ($fechaform!="") {
           ?>
-           <h3 class="m-0 text-dark">Recepción Material del <?php echo(fechalarga($datofechain)) ?> al <?php echo (fechalarga($datofechafinal)) ?></h3>
+           <h3 class="m-0 text-dark">Reporte Inconvenientes del <?php echo(fechalarga($datofechain)) ?> al <?php echo (fechalarga($datofechafinal)) ?></h3>
           <?php
         }
         else
         {
           ?>
-           <h3 class="m-0 text-dark">Reporte Total Recepción Material</h3>
+           <h3 class="m-0 text-dark">Reporte Total Inconvenientes en Obra </h3>
           <?php
         }
 
@@ -255,22 +243,15 @@ else
             <th style="background-color: #fcf8e3" class="success"></th>
             <th style="background-color: #fcf8e3" class="success"></th>
             <th style="background-color: #fcf8e3" class="success"></th>
-            <th style="background-color: #fcf8e3" class="success"></th>
-            <th style="background-color: #fcf8e3" class="success"></th>
-             <th style="background-color: #fcf8e3" class="success"></th>
-              <th style="background-color: #fcf8e3" class="success"></th>
+           
                                         
                             </tfoot>
           <thead>
             <tr style="background-color: #4f5962;color: white;">
               <th style="width: 2%;"><i class="fa fa-edit"></i></th>
               <th>Fecha</th>
-              <th >Insumo</th>
-              <th >Unidad</th>
-              <th >Total</th>
-              <th >Placa</th>
-              <th >Proveedor</th>
-              <th>Recibido por</th>
+              <th>Reportado por</th>
+              <th>Tipo Inconveniente</th>
               <th>Obra</th>
               <th>Ubicación</th>
               <th>Frente</th>
@@ -279,12 +260,8 @@ else
             <tr>
               <th style="width: 2%;"><i class="fa fa-edit"></i></th>
               <th>Fecha</th>
-              <th >Insumo</th>
-              <th >Unidad</th>
-              <th >Total</th>
-              <th >Placa</th>
-              <th >Proveedor</th>
-              <th>Recibido por</th>
+              <th>Reportado por</th>
+              <th>Tipo Inconveniente</th>
               <th>Obra</th>
               <th>Ubicación</th>
               <th>Frente</th>
@@ -294,7 +271,7 @@ else
        <tbody>
             <?php
             if ($fechaform!="") {
-              $res=Agregadosobra::porfecha($FechaStart,$FechaEnd,$getobra);
+              $res=Inconvenientes::porfecha($FechaStart,$FechaEnd,$getobra);
               $campos = $res->getCampos();
             }
             else
@@ -305,11 +282,7 @@ else
             $id = $campo['id'];
             $imagen = $campo['imagen'];
             $fecha_reporte = $campo['fecha_reporte'];
-            $insumo_id_insumo = $campo['insumo_id_insumo'];
-            $origen_id_origen = $campo['origen_id_origen'];
-            $recibido_por = $campo['recibido_por'];
-            $cantidad = $campo['cantidad'];
-            $placa = $campo['placa'];
+            $tipo_inconveniente = $campo['tipo_inconveniente'];
             $localizacion = $campo['localizacion'];
             $creado_por = $campo['creado_por'];
             $estado_reporte = $campo['estado_reporte'];
@@ -319,13 +292,10 @@ else
             $obra_id_obra = $campo['obra_id_obra'];
             $frente_id_frente = $campo['frente_id_frente'];
 
-            $nominsumo=Insumos::obtenerNombreInsumo($insumo_id_insumo);
-            $unidad=Insumos::obtenerUnidadmed($insumo_id_insumo);
-            $nomunidad=Unidadesmed::obtenerNombre($unidad);
-            $nomcantera=Destinos::obtenerNombreDestino($origen_id_origen);
+           
             $nomobra=Obras::obtenernombreobra($obra_id_obra);
             $nomfrente=Frentes::obtenerNombre($frente_id_frente);
-            $nomreportador=usuarios::obtenerNombreUsuario($recibido_por);
+            $nomreportador=usuarios::obtenerNombreUsuario($creado_por);
             
 
            
@@ -347,12 +317,8 @@ else
               </td>
 
               <td><?php echo ($fecha_reporte) ?></td>
-              <td><?php echo ($nominsumo) ?></td>
-              <td><?php echo ($nomunidad) ?></td>
-              <td><?php echo ($cantidad) ?></td>
-              <td><?php echo utf8_decode($placa); ?></td>
-              <td><?php echo ($nomcantera) ?></td>
               <td><?php echo utf8_decode($nomreportador); ?></td>
+              <td><?php echo ($tipo_inconveniente) ?></td>
               <td><?php echo utf8_decode($nomobra); ?></td>
                <td><?php echo utf8_decode($localizacion); ?></td>
               <td><?php echo utf8_decode($nomfrente); ?></td>
@@ -391,7 +357,7 @@ else
 function eliminar(id,obra){
    eliminar=confirm("¿Deseas eliminar este registro?");
    if (eliminar)
-     window.location.href="?controller=agregadosobra&&action=eliminar&&id="+id+"&&id_obra="+obra;
+     window.location.href="?controller=inconvenientes&&action=eliminar&&id="+id+"&&id_obra="+obra;
 else
   //Y aquí pon cualquier cosa que quieras que salga si le diste al boton de cancelar
     alert('No se ha podido eliminar el registro...')
@@ -514,7 +480,7 @@ $('#cotizaciones thead tr:eq(1) th').each( function () {
             
             
           pageTotal3 = api
-                .column( 4, { page: 'current'} )
+                .column( 3, { page: 'current'} )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
@@ -528,8 +494,8 @@ $('#cotizaciones thead tr:eq(1) th').each( function () {
 
               
 
-   $( api.column( 4 ).footer() ).html(
-                ''+formatmoneda(pageTotal3,'' )
+   $( api.column( 3 ).footer() ).html(
+                ''+formatmoneda(pageTotal3,'m3' )
             );  
             
         },

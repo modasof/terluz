@@ -17,6 +17,38 @@ class FuncionariosController {
 	}
 
 /*************************************************************/
+/* FUNCION PARA ELIMINAR  LLAMADO DESDE ROUTING.PHP*/
+/*************************************************************/
+	function desactivarempleadoPor() {
+		$id = $_GET['id'];
+		$res = Funcionarios::desactivarempleadoPor($id);
+		if ($res){
+			echo "<script>jQuery(function(){Swal.fire(\"¡Datos Actualizados!\", \"Se han eliminado correctamente los datos\", \"success\");});</script>";
+		}else{
+				echo "<script>jQuery(function(){Swal.fire(\"¡Error al Actualizar!\", \"No se han eliminado correctamente los datos\", \"error\");});</script>";
+		}
+		$campos=Funcionarios::obtenerPagina();;
+		require_once 'vistas/funcionarios/todos.php';
+	}
+
+
+/*************************************************************/
+/* FUNCION PARA ELIMINAR  LLAMADO DESDE ROUTING.PHP*/
+/*************************************************************/
+	function activarempleadoPor() {
+		$id = $_GET['id'];
+		$res = Funcionarios::activarempleadoPor($id);
+		if ($res){
+			echo "<script>jQuery(function(){Swal.fire(\"¡Datos Actualizados!\", \"Se han eliminado correctamente los datos\", \"success\");});</script>";
+		}else{
+				echo "<script>jQuery(function(){Swal.fire(\"¡Error al Actualizar!\", \"No se han eliminado correctamente los datos\", \"error\");});</script>";
+		}
+		$campos=Funcionarios::obtenerPaginainactivos();
+		require_once 'vistas/funcionarios/todosinactivos.php';
+	}
+
+
+/*************************************************************/
 /* FUNCION PARA AGREGAR NUEVO LLAMADO DESDE ROUTING.PHP */
 /*************************************************************/
 	function nuevo() {
@@ -108,15 +140,14 @@ function guardar() {
 		}
 	}
 
-$documento=$_POST['documento'];
-$validarduplicado=Funcionarios::validacionpor($documento);
+	$documento=$_POST['documento'];
+	$validarduplicado=Funcionarios::validacionpor($documento);
 
 if ($validarduplicado>0) {
 		echo "<script>jQuery(function(){Swal.fire(\"¡Error al guardar!\", \"No se han guardado los datos, el documento Nº".$documento." ya existe\", \"info\");});</script>";
 }else
 {
-
-	$campo = new Usuarios('',$nuevoarreglo);
+	$campo = new Funcionarios('',$nuevoarreglo);
 	$res = Funcionarios::guardar($campo,$ruta_imagen);
 	if ($res){
 		echo "<script>jQuery(function(){Swal.fire(\"¡Datos guardados!\", \"Se han guardado correctamente los datos\", \"success\");});</script>";
@@ -157,7 +188,7 @@ function actualizar(){
 	$datosguardar = new Usuarios($id,$nuevoarreglo);
 	$res = Funcionarios::actualizar($id,$datosguardar,$ruta_imagen);
 	if ($res){
-		echo "<script>jQuery(function(){Swal.fire(\"¡Datos actualizados!\", \"Se ha actualizado correctamente la pagina\", \"success\");});</script>";
+		echo "<script>jQuery(function(){Swal.fire(\"¡Datos actualizados!\", \"Se ha actualizado correctamente la pagina \", \"success\");});</script>";
 	}else{
 				echo "<script>jQuery(function(){Swal.fire(\"¡Error al actualizar!\", \"Hubo un error al actualizar, comunique con el administrador del sistema\", \"error\");});</script>";
 		}
@@ -173,6 +204,9 @@ function reportarnovedad() {
 	//$nuevo['imagen']=$ruta_imagen;
 	$id = $_GET['id'];
 	$variable = $_POST;
+	$tipo_novedad=$_POST['tipo_novedad'];
+	$fecha_novedad=$_POST['fecha_novedad'];
+
 	$nuevoarreglo = array();
 	extract($variable);
 	foreach ($variable as $campo => $valor){
@@ -188,8 +222,16 @@ function reportarnovedad() {
 			$nuevoarreglo[$campo]=$valor;
 		}
 	}
+
 	$campo = new Funcionarios('',$nuevoarreglo);
 	$res = Funcionarios::reportarnovedad($campo,$ruta_imagen);
+
+	if ($tipo_novedad=='Retiro') {
+		$res = Funcionarios::eliminarPor($id);
+		$res = Funcionarios::actualizarfechasalidaPor($id,$fecha_novedad);
+	}
+
+
 	if ($res){
 		echo "<script>jQuery(function(){Swal.fire(\"¡Datos guardados!\", \"Se han guardado correctamente los datos\", \"success\");});</script>";
 	}else{

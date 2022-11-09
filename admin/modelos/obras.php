@@ -38,6 +38,28 @@ class Obras
     }
 
 /*******************************************************
+** FUNCION PARA MOSTRAR EL NOMBRE DEL PRODUCTO **
+********************************************************/
+public static function validacionpor($actividad_id_actividad,$fecha_reporte){
+    try {
+        $db=Db::getConnect();
+
+        $select=$db->query("SELECT COUNT(id_cantidades) AS total FROM  actividades_avance WHERE actividad_id_actividad='".$actividad_id_actividad."' and fecha_reporte='".$fecha_reporte."'");
+        $camposs=$select->fetchAll();
+        $campos = new Obras('',$camposs);
+        $marcas = $campos->getCampos();
+        foreach($marcas as $marca){
+            $mar = $marca['total'];
+        }
+        return $mar;
+    }
+    catch(PDOException $e) {
+        echo '{"error en obtener la pagina":{"text":'. $e->getMessage() .'}}';
+    }
+}
+
+
+/*******************************************************
  ** FUNCION PARA MOSTRAR TODOS LOS CAMPOS      **
  ********************************************************/
     public static function todos()

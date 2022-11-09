@@ -95,6 +95,8 @@ foreach ($campos as $campo) {
 
 $proyectadoalafecha = $totalproyeccionmes+$sumaproyeccionmesanterior;
 $valorejecutadoalafecha  = Valorejecutadoporrango($getobra, $inicioobra, $dia_actual);
+$totalinconvenientes = CantidadInconvenientes($getobra);
+
 
 if($proyectadoalafecha!=0){
 
@@ -179,7 +181,9 @@ if ($porcentajeejecutadoalafecha<$porcentajeproyectadoalafecha){
 <div class="widget-user-header bg-aqua-active">
 <h3 class="widget-user-username"><strong>Obra : <?php echo utf8_decode($nombre_obra); ?></strong></h3>
 <h5 class="widget-user-desc">Tiempo proyectado para la ejecución :<strong><?php $totaldias = tiempoTranscurridoFechas($inicioobra,$finalobra); echo($totaldias)?> </strong>, iniciando el <?php echo($inicioobra); ?> terminando el día <?php echo($finalobra); ?> <br>
-<?php echo ($estadodelaobra); ?>
+<?php echo ($estadodelaobra); ?><br><br>
+Inconvenientes reportados en la ejecución: <strong><a href="#"><?php echo ($totalinconvenientes) ?> Reportes</a></strong> 
+
 </h5>
 </div>
 <div class="box-footer">
@@ -631,7 +635,7 @@ foreach ($campos as $campo) {
           <tbody>
 
             <tr class="success">
-            <td><strong>Ingresos</strong> </td>
+            <td><strong>Ingresos Ejecutado</strong> </td>
                <?php
 $campos = Rangos::obtenerPagina($getobra);
 $campos = $campos->getCampos();
@@ -644,14 +648,11 @@ foreach ($campos as $campo) {
     $valorejecutado  = Valorejecutadoporrango($getobra, $Fila1_fecha_inicio, $Fila1_fecha_fin);
     $valorproyeccion = Obras::sqlvalorrangoporobra($getobra, $Fila1_id);
 
-    if ($valorejecutado != 0) {
+    if ($valorejecutado > 0) {
         $porcentajeavance = ($valorejecutado / $valorproyeccion) * 100;
         $labelporcentaje  = round($porcentajeavance, 2) . " %";
 
-    } elseif ($valorejecutado != 0 and $valorproyeccion == 0) {
-        $labelporcentaje = "<small class='text-danger'>SP</small>";
-
-    } elseif ($valorejecutado == 0 and $valorproyeccion != 0) {
+    } else  {
         $labelporcentaje = "0.00 %";
     }
 
